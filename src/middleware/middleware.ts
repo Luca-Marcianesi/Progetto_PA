@@ -63,15 +63,15 @@ function signJwt(payload: object): string {
 }
 
 export var detachToken = function(req : Request, res: Response){
-    const payload = { 
-        username: req.body.username,
-        role: "admin"
-     };
+  try{
+    const payload = req.user
     const token = signJwt(payload);
-    return res.status(StatusCodes.OK).json({
-    message: "Login successful",
-    token : token,
-  });
+    return res.status(StatusCodes.OK).json({message: "Login successful",token : token});
+
+  }catch(err){
+    throw err
+  }
+    
 };
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
@@ -102,64 +102,14 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
-/*
-export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      throw ErrorFactory.getError(ErrorType.Unauthorized, "Token mancante o malformato");
+export const authenticate = (roles: string[])=>{
+  return (req: Request, res: Response, next: NextFunction)=>{
+    if(!req.user || !roles.includes(req.user.role)){
+      throw ErrorFactory.getError(ErrorType.Unauthorized,"Token valido ma rotta riservata");
     }
+    next()
 
-    const token = authHeader.split(" ")[1];
-
-    // verifica token
-    const payload = jwt.verify(token, public_key, { algorithms: [ALGORITHM] }) as UserPayload;
-
-    // assegna l'utente a req
-    req.user = payload;
-
-    return next();
-  } catch (err: any) {
-    if (err instanceof TokenExpiredError) {
-      throw ErrorFactory.getError(ErrorType.Unauthorized, "Token scaduto");
-    }
-    if (err instanceof JsonWebTokenError || err instanceof NotBeforeError) {
-      throw ErrorFactory.getError(ErrorType.Unauthorized, "Token non valido");
-    }
-
-    // errore inaspettato
-    throw ErrorFactory.getError(ErrorType.InternalServerError);
   }
-};
 
 
-/*
-export function checkToken(req : Request,res : Response,next: any){
-  const bearerHeader = req.headers.authorization;
-  console.log(bearerHeader);
-  if(typeof bearerHeader!=='undefined'){
-      const bearerToken = bearerHeader.split(' ')[1];
-      req.token=bearerToken;
-      next();
-  }else{
-      res.sendStatus(403);
-  }
 }
-
-export function verifyAndAuthenticate(req: Request,res: Response,next: any){
-  if (!req.token) {
-    return res.sendStatus(403);
-  }
-
-  try {
-    console.log(req.token);
-    const decoded = jwt.verify(req.token, public_key, { algorithms: [ALGORITHM] });
-    //req.user = decoded; // puoi anche salvare info decodificate su req.user
-    next();
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(401);
-  }
-}
-*/

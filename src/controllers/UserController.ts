@@ -2,19 +2,32 @@ import { NextFunction, Request, Response } from "express";
 import { isNewExpression } from "typescript";
 import { StatusCodes } from "http-status-codes";
 import { IUserService } from "../services/serviceInterface/IUserService";
+import { User } from "../models/User";
+import { UserPayload } from "../@types/userPayload";
 
 export class UserController {
   constructor(private UserService : IUserService) {}
 
  
   login = async (req: Request, res: Response, next: any) => {
-    const { username, password } = req.body;
-    /*
-    if (! await this.userService.checkCredentials(username, password)) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid credentials" });
+
+    try{
+      const {username, password} = req.body
+      const user : User = await this.UserService.checkCredentials(username,password)
+      let payload : UserPayload = {
+        id: user.id,
+        email: user.email,
+        role: user.role
+      }
+      req.user = payload
+      next()
     }
-      */
-    next();
+    catch(err){
+      throw err
+    }
+
+      
+    
   }
 
   create = async (req: Request, res: Response, next: NextFunction) => {
