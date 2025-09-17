@@ -2,7 +2,7 @@ import { DataTypes, Model } from "sequelize";
 import { getDatabase } from "../database/database.js";
 
 const sequelize = getDatabase();
-
+/*
 const CalendarSlot = sequelize.define(
     "CalendarSlot",
     {
@@ -58,3 +58,4 @@ const CalendarSlot = sequelize.define(
 
 export { CalendarSlot };
 
+*/

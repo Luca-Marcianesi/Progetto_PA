@@ -23,6 +23,11 @@ const Calendar = sequelize.define(
             type: DataTypes.DATE, 
             allowNull: false
         },
+        costPerHour: { 
+            type: DataTypes.INTEGER, 
+            allowNull: false,
+            validate: { min: 0 } // Valore non negativo
+        },
         archived: { 
             type: DataTypes.BOOLEAN, 
             allowNull: false,
@@ -32,8 +37,10 @@ const Calendar = sequelize.define(
     },
     { 
         tableName: "calendars",
-        createdAt: false,
-        updatedAt: false
+        paranoid: true,
+        createdAt: "created_at",
+        updatedAt: "updated_at",
+        deletedAt: "deleted_at"
     }
 );
 

@@ -12,7 +12,7 @@ const Request = sequelize.define(
             autoIncrement: true,
             primaryKey: true,
         },
-        slotId: {
+        calendarId: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
@@ -37,9 +37,8 @@ const Request = sequelize.define(
     },
     {
         tableName: "requests",
-        timestamps: false,
-        createdAt: false,
-        updatedAt: false,
+        createdAt: "created_at",
+        updatedAt: "updated_at",
     }
 );
 

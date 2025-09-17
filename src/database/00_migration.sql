@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS resources (
     id SERIAL PRIMARY KEY,
     name VARCHAR(150) NOT NULL UNIQUE,
     description TEXT,
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -15,8 +16,8 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR(255) NOT NULL,
   role role_enum NOT NULL DEFAULT 'user',
   token INT DEFAULT 1000 CHECK (token >= 0),
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS calendars (
@@ -25,25 +26,15 @@ CREATE TABLE IF NOT EXISTS calendars (
     name VARCHAR(150) NOT NULL,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
+    cost_per_hour NUMERIC(10,4) NOT NULL CHECK (cost_per_hour >= 0),
     archived BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT NOW(),
     CHECK (end_time > start_time)
 );
 
-CREATE TABLE IF NOT EXISTS calendar_slots (
-    id SERIAL PRIMARY KEY,
-    calendar_id INT NOT NULL REFERENCES calendars(id) ON DELETE CASCADE,
-    start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP NOT NULL,
-    cost_per_hour NUMERIC(10,4) NOT NULL CHECK (cost_per_hour >= 0),
-    created_at TIMESTAMP DEFAULT NOW(),
-    CHECK (date_part('minute', start_time) = 0 AND date_part('minute', end_time) = 0),
-    CHECK (end_time > start_time)
-);
-
 CREATE TABLE IF NOT EXISTS requests (
     id SERIAL PRIMARY KEY,
-    slot_id INT NOT NULL REFERENCES calendar_slots(id) ON DELETE CASCADE,
+    calendar_id_id INT NOT NULL REFERENCES calendars(id) ON DELETE CASCADE,
     user_id INT NOT NULL REFERENCES users(id),
     title VARCHAR(255) NOT NULL,
     reason TEXT NOT NULL,
