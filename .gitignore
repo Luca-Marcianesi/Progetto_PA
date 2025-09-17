@@ -1,0 +1,32 @@
+# Dipendenze
+node_modules/
+
+# Build output
+dist/
+build/
+
+#chiavi jwt token
+key/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Cache
+.cache/
+.tmp/
+coverage/
+
+# IDE e sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
