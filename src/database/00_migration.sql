@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS calendars (
 
 CREATE TABLE IF NOT EXISTS requests (
     id SERIAL PRIMARY KEY,
-    calendar_id_id INT NOT NULL REFERENCES calendars(id) ON DELETE CASCADE,
+    calendar_id INT NOT NULL REFERENCES calendars(id) ON DELETE CASCADE,
     user_id INT NOT NULL REFERENCES users(id),
     title VARCHAR(255) NOT NULL,
     reason TEXT NOT NULL,

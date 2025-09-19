@@ -17,6 +17,8 @@ export class BaseError  extends Error {
     
 }
 
+// Errori generici
+
 export class NotFoundError extends BaseError {
     constructor(message?: string) {
         super(StatusCodes.NOT_FOUND , message || "Risorsa non trovata");
@@ -41,32 +43,82 @@ export class UnauthorizedError  extends BaseError  {
     }
 }
 
-export class InvaidTokenError extends UnauthorizedError  {
-    constructor(message?: string) {
-        super(message || "Token non valido o scaduto");
-    }   
-}
-
 export class InternalServerError extends BaseError  {
     constructor(message?: string) {
         super(StatusCodes.INTERNAL_SERVER_ERROR , message || "Errore interno del server");
     }   
 }
 
-export class UserNotFounderror extends NotFoundError {
+export class ConflictError extends BaseError  {
+    constructor(message?: string) {
+        super(StatusCodes.CONFLICT , message || "Conflitto");
+    }   
+}
+
+
+// Errori specifici che erediano lo status code dai generici
+
+export class InvalidReservaionError extends BadRequestError{
+    constructor(){
+        super("Prenotazione non valida")
+    }
+}
+
+export class CalendarNotExistError extends NotFoundError{
+    constructor(){
+        super("Calendario non trovato")
+    }
+}
+
+
+
+export class RejectReservaionError extends BadRequestError{
+    constructor(reason?: string){
+        super()
+        if(reason !== undefined) {
+            this.message = this.message.concat(":",reason);
+        }
+    }
+}
+
+export class InvaidTokenError extends UnauthorizedError  {
+    constructor(message?: string) {
+        super(message || "Token non valido o scaduto");
+    }   
+}
+
+export class UserNotFoundError extends NotFoundError {
     constructor(message?: string) {
         super(message || "Utente non trovato");
     }
 }
 
-export class UnknownError extends BaseError {
+export class EmailUsedError extends ConflictError {
     constructor(message?: string) {
-        super(StatusCodes.INTERNAL_SERVER_ERROR , message || "Errore sconosciuto");
-    }   
+        super(message || "Email già in uso");
+    }
 }
 
-export class EmailUsedError extends BaseError {
-    constructor(message?: string) {
-        super(StatusCodes.CONFLICT, message || "Email già in uso");
+export class TooLessTokenError extends BadRequestError{
+    constructor(){
+        super( "Non hai abbastanza token")
+    }
+}
+
+export class SlotNotInCalError extends NotFoundError{
+    constructor(){
+        super("Gli slot inseriti non appartengono al calendario")
+    }
+}
+
+export class SlotUsedError extends ConflictError{
+    constructor(){
+        super("1 o più slot richiesti non sono disponibili")
+    }
+}
+
+export class LoginFailError extends ForbiddenError{
+    constructor(){
+        super("Login failed: emai o psw errati")
     }
 }

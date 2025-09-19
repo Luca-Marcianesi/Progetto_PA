@@ -3,8 +3,31 @@ import { getDatabase } from "../database/database.js";
 
 const sequelize = getDatabase();
 
-const Calendar = sequelize.define(
-    "Calendar",
+interface CalendarAttributes{
+    id? : number;
+    resourceId : number;
+    start_time: Date;
+    end_time: Date;
+    cost_per_hour: number;
+    archived: Date;
+
+}
+
+interface CalendarCreationAttributes extends Omit<CalendarAttributes, 'id' | 'archived'>{}
+
+class Calendar extends Model<CalendarAttributes,CalendarCreationAttributes> implements CalendarAttributes{
+    public id! : number;
+    public resourceId!: number;
+    public start_time!: Date;
+    public end_time!: Date;
+    public cost_per_hour!: number;
+    public archived!: Date;
+    
+    public readonly created_at!: Date;
+    public readonly updated_at!: Date;
+}
+
+Calendar.init(
     {
         id: {
             type: DataTypes.INTEGER, 
@@ -15,15 +38,15 @@ const Calendar = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        startTime: { 
+        start_time: { 
             type: DataTypes.DATE, 
             allowNull: false
         },
-        endTime: { 
+        end_time: { 
             type: DataTypes.DATE, 
             allowNull: false
         },
-        costPerHour: { 
+        cost_per_hour: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
             validate: { min: 0 } // Valore non negativo
@@ -35,7 +58,8 @@ const Calendar = sequelize.define(
         },
 
     },
-    { 
+    {   
+        sequelize,
         tableName: "calendars",
         paranoid: true,
         createdAt: "created_at",

@@ -1,6 +1,7 @@
 import { Resource } from "../models/Resource";
 import { IResourceDAO } from "../dao/daoInterface/IResourceDAO";
 import { ICalendarRepository } from "./repositoryInterface/ICalendarRepository";
+import { Calendar } from "../models/Calendar";
 //import { ICalendarDAO } from "../dao/daoInterface/ICalendarDAO";
 
 export class CalendarRepository implements ICalendarRepository {
@@ -15,7 +16,7 @@ export class CalendarRepository implements ICalendarRepository {
         // Implementa la logica per creare un calendario
         throw new Error("Method not implemented.");
     }
-    async getCalendarById(id: number): Promise<Resource | null> {
+    async getCalendarById(id: number): Promise<Calendar | null> {
         // Implementa la logica per ottenere un calendario per ID
         throw new Error("Method not implemented.");
     }
@@ -39,6 +40,26 @@ export class CalendarRepository implements ICalendarRepository {
         // Implementa la logica per verificare la disponibilità di un calendario
         throw new Error("Method not implemented.");
     }
+
+    async getCalendarStart(calendar_id: number): Promise<Date> {
+        throw new Error("Method not implemented.");
+        
+    }
+
+    async getCalendarEnd(calendar_id: number): Promise<Date> {
+        throw new Error("Method not implemented.");
+        
+    }
+
+    async getCostPerHourCalendar(calendar_id: number): Promise<number | null> {
+        throw new Error("Method not implemented.");
+        
+    }
+
+
+
+
+
     async createResource(resourceData: { name: string; description?: string | null; }): Promise<number> {
         return await this.resourceDAO.createResource(resourceData);
     }

@@ -1,3 +1,4 @@
+import { Calendar } from "../../models/Calendar";
 import { Resource } from "../../models/Resource";
 
 export interface ICalendarRepository {
@@ -12,7 +13,7 @@ export interface ICalendarRepository {
         costPerHour: number; 
         archived?: boolean; }): Promise<number>;
 
-    getCalendarById(id: number): Promise<Resource | null>;
+    getCalendarById(id: number): Promise<Calendar | null>;
 
     updateCalendar(id: number, updateData: { 
         resourceId?: number; 
@@ -25,6 +26,12 @@ export interface ICalendarRepository {
 
     archiveCalendar(id: number): Promise<void>;
 
+    getCostPerHourCalendar(calendar_id: number): Promise<number | null>;
+
+    getCalendarStart(calendar_id: number): Promise<Date>;
+
+    getCalendarEnd(calendar_id: number): Promise<Date>;
+
     unarchiveCalendar(id: number): Promise<void>;
 
     checkAvailability(id: number, startTime: Date, endTime: Date): Promise<boolean | never>;
@@ -36,6 +43,8 @@ export interface ICalendarRepository {
     getAllResources(): Promise<Resource[]>;
 
     updateResource(id: number, updateData: { name?: string; description?: string | null; }): Promise<void>;
+
+    
 
 }
 

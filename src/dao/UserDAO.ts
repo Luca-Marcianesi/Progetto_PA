@@ -20,4 +20,13 @@ export class UserDAO implements IUserDAO {
     async getUserByEmail(email: string): Promise<User | null> {
         return await User.findOne({ where: { email } });
     }
+
+    async getUserById(id: number): Promise<User | null> {
+        return await User.findByPk(id)
+    }
+    
+    async getUserToken(id: number): Promise<number | null> {
+        const user =  await User.findByPk(id)
+        return user ? user.token:  null
+    }
 }

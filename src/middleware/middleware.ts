@@ -78,17 +78,17 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
   try {
     const authorization = req.headers.authorization;
     if(typeof authorization =='undefined'){
-      throw ErrorFactory.getError(ErrorType.Unauthorized, "Token mancante");
+      throw ErrorFactory.getError(ErrorType.Unauthorized);
     }
     if(!authorization.startsWith('Bearer ') || authorization.split(' ').length!==2){
-      throw ErrorFactory.getError(ErrorType.Unauthorized, "Token malformato");
+      throw ErrorFactory.getError(ErrorType.Unauthorized);
     }
     let out;
     try {
       let jwtToken = authorization.split(' ')[1];
       out = jwt.verify(jwtToken || '', public_key, { algorithms: [ALGORITHM] }) as UserPayload;
     } catch {
-      throw ErrorFactory.getError(ErrorType.InvalidToken, "Token not valid");
+      throw ErrorFactory.getError(ErrorType.InvalidToken);
     }
     req.user = out;
     next();
@@ -105,7 +105,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
 export const authenticate = (roles: string[])=>{
   return (req: Request, res: Response, next: NextFunction)=>{
     if(!req.user || !roles.includes(req.user.role)){
-      throw ErrorFactory.getError(ErrorType.Unauthorized,"Token valido ma rotta riservata");
+      throw ErrorFactory.getError(ErrorType.Unauthorized);
     }
     next()
 

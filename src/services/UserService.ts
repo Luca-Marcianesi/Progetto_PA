@@ -34,11 +34,11 @@ export class UserService implements IUserService {
     return user;
   }
 
-  async checkCredentials(email: string, password: string): Promise<User | never> {
+  async login(email: string, password: string): Promise<User | never> {
       let password_hash = createHash(HASH_ALGORITM).update(password).digest(DIGEST);
       let user : User | null = await this.userRepo.getUserByEmail(email);
       if(user === null || user.password != password_hash){
-        throw ErrorFactory.getError(ErrorType.Forbidden, "Email o password errati")
+        throw ErrorFactory.getError(ErrorType.LoginFail)
       }
       return user
   }

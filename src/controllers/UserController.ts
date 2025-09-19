@@ -13,7 +13,7 @@ export class UserController {
 
     try{
       const {username, password} = req.body
-      const user : User = await this.UserService.checkCredentials(username,password)
+      const user : User = await this.UserService.login(username,password)
       let payload : UserPayload = {
         id: user.id,
         email: user.email,

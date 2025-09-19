@@ -21,5 +21,13 @@ export class UserRepository implements IUserRepository {
   async getUserByEmail(email: string): Promise<User | null> {
     return this.userDAO.getUserByEmail(email);
   }
+  async getUserToken(user_id: number): Promise<number | null> {
+    return this.userDAO.getUserToken(user_id)
+      
+  }
+  async getUserById(id: number): Promise<User | null> {
+    return this.userDAO.getUserById(id)
+      
+  }
 
 }

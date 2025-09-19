@@ -1,7 +1,4 @@
-import {BaseError ,BadRequestError, NotFoundError,
-    UnauthorizedError,ForbiddenError,InternalServerError, 
-    UnknownError, InvaidTokenError, UserNotFounderror,
-    EmailUsedError } from "./ExtendedError";
+import * as Errors from "./ExtendedError";
 import { StatusCodes } from "http-status-codes";
 
 export enum ErrorType {
@@ -12,33 +9,50 @@ export enum ErrorType {
     InternalServer,
     InvalidToken,
     UserNotFound,
-    Unknown,
-    EmailUsed
+    EmailUsed,
+    InvalidReservaion,
+    CalNotExist,
+    SlotNotInCal,
+    SlotUsed,
+    TooLessToken,
+    LoginFail
+
+
 
 }
 
 export class ErrorFactory {
-    static getError(type: ErrorType, message?: string): BaseError {
+    static getError(type: ErrorType): Errors.BaseError {
 
         switch (type) {
             case ErrorType.NotFound:
-                return new NotFoundError(message);
+                return new Errors.NotFoundError();
             case ErrorType.BadRequest:
-                return new BadRequestError(message );
+                return new Errors.BadRequestError();
             case ErrorType.Unauthorized:
-                return new UnauthorizedError(message);
+                return new Errors.UnauthorizedError();
             case ErrorType.Forbidden:
-                return new ForbiddenError(message);
-            case ErrorType.InternalServer:
-                return new  InternalServerError(message);
+                return new Errors.ForbiddenError();
             case ErrorType.InvalidToken:
-                return new InvaidTokenError(message);
+                return new Errors.InvaidTokenError();
             case ErrorType.UserNotFound:
-                return new UserNotFounderror(message);
+                return new Errors.UserNotFoundError();
             case ErrorType.EmailUsed:
-                return new EmailUsedError(message);
+                return new Errors.EmailUsedError();
+            case ErrorType.InvalidReservaion:
+                return new Errors.InvalidReservaionError();
+            case ErrorType.CalNotExist:
+                return new Errors.CalendarNotExistError();
+            case ErrorType.SlotNotInCal:
+                return new Errors.SlotNotInCalError();
+            case ErrorType.SlotUsed:
+                return new Errors.SlotUsedError();
+            case ErrorType.TooLessToken:
+                return new Errors.TooLessTokenError();
+            case ErrorType.LoginFail:
+                return new Errors.LoginFailError()
             default:
-                return new UnknownError(message);
+                return new Errors.InternalServerError();
         }
     }
 }
