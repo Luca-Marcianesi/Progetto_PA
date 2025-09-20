@@ -1,19 +1,37 @@
-import { NextFunction } from "express";
+import { Request, Response ,NextFunction } from "express";
+
 import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
 import { IReservationService } from "../services/serviceInterface/IReservationService";
 import { ReservationDataInterface } from "../dto/reservationModel";
+import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
+import { NewReservationInput } from "../middleware/zodValidator/reservation.schema";
+
 
 export class ReservationController{
     constructor(private ReservationService: IReservationService){}
 
     newReservation = async(req: Request, res: Response, next: NextFunction) => {
+        try {     
+        
+            const inputValidate = req.body as  unknown as NewReservationInput
+            await this.ReservationService.newReservation(inputValidate)
 
-        const {calendar_id, user_id,  title,  start_time,  end_time, status}  = req.body as unknown as ReservationDataInterface
-        await this.ReservationService.newReservation({
-            calendar_id,  user_id,
-            title, start_time, 
-            end_time, status
-
-        })
+        } catch (error) {
+            throw error
+        }
     }
+
+    getReservations = async(req: Request, res: Response, next: NextFunction) => {
+    }
+
+    updateReservations = async(req: Request, res: Response, next: NextFunction) => {
+    }
+
+    cancelReservations = async(req: Request, res: Response, next: NextFunction) => {
+    }
+
+    getReservationsFiltered = async(req: Request, res: Response, next: NextFunction) => {
+    }
+
+
 }
