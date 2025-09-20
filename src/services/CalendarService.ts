@@ -27,20 +27,5 @@ export class CalendarService implements ICalendarService {
     async unarchiveCalendar(id: number): Promise<void> {
         await this.calendarRepository.unarchiveCalendar(id);
     }
-    async checkAvailability(id: number, startTime: Date, endTime: Date): Promise<boolean | never> {
-        return await this.calendarRepository.checkAvailability(id, startTime, endTime);
-    }
-
-    async createResource(resourceData: { name: string; description?: string | null; }): Promise<number> {
-        return await this.calendarRepository.createResource(resourceData);
-    }
-    async getResourceById(id: number): Promise<Resource | null> {
-        return await this.calendarRepository.getResourceById(id);
-    }
-    async getAllResources(): Promise<Resource[]> {
-        return await this.calendarRepository.getAllResources();
-    }
-    async updateResource(id: number, updateData: { name?: string; description?: string | null; }): Promise<void> {
-        await this.calendarRepository.updateResource(id, updateData);
-    }
+ 
 }

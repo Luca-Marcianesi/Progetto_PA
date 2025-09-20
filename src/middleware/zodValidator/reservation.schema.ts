@@ -24,8 +24,8 @@ export type ReservationOptionalFilterInput = z.infer<typeof ReservationOptionalF
 
 export const NewReservationSchema = z.object({
     title: GenericStringSchema,
-    start: DateOnHourSchema.optional(),
-    end: DateOnHourSchema.optional(),
+    start: DateOnHourSchema,
+    end: DateOnHourSchema,
     reason : GenericStringSchema
 
 }).refine(
@@ -46,8 +46,8 @@ export type UpdateStatusReseservationInput = z.infer<typeof UpdateStatusReseserv
 
 export const CheckSlotSchema = z.object({
     calendar_id: StandarIdSchema,
-    start: DateOnHourSchema.optional(),
-    end: DateOnHourSchema.optional(),
+    start: DateOnHourSchema,
+    end: DateOnHourSchema,
 
 }).refine(
     refineFromBeforeToSchema("start","end"),

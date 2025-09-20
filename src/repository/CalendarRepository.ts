@@ -2,15 +2,15 @@ import { Resource } from "../models/Resource";
 import { IResourceDAO } from "../dao/daoInterface/IResourceDAO";
 import { ICalendarRepository } from "./repositoryInterface/ICalendarRepository";
 import { Calendar } from "../models/Calendar";
-//import { ICalendarDAO } from "../dao/daoInterface/ICalendarDAO";
+import { ICalendarDAO } from "../dao/daoInterface/ICalendarDAO";
 
 export class CalendarRepository implements ICalendarRepository {
     private resourceDAO: IResourceDAO;
-    //private calendarDAO: ICalendarDAO;
+    private calendarDAO: ICalendarDAO;
 
-    constructor(resourceDAO: IResourceDAO /*, calendarDAO: ICalendarDAO */) {
+    constructor(resourceDAO: IResourceDAO , calendarDAO: ICalendarDAO) {
         this.resourceDAO = resourceDAO;
-        //this.calendarDAO = calendarDAO;
+        this.calendarDAO = calendarDAO;
     }
     async createCalendar(calendarData: { resourceId: number; startTime: Date; endTime: Date; costPerHour: number; archived?: boolean; }): Promise<number> {
         // Implementa la logica per creare un calendario
@@ -54,22 +54,5 @@ export class CalendarRepository implements ICalendarRepository {
     async getCostPerHourCalendar(calendar_id: number): Promise<number | null> {
         throw new Error("Method not implemented.");
         
-    }
-
-
-
-
-
-    async createResource(resourceData: { name: string; description?: string | null; }): Promise<number> {
-        return await this.resourceDAO.createResource(resourceData);
-    }
-    async getResourceById(id: number): Promise<Resource | null> {
-        return await this.resourceDAO.getResourceById(id);
-    }
-    async getAllResources(): Promise<Resource[]> {
-        return await this.resourceDAO.getAllResources();
-    }
-    async updateResource(id: number, updateData: { name?: string; description?: string | null; }): Promise<void> {
-        await this.resourceDAO.updateResource(id, updateData);
-    }   
+    } 
 }

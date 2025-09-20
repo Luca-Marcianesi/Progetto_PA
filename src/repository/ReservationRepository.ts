@@ -2,16 +2,16 @@ import { ReservationDataInterface } from "../dto/reservationModel";
 import { Reservation } from "../models/Reservation";
 import { IReservationRepository } from "./repositoryInterface/IResevationRepository";
 import {IReservationDAO} from "../dao/daoInterface/IReservationDAO"
-import {ICalendarDao} from "../dao/daoInterface/ICalendarDAO"
+import {ICalendarDAO} from "../dao/daoInterface/ICalendarDAO"
 import { Calendar } from "../models/Calendar";
 import { DomainReservation } from "../domain/reservation";
 import { enumReservationStatus } from "../utils/db_const";
 
-export class reservationRepository implements IReservationRepository{
+export class ReservationRepository implements IReservationRepository{
     private reservationDAO : IReservationDAO;
-    private calendarDAO: ICalendarDao;
+    private calendarDAO: ICalendarDAO;
 
-    constructor(reservationDAO : IReservationDAO , calendarDAO: ICalendarDao){
+    constructor(reservationDAO : IReservationDAO , calendarDAO: ICalendarDAO){
         this.reservationDAO = reservationDAO;
         this.calendarDAO = calendarDAO;
 

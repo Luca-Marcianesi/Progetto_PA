@@ -15,7 +15,8 @@ export enum ErrorType {
     SlotNotInCal,
     SlotUsed,
     TooLessToken,
-    LoginFail
+    LoginFail,
+    ReservationNotFound
 
 
 
@@ -51,6 +52,8 @@ export class ErrorFactory {
                 return new Errors.TooLessTokenError();
             case ErrorType.LoginFail:
                 return new Errors.LoginFailError()
+            case ErrorType.ReservationNotFound:
+                return new Errors.ReservationNotFoundError()
             default:
                 return new Errors.InternalServerError();
         }

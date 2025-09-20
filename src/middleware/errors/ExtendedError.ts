@@ -122,3 +122,9 @@ export class LoginFailError extends ForbiddenError{
         super("Login failed: emai o psw errati")
     }
 }
+
+export class ReservationNotFoundError extends NotFoundError{
+    constructor(){
+        super("Prenotazone non trovata")
+    }
+}

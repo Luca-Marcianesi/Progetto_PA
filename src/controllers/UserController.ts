@@ -8,7 +8,6 @@ import { UserPayload } from "../@types/userPayload";
 export class UserController {
   constructor(private UserService : IUserService) {}
 
- 
   login = async (req: Request, res: Response, next: any) => {
 
     try{
@@ -24,9 +23,7 @@ export class UserController {
     }
     catch(err){
       throw err
-    }
-
-      
+    }  
     
   }
 
@@ -61,10 +58,6 @@ export class UserController {
       next(error);
     }
   };
-
-  auth = async (req: Request, res: Response) => {
-    return res.status(StatusCodes.OK).json({ message: "Auth successful" });
-  }
 
 
 }

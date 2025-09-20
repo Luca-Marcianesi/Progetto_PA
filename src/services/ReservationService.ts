@@ -6,6 +6,7 @@ import { ReservationDataInterface } from "../dto/reservationModel";
 import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
 import { Calendar } from "../models/Calendar";
 import { enumReservationStatus } from "../utils/db_const";
+import { DomainReservation } from "../domain/reservation";
 
 export class ReservationService {
     private userRepository : IUserRepository;
@@ -27,18 +28,14 @@ export class ReservationService {
                 await this.calendarRepository.getCostPerHourCalendar(calendar_id)
             if( (cost_per_hour) === null) throw ErrorFactory.getError(ErrorType.UserNotFound)
 
-            
-            let isSlotExist =  await this.checkSlotExist(calendar_id, start_time, end_time)         
-            if(!isSlotExist) throw  ErrorFactory.getError(ErrorType.SlotNotInCal)
+            if(!await this.checkSlotExist(calendar_id, start_time, end_time) ) throw  ErrorFactory.getError(ErrorType.SlotNotInCal)
 
 
-            let conflicts: number = await this.searchConflicts(calendar_id,start_time, end_time)
-            if(conflicts != 0) throw  ErrorFactory.getError(ErrorType.SlotUsed)
+            if(await this.searchConflicts(calendar_id,start_time, end_time) != 0) throw  ErrorFactory.getError(ErrorType.SlotUsed)
             
-            
-            const haveTokens : boolean = await this.checkHaveEnoughTokens(user_id,start_time,end_time,cost_per_hour)
 
-            const reservation_status : enumReservationStatus = haveTokens ? enumReservationStatus.Pending : enumReservationStatus.Invalid
+            const reservation_status : enumReservationStatus = await this.checkHaveEnoughTokens(user_id,start_time,end_time,cost_per_hour)
+             ? enumReservationStatus.Pending : enumReservationStatus.Invalid
 
             //Devo salvare la prenotazione anche se non ha abbastanza token
 
@@ -49,30 +46,27 @@ export class ReservationService {
             }
             
             return reservation
-            
-            
+
         } catch (error) {
             throw error          
         
         }
     }
 
-    async approveReservation(id: number, approvedBy: number){
+    async approveReservation(id: number, approvedBy: number): Promise<void>{
         const reservation = await this.reservationRepository.findReservationById(id)
-        if(!reservation) throw Error("not found")
+        if(!reservation) throw ErrorFactory.getError(ErrorType.ReservationNotFound)
 
         reservation.approve(approvedBy)
         this.reservationRepository.saveReservation(reservation)
-        return reservation
     }
 
-    async rejectReservation(id: number, rejectedBy: number, reason: string){
+    async rejectReservation(id: number, rejectedBy: number, reason: string): Promise<void>{
         const reservation = await this.reservationRepository.findReservationById(id)
-        if(!reservation) throw Error("not found")
+        if(!reservation) throw ErrorFactory.getError(ErrorType.ReservationNotFound)
 
         reservation.reject(rejectedBy,reason)
         this.reservationRepository.saveReservation(reservation)
-        return reservation
 
     }
 

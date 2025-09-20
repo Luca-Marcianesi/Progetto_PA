@@ -23,13 +23,4 @@ export interface ICalendarService {
 
     unarchiveCalendar(id: number): Promise<void>;
 
-    checkAvailability(id: number, startTime: Date, endTime: Date): Promise<boolean | never>;
-
-    createResource(resourceData: { name: string; description?: string | null; }): Promise<number>;
-
-    getResourceById(id: number): Promise<Resource | null>;
-
-    getAllResources(): Promise<Resource[]>;
-
-    updateResource(id: number, updateData: { name?: string; description?: string | null; }): Promise<void>;
 }

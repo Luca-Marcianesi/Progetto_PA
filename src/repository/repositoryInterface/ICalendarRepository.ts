@@ -3,8 +3,7 @@ import { Resource } from "../../models/Resource";
 
 export interface ICalendarRepository {
 
-    // Il CalendarRepository si occupa di operazioni CRUD e di gestione del calendario ed
-    // anche per CRUD delle risorse associate al calendario.
+    // Il CalendarRepository si occupa di operazioni CRUD e di gestione del calendario
 
     createCalendar(calendarData: { 
         resourceId: number; 
@@ -32,19 +31,7 @@ export interface ICalendarRepository {
 
     getCalendarEnd(calendar_id: number): Promise<Date>;
 
-    unarchiveCalendar(id: number): Promise<void>;
-
-    checkAvailability(id: number, startTime: Date, endTime: Date): Promise<boolean | never>;
-
-    createResource(resourceData: { name: string; description?: string | null; }): Promise<number>;
-
-    getResourceById(id: number): Promise<Resource | null>;
-
-    getAllResources(): Promise<Resource[]>;
-
-    updateResource(id: number, updateData: { name?: string; description?: string | null; }): Promise<void>;
-
-    
+    unarchiveCalendar(id: number): Promise<void>;   
 
 }
 

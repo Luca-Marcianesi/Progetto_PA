@@ -1,7 +1,11 @@
 import { getDatabase } from "./database/database.js";
 import express from "express";
-import userRoutes from "./routes/UserRoutes.js";
-import { errorHandler } from "./middleware/middlewareToken.js";
+import publicRoutes from "./routes/PublicRoutes";
+import autheticateRoutes from "./routes/AuthenticatedRoutes.js"
+import adminRoutes from "./routes/AdminRoutes.js"
+
+import { errorHandler } from "./middleware/errorHandler.js";
+import { authenticate } from "./middleware/middlewareToken.js";
 
 const app = express();
 const PORT = 3000;
@@ -10,7 +14,11 @@ const sequelize = getDatabase();
 
 
 app.use(express.json());
-app.use("/api", userRoutes);
+app.use("/api", publicRoutes);
+app.use("/api", autheticateRoutes);
+app.use("/api", adminRoutes);
+
+
 app.use(errorHandler)
 
 async function start() {

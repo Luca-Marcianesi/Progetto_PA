@@ -1,5 +1,5 @@
 import { Calendar } from "../../models/Calendar";
 
-export interface ICalendarDao {
+export interface ICalendarDAO {
     getCalendarById(calendar_id: number):Promise<Calendar | null>
 }

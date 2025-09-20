@@ -23,36 +23,6 @@ const private_key_path = path.join(__dirname, "../../key/jwtRS256.key");
 const public_key = fs.readFileSync(public_key_path, "utf8");
 const private_key = fs.readFileSync(private_key_path, "utf8");
 
-export function errorHandler(err: Error, req : Request, res : Response , next: any) { 
-  if (err instanceof BaseError) {
-    res.status(err.statusCode).json({"error": err.message});
-  } else {
-    console.log(err)
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({"error": "Internal Server Error Middleware"});
-    }
-  }
-
-export var checkInputLogin = function(req:Request,res:Response,next:any){
-    const { username, password } = req.body;
-    /*
-    if (!username || !password) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: "Username and password are required" });
-    }
-    */
-    next();  
-};
-
-export var validateNewUser = function(req:Request,res:Response,next:any){
-  const { username, password, email } = req.body;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!username || !password || !email) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: "Username, password and email are required" });
-  }
-  if (!emailRegex.test(email)) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid email format" });
-  }
-  next();
-};
    
 
 function signJwt(payload: object): string {
