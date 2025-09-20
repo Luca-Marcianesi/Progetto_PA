@@ -1,7 +1,7 @@
 import { getDatabase } from "./database/database.js";
 import express from "express";
 import userRoutes from "./routes/UserRoutes.js";
-import { errorHandler } from "./middleware/middleware.js";
+import { errorHandler } from "./middleware/middlewareToken.js";
 
 const app = express();
 const PORT = 3000;
