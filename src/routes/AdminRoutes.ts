@@ -9,7 +9,7 @@ import { buildCalendarController,buildReservationController,
 const resource_controller = buildResourceController()
 
 
-const calendar_conytroller = buildCalendarController()
+const calendar_controller = buildCalendarController()
 
 const user_controller = buildUserController()
 
@@ -27,9 +27,21 @@ router.put("/user/:email/token", user_controller.updateToken);
 router.post("/resource",resource_controller.createResource);
 
 //Calendario
-router.post("/calendar",calendar_conytroller.createCalendar);
+router.post("/calendar",calendar_controller.createCalendar);
+
+router.get("/calendar",calendar_controller.getCalendar);
+
+router.put("/calendar/cost",calendar_controller.udateCalendarCost);
+
+router.put("/calendar/end",calendar_controller.updateCalendaEnd);
+
+router.delete("/calendar", calendar_controller.cancelCalendar)
 
 //Prenotazioni
+
+router.put("/reservation",reservation_controller.updateReservations)
+
+router.get("/reservationByCal",reservation_controller.getReservationsByCal)
 
 
 

@@ -35,5 +35,8 @@ export class ReservationController{
     getReservationsFiltered = async(req: Request, res: Response, next: NextFunction) => {
     }
 
+    getReservationsByCal = async(req: Request, res: Response, next: NextFunction) => {
+    }
+
 
 }
