@@ -50,5 +50,5 @@ export function buildResourceController(){
     const resource_dao = new ResourceDAO()
     const resource_repository = new ResourceRepository(resource_dao)
     const resource_service = new ResourceService(resource_repository)
-    return new ResourceController(resource_repository)
+    return new ResourceController(resource_service)
 }

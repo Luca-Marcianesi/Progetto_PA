@@ -32,7 +32,7 @@ export class CalendarService implements ICalendarService {
 
 
     }
-    async getCalendarById(id: number): Promise<Calendar | null> {
+    async getCalendarById(id: number): Promise<DomainCalendar | null> {
         return await this.calendar_repository.getCalendarById(id);
     }
     async updateCostCalendar(id: number, new_cost : Date): Promise<void> {

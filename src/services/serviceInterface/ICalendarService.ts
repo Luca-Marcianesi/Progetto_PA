@@ -5,7 +5,7 @@ import { Resource } from "../../models/Resource";
 export interface ICalendarService {
     createCalendar(calendarData: CreateCalendarInput): Promise<DomainCalendar>;
 
-    getCalendarById(id: number): Promise<Calendar | null>;
+    getCalendarById(id: number): Promise<DomainCalendar | null>;
 
     updateCostCalendar(id: number, new_cost : Date): Promise<void>
     

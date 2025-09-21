@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { IUserService } from "../services/serviceInterface/IUserService";
 import { User } from "../models/User";
 import { UserPayload } from "../@types/userPayload";
+import { DomainUser } from "../domain/user";
 
 export class UserController {
   constructor(private UserService : IUserService) {}

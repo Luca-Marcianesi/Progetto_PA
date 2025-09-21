@@ -30,7 +30,7 @@ export class UserService implements IUserService {
   async   addTokenToUser(email: string, token: number): Promise<void> {
     return await this.userRepo.addTokenToUser(email, token);
   }
-  async  getUserByEmail(email: string): Promise<DomainUser | never> {
+  async  getUserByEmail(email: string): Promise<User | never> {
     let user =  await this.userRepo.getUserByEmail(email)
     if (user=== null) {
       throw ErrorFactory.getError(ErrorType.UserNotFound);
@@ -38,10 +38,10 @@ export class UserService implements IUserService {
     return user;
   }
 
-  async login(email: string, password: string): Promise<DomainUser | never> {
+  async login(email: string, password: string): Promise<User | never> {
       let password_hash = createHash(HASH_ALGORITM).update(password).digest(DIGEST);
       let user  = await this.userRepo.getUserByEmail(email);
-      if(user === null || user.psw != password_hash){
+      if(user === null || user.password != password_hash){
         throw ErrorFactory.getError(ErrorType.LoginFail)
       }
       return user
