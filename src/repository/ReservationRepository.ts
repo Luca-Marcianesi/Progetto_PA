@@ -1,4 +1,3 @@
-import { ReservationDataInterface } from "../dto/reservationModel";
 import { Reservation } from "../models/Reservation";
 import { IReservationRepository } from "./repositoryInterface/IResevationRepository";
 import {IReservationDAO} from "../dao/daoInterface/IReservationDAO"
@@ -29,15 +28,16 @@ export class ReservationRepository implements IReservationRepository{
         if(!modelReservation) throw ErrorFactory.getError(ErrorType.InternalServer)
         
         return new DomainReservation(
-            modelReservation.id,
             modelReservation.calendar_id,
             modelReservation.start_time,
             modelReservation.end_time,
             modelReservation.title,
             modelReservation.user_id,
             999,
+            modelReservation.id,
             "da fare",
-            reservation.getState()
+            reservation.getState(),
+
 
         )
     }
@@ -59,13 +59,13 @@ export class ReservationRepository implements IReservationRepository{
        
 
         return new DomainReservation(
-            model.id,
             model.calendar_id,
             model.start_time,
             model.end_time,
             model.title,
             model.user_id,
             model.user_id,
+            model.id,
             model.reason,
             this.getStateByStatus(model.status)
         );

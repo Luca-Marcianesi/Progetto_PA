@@ -1,5 +1,4 @@
 import { DomainReservation } from "../domain/reservation";
-import { ReservationDataInterface } from "../dto/reservationModel";
 import { Reservation } from "../models/Reservation";
 import { enumReservationStatus } from "../utils/db_const";
 import { IReservationDAO } from "./daoInterface/IReservationDAO";
@@ -41,7 +40,7 @@ export class ReservationDAO implements IReservationDAO{
         
     }
 
-    async updateStatus(id: number, status: string): Promise<void> {
+    async updateStatus(id: number, status: enumReservationStatus): Promise<void> {
         await Reservation.update(
             {
                 status: status

@@ -1,5 +1,4 @@
 import { DomainReservation } from "../../domain/reservation"
-import { ReservationDataInterface } from "../../dto/reservationModel"
 import { NewReservationInput } from "../../middleware/zodValidator/reservation.schema"
 import { Reservation } from "../../models/Reservation"
 

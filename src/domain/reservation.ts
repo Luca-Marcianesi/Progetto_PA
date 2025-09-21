@@ -7,12 +7,12 @@ export class DomainReservation {
     private state : IReservationState
 
     constructor(
-       public id: number,
        public calendar_id: number,
        public start: Date,
        public end: Date,
        public title: string,
        public reservationBy : number,
+       public id?: number,
        public handledBy?: number,
        public rejectReason?: string,
        state?: IReservationState

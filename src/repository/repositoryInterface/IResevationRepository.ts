@@ -1,5 +1,4 @@
-//import { ReservationModel } from "../../dto/reservationModel";
-import { ReservationDataInterface } from "../../dto/reservationModel";
+
 import { Reservation } from "../../models/Reservation";
 import { Calendar } from "../../models/Calendar";
 import { enumReservationStatus } from "../../utils/db_const";

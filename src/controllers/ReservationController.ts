@@ -2,7 +2,6 @@ import { Request, Response ,NextFunction } from "express";
 
 import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
 import { IReservationService } from "../services/serviceInterface/IReservationService";
-import { ReservationDataInterface } from "../dto/reservationModel";
 import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
 import { NewReservationInput } from "../middleware/zodValidator/reservation.schema";
 

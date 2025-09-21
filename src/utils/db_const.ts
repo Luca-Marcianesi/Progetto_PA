@@ -14,3 +14,8 @@ export enum enumReservationStatus {
 
 export const USER_ROLE = "user"
 export const ADMIN_ROLE = "admin"
+
+export enum enumRole{
+    USER = USER_ROLE,
+    ADMIN = ADMIN_ROLE
+}

@@ -22,7 +22,6 @@ export class CalendarService implements ICalendarService {
         if(!await this.isResourceBusy(calendarData.resource_id,calendarData.start,calendarData.end)) throw Error("errore non implemenato reso occupata")
 
         let calendar = new DomainCalendar(
-            0,
             calendarData.resource_id,
             calendarData.start,
             calendarData.end,

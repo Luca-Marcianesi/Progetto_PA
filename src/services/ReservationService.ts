@@ -2,7 +2,6 @@ import { Reservation } from "../models/Reservation";
 import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
 import { ICalendarRepository } from "../repository/repositoryInterface/ICalendarRepository";
 import { IUserRepository } from "../repository/repositoryInterface/IUserRepository";
-import { ReservationDataInterface } from "../dto/reservationModel";
 import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
 import { Calendar } from "../models/Calendar";
 import { enumReservationStatus } from "../utils/db_const";
@@ -26,7 +25,6 @@ export class ReservationService {
             let {calendar_id, start_time, end_time} = reservationData
 
             let reservation = new DomainReservation(
-                0, //idfittizio
                 reservationData.calendar_id,
                 reservationData.start_time,
                 reservationData.end_time,
