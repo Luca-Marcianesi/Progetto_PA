@@ -45,3 +45,24 @@ export const validateParamsSchema = (schema: ZodSchema) => {
   }
 }
 }
+
+export const validateQuerySchema = (schema: ZodSchema) => {
+  return  (req: Request,res:Response, next: NextFunction) => {
+
+  try {
+    schema.parse(req.query)
+    next()
+  } catch (error) {
+    if(error instanceof ZodError){
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        errors: error.issues.map(e =>({
+          field: e.path.join("|"),
+          message: e.message
+        })
+      )
+      })
+    }
+    next(error)
+  }
+}
+}

@@ -2,7 +2,14 @@ import {z} from "zod"
 import {enumReservationStatus} from "../../utils/db_const"
 import { DateOnHourSchema, GenericStringSchema, refineFromBeforeToSchema, StandarIdSchema, ValidationMessages } from "./utilsValidator"
 
+export const deleteReservationSchema = z.object({
+    id: StandarIdSchema,
+
+})
+export type deleteReservationInput = z.infer<typeof deleteReservationSchema>
+
 export const ReservationStatusFilterSchema = z.object({
+    id: StandarIdSchema,
     status: z.enum(enumReservationStatus),
     created_at: z.iso.datetime()
 

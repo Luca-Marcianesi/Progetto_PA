@@ -3,6 +3,11 @@ import { authenticate, verifyToken } from "../middleware/middlewareToken";
 import { ADMIN_ROLE } from "../utils/db_const";
 import { buildCalendarController,buildReservationController,
     buildResourceController,buildUserController } from "../utils/controllerFactory";
+import { validateBodySchema,validateParamsSchema,validateQuerySchema } from "../middleware/middlewareValidator";
+import { UpdateTokenSchema } from "../middleware/zodValidator/user.schema";
+import { CreateResourceSchema } from "../middleware/zodValidator/resource.schema";
+import { CalendaIdSchema, CreateCalendarSchema, UpdateCalendaCostSchema, UpdateCalendarEndSchema } from "../middleware/zodValidator/calendar.schema";
+import { UpdateStatusReseservationSchema } from "../middleware/zodValidator/reservation.schema";
 
 
 
@@ -21,27 +26,27 @@ const router = Router()
 router.use(verifyToken,authenticate([ADMIN_ROLE]))
 
 //Utente
-router.put("/user/:email/token", user_controller.updateToken);
+router.patch("/user/:email/token",validateBodySchema(UpdateTokenSchema), user_controller.updateToken);
 
 //Risorse
-router.post("/resource",resource_controller.createResource);
+router.post("/resource",validateBodySchema(CreateResourceSchema),resource_controller.createResource);
 
 //Calendario
-router.post("/calendar",calendar_controller.createCalendar);
+router.post("/calendar",validateBodySchema(CreateCalendarSchema),calendar_controller.createCalendar);
 
-router.get("/calendar",calendar_controller.getCalendar);
+router.get("/calendar",validateQuerySchema(CalendaIdSchema),calendar_controller.getCalendar);
 
-router.put("/calendar/cost",calendar_controller.udateCalendarCost);
+router.patch("/calendar/cost", validateBodySchema(UpdateCalendaCostSchema),calendar_controller.udateCalendarCost);
 
-router.put("/calendar/end",calendar_controller.updateCalendaEnd);
+router.patch("/calendar/end",validateBodySchema(UpdateCalendarEndSchema),calendar_controller.updateCalendaEnd);
 
-router.delete("/calendar", calendar_controller.cancelCalendar)
+router.delete("/calendar", validateParamsSchema(CalendaIdSchema), calendar_controller.cancelCalendar)
 
 //Prenotazioni
 
-router.put("/reservation",reservation_controller.updateReservations)
+router.patch("/reservation",validateBodySchema(UpdateStatusReseservationSchema),reservation_controller.updateReservations)
 
-router.get("/reservationByCal",reservation_controller.getReservationsByCal)
+router.get("/reservationsByCal",validateQuerySchema(CalendaIdSchema),reservation_controller.getReservationsByCal)
 
 
 

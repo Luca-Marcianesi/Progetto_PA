@@ -22,5 +22,8 @@ export class CalendarController {
     updateCalendaEnd = async(req: Request, res: Response, next: NextFunction) => {
     }
 
+    checkSclot = async(req: Request, res: Response, next: NextFunction) => {
+    }
+
 }
 
