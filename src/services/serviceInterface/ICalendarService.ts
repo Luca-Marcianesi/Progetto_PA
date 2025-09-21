@@ -7,7 +7,7 @@ export interface ICalendarService {
 
     getCalendarById(id: number): Promise<DomainCalendar | null>;
 
-    updateCostCalendar(id: number, new_cost : Date): Promise<void>
+    updateCostCalendar(id: number, new_cost : number): Promise<void>
     
     updateEndCalendar(id: number, new_end : Date): Promise<void>
 
@@ -16,5 +16,7 @@ export interface ICalendarService {
     archiveCalendar(id: number): Promise<void>;
 
     unarchiveCalendar(id: number): Promise<void>;
+
+    checkSlotAvaiability(calendar_id: number, start: Date, end: Date):Promise<void>
 
 }

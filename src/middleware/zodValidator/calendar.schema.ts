@@ -32,6 +32,6 @@ export type UpdateCalendarCostInput = z.infer<typeof UpdateCalendaCostSchema>
 
 export const UpdateCalendarEndSchema = z.object({
     calendar_id: StandarIdSchema,
-    end: DateOnHourSchema.optional(),
+    end: DateOnHourSchema
 })
 export type UpdateCalendarEndInput = z.infer<typeof UpdateCalendarEndSchema>

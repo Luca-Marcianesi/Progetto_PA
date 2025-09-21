@@ -5,6 +5,7 @@ export const ValidationMessages ={
     date: {
         mustBeOnHour : "La date deve essere all'ora esatta",
         fromBeforeTo: "La data di inizio deve precedere la data di fine",
+        invalid: "Formato data invalido"
     },
     string:{
         toShort: (min : number) => 'La stringa deve essere più lunga di ${min} caratteri',

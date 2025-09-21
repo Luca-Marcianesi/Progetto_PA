@@ -36,7 +36,7 @@ router.post("/calendar",validateBodySchema(CreateCalendarSchema),calendar_contro
 
 router.get("/calendar",validateQuerySchema(CalendaIdSchema),calendar_controller.getCalendar);
 
-router.patch("/calendar/cost", validateBodySchema(UpdateCalendaCostSchema),calendar_controller.udateCalendarCost);
+router.patch("/calendar/cost", validateBodySchema(UpdateCalendaCostSchema),calendar_controller.updateCalendarCost);
 
 router.patch("/calendar/end",validateBodySchema(UpdateCalendarEndSchema),calendar_controller.updateCalendaEnd);
 
