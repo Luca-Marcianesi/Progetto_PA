@@ -1,54 +1,61 @@
 import { Reservation as ReservationModel } from "../models/Reservation";
 import { enumReservationStatus } from "../utils/db_const";
-import {ApprovedState, IReservationState, PendingState, RejectedState} from "../utils/stateReservation"
-
-interface StateData  {
-    id: number,
-    status: enumReservationStatus,
-    apprOrRejBy?: number,
-    reason? : string
-
-}
-
+import { IReservationState} from "./stateReservation/IReservationState"
+import { PendingState } from "./stateReservation/states/pendingState";
 export class DomainReservation {
-    id: number
-    status: enumReservationStatus
-    apprOrRejBy?: number
-    reason? : string
 
-    private state: IReservationState;
+    private state : IReservationState
 
-    constructor(data: StateData){
-        this.id = data.id;
-        this.status = data.status;
-        this.apprOrRejBy = data.apprOrRejBy
-        this.reason = data.reason
-
-        switch(data.status){
-            case enumReservationStatus.Approved:
-                this.state = new ApprovedState();
-                break
-            case enumReservationStatus.Reject:
-                this.state = new RejectedState();
-                break
-            default:
-                this.state = new PendingState()
-
-        }
+    constructor(
+       public id: number,
+       public calendar_id: number,
+       public start: Date,
+       public end: Date,
+       public title: string,
+       public reservationBy : number,
+       public handledBy?: number,
+       public rejectReason?: string,
+       state?: IReservationState
+    ){
+        this.state = state ??  new PendingState()
     }
 
-    setState(state: IReservationState, newStatus : enumReservationStatus){
+
+    setState(state: IReservationState){
         this.state = state
-        this.status = newStatus
     }
 
-
-    approve(userId : number){
-        this.state.approve(this, userId)
+    setApprovedBy(userId: number) {
+        this.handledBy = userId;
     }
 
-    reject(user_id: number, reason: string){
-        this.state.reject(this,user_id,reason)
+    setRejectedBy(userId: number, reason: string) {
+        this.handledBy = userId;
+        this.rejectReason = reason;
+    }
+
+    setCancelled() {
+        // logica di cancellazione
+    }
+
+    getState(){
+        return this.state
+    }
+
+    getStatus(){
+        return this.state.getStatus()
+    }
+
+    approve(approvedBy : number){
+        this.state.approve(this, approvedBy)
+    }
+
+    reject(rejectBy: number, reason: string){
+        this.state.reject(this, rejectBy ,reason)
+    }
+
+    cancel(){
+        this.state.cancel(this)
     }
 
 }

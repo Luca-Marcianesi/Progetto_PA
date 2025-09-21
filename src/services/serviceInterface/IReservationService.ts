@@ -1,9 +1,10 @@
+import { DomainReservation } from "../../domain/reservation"
 import { ReservationDataInterface } from "../../dto/reservationModel"
+import { NewReservationInput } from "../../middleware/zodValidator/reservation.schema"
 import { Reservation } from "../../models/Reservation"
-import {InputNewReservation} from "../../utils/input_validator/reservaionSchema"
 
 export interface IReservationService {
-    newReservation(reservationData : InputNewReservation):Promise<Reservation | never>
+    newReservation(reservationData : NewReservationInput,user_id: number):Promise<DomainReservation | never>
 
     approveReservation(id: number, approvedBy: number):Promise<void>
 

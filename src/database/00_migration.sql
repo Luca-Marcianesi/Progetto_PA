@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS requests (
     calendar_id INT NOT NULL REFERENCES calendars(id) ON DELETE CASCADE,
     user_id INT NOT NULL REFERENCES users(id),
     title VARCHAR(255) NOT NULL,
-    reason TEXT NOT NULL,
+    reason TEXT,
     status VARCHAR(20) NOT NULL CHECK (status IN ('pending','approved','rejected','invalid','cancelled')),
     held_tokens NUMERIC(20,4) NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT NOW(),

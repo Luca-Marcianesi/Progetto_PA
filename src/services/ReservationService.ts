@@ -7,6 +7,7 @@ import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
 import { Calendar } from "../models/Calendar";
 import { enumReservationStatus } from "../utils/db_const";
 import { DomainReservation } from "../domain/reservation";
+import { NewReservationInput } from "../middleware/zodValidator/reservation.schema";
 
 export class ReservationService {
     private userRepository : IUserRepository;
@@ -19,13 +20,23 @@ export class ReservationService {
         this.calendarRepository = calendarRepository;
     }
 
-    async newReservation(reservationData : ReservationDataInterface):Promise<Reservation | never>{
+    async newReservation(reservationData : NewReservationInput, user_id: number ):Promise<DomainReservation | never>{
         try {
 
-            let {calendar_id,start_time,end_time,user_id} = reservationData
+            let {calendar_id, start_time, end_time} = reservationData
+
+            let reservation = new DomainReservation(
+                0, //idfittizio
+                reservationData.calendar_id,
+                reservationData.start_time,
+                reservationData.end_time,
+                reservationData.title,
+                user_id
+
+            )
 
             let cost_per_hour : number | null = 
-                await this.calendarRepository.getCostPerHourCalendar(calendar_id)
+                await this.calendarRepository.getCostPerHourCalendar(reservation.calendar_id)
             if( (cost_per_hour) === null) throw ErrorFactory.getError(ErrorType.UserNotFound)
 
             if(!await this.checkSlotExist(calendar_id, start_time, end_time) ) throw  ErrorFactory.getError(ErrorType.SlotNotInCal)
@@ -39,13 +50,13 @@ export class ReservationService {
 
             //Devo salvare la prenotazione anche se non ha abbastanza token
 
-            let reservation : Reservation = await this.reservationRepository.insertResevation(reservationData,reservation_status)
+            let reservationOut : DomainReservation = await this.reservationRepository.insertResevation(reservation,reservation_status)
 
             if(reservation_status == enumReservationStatus.Invalid){
                 throw ErrorFactory.getError(ErrorType.TooLessToken)
             }
             
-            return reservation
+            return reservationOut
 
         } catch (error) {
             throw error          

@@ -17,7 +17,19 @@ const reservation_controller =buildReservationController()
 const router = Router()
 
 // Verifica del token prima di ogni rotta del file
-router.use(verifyToken,)
+router.use(verifyToken)
+
+router.post("/reservation", reservation_controller.newReservation)
+
+router.get("/reservation/state",reservation_controller.getReservations)
+
+router.get("/reservation/filter", reservation_controller.getReservationsFiltered)
+
+router.get("/calendar",calendar_conytroller.getCalendar)
+
+router.delete("/reservation", reservation_controller.deleteReservations)
+
+
 
 
 

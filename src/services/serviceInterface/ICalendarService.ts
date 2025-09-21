@@ -1,21 +1,15 @@
+import { DomainCalendar } from "../../domain/calendar";
+import { CreateCalendarInput } from "../../middleware/zodValidator/calendar.schema";
 import { Calendar } from "../../models/Calendar";
 import { Resource } from "../../models/Resource";
 export interface ICalendarService {
-    createCalendar(calendarData: { 
-        resourceId: number; 
-        startTime: Date; 
-        endTime: Date; 
-        costPerHour: number; 
-        archived?: boolean; }): Promise<number>;
+    createCalendar(calendarData: CreateCalendarInput): Promise<DomainCalendar>;
 
     getCalendarById(id: number): Promise<Calendar | null>;
 
-    updateCalendar(id: number, updateData: { 
-        resourceId?: number; 
-        startTime?: Date;
-        endTime?: Date;
-        costPerHour?: number; 
-    }): Promise<void>;
+    updateCostCalendar(id: number, new_cost : Date): Promise<void>
+    
+    updateEndCalendar(id: number, new_end : Date): Promise<void>
 
     deleteCalendar(id: number): Promise<void>;
 

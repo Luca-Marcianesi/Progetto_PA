@@ -15,13 +15,15 @@ export const ValidationMessages ={
     }
 }
 
-export const DateOnHourSchema = z.iso.datetime().refine((value) =>{
-    const date = new Date(value);
-    return date.getTime() === 0 && date.getSeconds() === 0;
-},{
-    message: ValidationMessages.date.mustBeOnHour,
-}
+export const DateOnHourSchema = z
+    .iso.datetime()
+    .transform((value) => new Date(value))
+    .refine((date) => date.getMinutes() === 0 && date.getSeconds() === 0,
+    {
+        message: ValidationMessages.date.mustBeOnHour
+    }
 )
+
 
 export const refineFromBeforeToSchema = (from : string, to : string) =>{
     return (data: any) =>{

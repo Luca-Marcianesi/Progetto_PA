@@ -3,6 +3,7 @@ import { IResourceDAO } from "../dao/daoInterface/IResourceDAO";
 import { ICalendarRepository } from "./repositoryInterface/ICalendarRepository";
 import { Calendar } from "../models/Calendar";
 import { ICalendarDAO } from "../dao/daoInterface/ICalendarDAO";
+import { DomainCalendar } from "../domain/calendar";
 
 export class CalendarRepository implements ICalendarRepository {
     private resourceDAO: IResourceDAO;
@@ -12,9 +13,14 @@ export class CalendarRepository implements ICalendarRepository {
         this.resourceDAO = resourceDAO;
         this.calendarDAO = calendarDAO;
     }
-    async createCalendar(calendarData: { resourceId: number; startTime: Date; endTime: Date; costPerHour: number; archived?: boolean; }): Promise<number> {
-        // Implementa la logica per creare un calendario
-        throw new Error("Method not implemented.");
+    async createCalendar(calendarData:DomainCalendar): Promise<DomainCalendar> {
+        await this.calendarDAO.create(
+            calendarData.resource_id,
+            calendarData.start_time,
+            calendarData.end_time,
+            calendarData.cost
+        )
+        return calendarData
     }
     async getCalendarById(id: number): Promise<Calendar | null> {
         // Implementa la logica per ottenere un calendario per ID
@@ -54,5 +60,14 @@ export class CalendarRepository implements ICalendarRepository {
     async getCostPerHourCalendar(calendar_id: number): Promise<number | null> {
         throw new Error("Method not implemented.");
         
-    } 
+    }
+
+    getCalendarsByResourceId(id: number): Promise<DomainCalendar[]> {
+        throw new Error("Method not implemented.");
+    }
+
+    async findConflicting(resourceId: number, start: Date, end: Date): Promise<DomainCalendar[]>{
+        const records = await this.calendarDAO.findConflicting(resourceId, start, end);
+        return records.map(r => new DomainCalendar(r.id, r.resource_id, r.start_time, r.end_time,r.cost_per_hour, r.title));
+    }
 }

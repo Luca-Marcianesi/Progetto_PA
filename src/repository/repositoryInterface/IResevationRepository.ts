@@ -6,7 +6,7 @@ import { enumReservationStatus } from "../../utils/db_const";
 import { DomainReservation } from "../../domain/reservation";
 
 export interface IReservationRepository{
-    insertResevation(reservation: ReservationDataInterface , status: enumReservationStatus): Promise<Reservation | never>;
+    insertResevation(reservation: DomainReservation , status: enumReservationStatus): Promise<DomainReservation | never>;
 
 
     calcel():Promise<void | never>;

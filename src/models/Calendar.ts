@@ -5,11 +5,12 @@ const sequelize = getDatabase();
 
 interface CalendarAttributes{
     id? : number;
-    resourceId : number;
+    resource_id : number;
     start_time: Date;
     end_time: Date;
     cost_per_hour: number;
-    archived: Date;
+    title:string;
+    archived: boolean;
 
 }
 
@@ -17,11 +18,12 @@ interface CalendarCreationAttributes extends Omit<CalendarAttributes, 'id' | 'ar
 
 class Calendar extends Model<CalendarAttributes,CalendarCreationAttributes> implements CalendarAttributes{
     public id! : number;
-    public resourceId!: number;
+    public resource_id!: number;
     public start_time!: Date;
     public end_time!: Date;
     public cost_per_hour!: number;
-    public archived!: Date;
+    public title!: string;
+    public archived!: boolean;
     
     public readonly created_at!: Date;
     public readonly updated_at!: Date;
@@ -34,7 +36,7 @@ Calendar.init(
             autoIncrement: true, 
             primaryKey: true 
         },
-        resourceId: {
+        resource_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
@@ -50,6 +52,11 @@ Calendar.init(
             type: DataTypes.INTEGER, 
             allowNull: false,
             validate: { min: 0 } // Valore non negativo
+        },
+        title:{
+            type: DataTypes.STRING,
+            allowNull: false,
+
         },
         archived: { 
             type: DataTypes.BOOLEAN, 

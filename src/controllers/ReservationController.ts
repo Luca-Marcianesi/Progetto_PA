@@ -14,7 +14,10 @@ export class ReservationController{
         try {     
         
             const inputValidate = req.body as  unknown as NewReservationInput
-            await this.ReservationService.newReservation(inputValidate)
+
+            if(!req.user) throw ErrorFactory.getError(ErrorType.Unauthorized)
+    
+            let reservation = await this.ReservationService.newReservation(inputValidate, req.user.id)
 
         } catch (error) {
             throw error
@@ -27,7 +30,7 @@ export class ReservationController{
     updateReservations = async(req: Request, res: Response, next: NextFunction) => {
     }
 
-    cancelReservations = async(req: Request, res: Response, next: NextFunction) => {
+    deleteReservations = async(req: Request, res: Response, next: NextFunction) => {
     }
 
     getReservationsFiltered = async(req: Request, res: Response, next: NextFunction) => {

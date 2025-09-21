@@ -23,9 +23,10 @@ export type ReservationOptionalFilterInput = z.infer<typeof ReservationOptionalF
 
 
 export const NewReservationSchema = z.object({
+    calendar_id: StandarIdSchema,
     title: GenericStringSchema,
-    start: DateOnHourSchema,
-    end: DateOnHourSchema,
+    start_time: DateOnHourSchema,
+    end_time: DateOnHourSchema,
     reason : GenericStringSchema
 
 }).refine(
