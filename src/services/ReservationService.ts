@@ -40,7 +40,7 @@ export class ReservationService {
             if(!await this.checkSlotExist(calendar_id, start_time, end_time) ) throw  ErrorFactory.getError(ErrorType.SlotNotInCal)
 
 
-            if(await this.searchConflicts(calendar_id,start_time, end_time) != 0) throw  ErrorFactory.getError(ErrorType.SlotUsed)
+            if(!await this.searchConflicts(reservation) ) throw  ErrorFactory.getError(ErrorType.SlotUsed)
             
 
             const reservation_status : enumReservationStatus = await this.checkHaveEnoughTokens(user_id,start_time,end_time,cost_per_hour)
@@ -96,9 +96,14 @@ export class ReservationService {
         
     }
 
-    private async searchConflicts(calendar_id: number, start_time: Date, end_time: Date): Promise<number>{
-        return (await this.reservationRepository
-                .findConflictsSlots(calendar_id,start_time, end_time)).length
+    private async searchConflicts(reservation: DomainReservation): Promise<boolean>{
+
+        const reservations = await this.reservationRepository.findReservationByCalendarId(reservation.calendar_id);
+
+        return reservations.some(r => r.overlaps(reservation));
+        
+
+
     }
 
     private async  checkHaveEnoughTokens(

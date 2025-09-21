@@ -38,6 +38,10 @@ export class DomainReservation {
         // logica di cancellazione
     }
 
+    overlaps(other: DomainReservation): boolean {
+        return this.start < other.end && this.end > other.start;
+    }
+
     getState(){
         return this.state
     }

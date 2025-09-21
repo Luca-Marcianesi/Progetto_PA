@@ -42,13 +42,16 @@ export class ReservationRepository implements IReservationRepository{
         )
     }
 
-    async findConflictsSlots(calendar_id: number, start_time: Date, end_time: Date): Promise<Reservation[]> {
+    async findReservationByCalendarId(calendar_id: number): Promise<DomainReservation[]> {
         let models = await this.reservationDAO.getReservatisByCalendarId(calendar_id)
-        return models.filter(r =>
-            r.status == enumReservationStatus.Approved &&
-            r.start_time < end_time &&
-            r.end_time > start_time
-        )
+        return models.map(r => new DomainReservation(
+                r.calendar_id,
+                r.start_time,
+                r.end_time,
+                r.title,
+                r.user_id,
+
+            ));
         
     }
 

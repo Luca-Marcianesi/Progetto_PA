@@ -8,14 +8,11 @@ export interface ICalendarRepository {
 
     createCalendar(calendarData: DomainCalendar): Promise<DomainCalendar>;
 
-    getCalendarById(id: number): Promise<Calendar | null>;
+    getCalendarById(id: number): Promise<DomainCalendar | null>;
 
-    updateCalendar(id: number, updateData: { 
-        resourceId?: number; 
-        startTime?: Date;
-        endTime?: Date;
-        costPerHour?: number; 
-    }): Promise<void>;
+    updateCostCalendar(id: number,  cost: number): Promise<void>;
+
+    updateEndCalendar(id: number,  cost: Date): Promise<void>;
 
     deleteCalendar(id: number): Promise<void>;
 

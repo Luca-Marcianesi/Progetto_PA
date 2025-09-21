@@ -1,5 +1,6 @@
 
 import { IResourceDAO } from "../dao/daoInterface/IResourceDAO";
+import { DomainResource } from "../domain/resource";
 import { Resource } from "../models/Resource";
 import { IResourceRepository } from "./repositoryInterface/IResourceRepository";
 
@@ -10,19 +11,16 @@ export class ResourceRepository implements IResourceRepository{
         this.resource_dao = resource_dao
 
     }
-    createResource(resourceData: { name: string; description?: string | null; }): Promise<number> {
+    createResource(resourceData: { name: string; description?: string | null; }): Promise<DomainResource> {
         throw Error("non implementata")
     }
 
-    getResourceById(id: number): Promise<Resource | null> {
+    getResourceById(id: number): Promise<DomainResource | null> {
         throw Error("non implementata")
     }
 
-    getAllResources(): Promise<Resource[]> {
+    getAllResources(): Promise<DomainResource[]> {
         throw Error("non implementata")
     }
 
-    updateResource(id: number, updateData: { name?: string; description?: string | null; }): Promise<void> {
-        throw Error("non implementata")
-    }
 }

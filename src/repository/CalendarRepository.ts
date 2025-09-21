@@ -23,14 +23,21 @@ export class CalendarRepository implements ICalendarRepository {
         )
         return calendarData
     }
-    async getCalendarById(id: number): Promise<Calendar | null> {
+    async getCalendarById(id: number): Promise<DomainCalendar | null> {
         // Implementa la logica per ottenere un calendario per ID
         throw new Error("Method not implemented.");
     }
-    async updateCalendar(id: number, updateData: { resourceId?: number; startTime?: Date; endTime?: Date; costPerHour?: number; }): Promise<void> {
+    async updateCostCalendar(id: number, cost: number): Promise<void> {
         // Implementa la logica per aggiornare un calendario
         throw new Error("Method not implemented.");
     }
+
+    async updateEndCalendar(id: number, end: Date): Promise<void> {
+        // Implementa la logica per aggiornare un calendario
+        throw new Error("Method not implemented.");
+    }
+
+
     async deleteCalendar(id: number): Promise<void> {
         // Implementa la logica per eliminare un calendario
         throw new Error("Method not implemented.");

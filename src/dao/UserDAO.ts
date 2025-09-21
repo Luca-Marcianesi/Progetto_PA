@@ -2,14 +2,19 @@ import { User } from "../models/User.js";
 import { IUserDAO } from "./daoInterface/IUserDAO.js";
 export class UserDAO implements IUserDAO {
 
-    async createUser(userData: {
-        name: string;
-        surname: string;
-        email: string;
-        password: string;
-    }): Promise<number> {
-        const user = await User.create(userData);
-        return user.id;
+    async createUser(
+        name: string,
+        surname: string,
+        email: string,
+        password: string,
+    ): Promise<User> {
+        return await User.create({
+            name: name,
+            surname: surname,
+            email: email,
+            password: password
+        });
+        
 
     }
 
