@@ -7,7 +7,7 @@ export class ReservationDAO implements IReservationDAO{
     async insert(reservation: DomainReservation, status: enumReservationStatus): Promise<Reservation > {
         return await Reservation.create(
             {
-                user_id: reservation.id,
+                user_id: reservation.reservationBy,
                 calendar_id: reservation.calendar_id,
                 start_time:reservation.start,
                 end_time: reservation.end,

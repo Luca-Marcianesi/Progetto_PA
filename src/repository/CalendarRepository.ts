@@ -18,7 +18,8 @@ export class CalendarRepository implements ICalendarRepository {
             calendarData.resource_id,
             calendarData.start_time,
             calendarData.end_time,
-            calendarData.cost
+            calendarData.cost,
+            calendarData.title
         )
         return calendarData
     }
@@ -68,6 +69,6 @@ export class CalendarRepository implements ICalendarRepository {
 
     async findConflicting(resourceId: number, start: Date, end: Date): Promise<DomainCalendar[]>{
         const records = await this.calendarDAO.findConflicting(resourceId, start, end);
-        return records.map(r => new DomainCalendar(r.id, r.resource_id, r.start_time, r.end_time,r.cost_per_hour, r.title));
+        return records.map(r => new DomainCalendar(r.resource_id, r.start_time, r.end_time,r.cost_per_hour, r.title,r.archived, r.id));
     }
 }

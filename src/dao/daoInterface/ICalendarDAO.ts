@@ -5,5 +5,5 @@ export interface ICalendarDAO {
 
     findConflicting(resourceId: number, start: Date, end: Date): Promise<Calendar[]>
 
-    create(resourceId: number,start_time: Date, end_time: Date,cost_per_hour: number):Promise<Calendar>
+    create(resourceId: number,start_time: Date, end_time: Date,cost_per_hour: number,title: string):Promise<Calendar>
 }

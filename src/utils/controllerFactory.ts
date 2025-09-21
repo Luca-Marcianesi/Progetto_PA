@@ -39,9 +39,10 @@ export function buildReservationController(){
 
 export function buildCalendarController(){
     const resource_dao = new ResourceDAO()
+    const resource_repository = new ResourceRepository(resource_dao)
     const calendar_dao = new CalendarDAO()
     const calendar_repository = new CalendarRepository(resource_dao,calendar_dao)
-    const calendar_service = new CalendarService(calendar_repository)
+    const calendar_service = new CalendarService(calendar_repository,resource_repository)
     return new CalendarController(calendar_service)
 }
 

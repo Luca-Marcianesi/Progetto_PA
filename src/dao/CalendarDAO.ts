@@ -18,12 +18,13 @@ export class CalendarDAO implements ICalendarDAO{
     });
   }
 
-    async create(resourceId: number, start_time: Date, end_time: Date, cost_per_hour: number): Promise<Calendar> {
+    async create(resourceId: number, start_time: Date, end_time: Date, cost_per_hour: number,title: string): Promise<Calendar> {
         return await Calendar.create({
           resource_id : resourceId,
           start_time: start_time,
           end_time: end_time,
           cost_per_hour: cost_per_hour,
+          title : title
 
         } )
     }
