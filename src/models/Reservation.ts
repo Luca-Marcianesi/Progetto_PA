@@ -14,8 +14,9 @@ interface ReservationAttributes {
     title: string;
     status: enumReservationStatus;
     reason?: string;
+    handledBy?: number;
 }
-interface ReservationCreationAttributes extends Omit<ReservationAttributes, 'id'  | 'reason'> {}
+interface ReservationCreationAttributes extends Omit<ReservationAttributes, 'id'  | 'reason' | 'handledBy'> {}
 
 class Reservation extends Model<ReservationAttributes, ReservationCreationAttributes> implements ReservationAttributes {
     public id!: number;
@@ -24,6 +25,7 @@ class Reservation extends Model<ReservationAttributes, ReservationCreationAttrib
     start_time!: Date;
     end_time!: Date;
     public title!: string;
+    public handledBy!: number;
     public status!: enumReservationStatus;
     public reason!: string;
 
@@ -71,6 +73,11 @@ Reservation.init(
             type: DataTypes.ENUM('pending', 'approved', 'rejected','invalid','cancel'),
             allowNull: false,
             defaultValue: 'pending',
+        },
+        handledBy:{
+            type: DataTypes.INTEGER,
+            allowNull: true
+
         },
         reason: {
             type: DataTypes.STRING,

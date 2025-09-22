@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import { getDatabase } from "../database/database.js";
+import { Reservation } from "./Reservation.js";
 
 const sequelize = getDatabase();
 
@@ -74,6 +75,9 @@ Calendar.init(
         deletedAt: "deleted_at"
     }
 );
+
+Calendar.hasMany(Reservation, { foreignKey: 'calendar_id', as: 'requests' });
+Reservation.belongsTo(Calendar, { foreignKey: 'calendar_id', as: 'calendar' });
 
 export { Calendar };
 

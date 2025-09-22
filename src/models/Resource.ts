@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import { getDatabase } from "../database/database.js";
+import { Calendar } from "./Calendar.js";
 
 const sequelize = getDatabase();
 
@@ -44,6 +45,9 @@ Resource.init(
         updatedAt: "updated_at",
     }
 );
+
+Resource.hasMany(Calendar, { foreignKey: 'resource_id', as: 'calendars' });
+Calendar.belongsTo(Resource, { foreignKey: 'resource_id', as: 'resource' });
 
 export { Resource };
 

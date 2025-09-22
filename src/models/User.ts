@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import { getDatabase } from "../database/database.js";
+import { Reservation } from "./Reservation.js";
 
 const sequelize = getDatabase();
 
@@ -80,6 +81,12 @@ User.init(
         updatedAt: "updated_at",
     }
 );
+
+User.hasMany(Reservation, { foreignKey: 'user_id', as: 'requests' });
+Reservation.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+
+User.hasMany(Reservation, { foreignKey: 'handledBy', as: 'handledRequests' }); 
+Reservation.belongsTo(User, { foreignKey: 'handledBy', as: 'handler' });
 
 export { User };
 
