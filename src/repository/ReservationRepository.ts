@@ -33,26 +33,38 @@ export class ReservationRepository implements IReservationRepository{
             modelReservation.end_time,
             modelReservation.title,
             modelReservation.user_id,
-            999,
+            modelReservation.handled_by,
             modelReservation.id,
-            "da fare",
+            undefined,
             reservation.getState(),
 
 
         )
     }
 
-    async findReservationByCalendarId(calendar_id: number): Promise<DomainReservation[]> {
-        let models = await this.reservationDAO.getReservatisByCalendarId(calendar_id)
-        return models.map(r => new DomainReservation(
+    async findReservationApprovedByCalendarId(calendar_id: number): Promise<DomainReservation[]> {
+        let models = await this.reservationDAO.getReservationApproved(calendar_id)
+        return models
+        .map(r => new DomainReservation(
                 r.calendar_id,
                 r.start_time,
                 r.end_time,
                 r.title,
                 r.user_id,
-
             ));
         
+    }
+
+    async findReservationsByCalendar(calendar_id: number): Promise<DomainReservation[]> {
+        const models = await this.reservationDAO.getReservatisByCalendarId(calendar_id)
+        return models
+        .map(r => new DomainReservation(
+                r.calendar_id,
+                r.start_time,
+                r.end_time,
+                r.title,
+                r.user_id,
+            ));
     }
 
     async findReservationById(reservation_id: number): Promise<DomainReservation | null> {
@@ -78,7 +90,7 @@ export class ReservationRepository implements IReservationRepository{
     }
 
     async saveReservation(reservation: DomainReservation): Promise<void> {
-       await this.reservationDAO.insert(reservation,reservation.getStatus())
+       await this.reservationDAO.saveUpdatedReservation(reservation)
         
     }
 

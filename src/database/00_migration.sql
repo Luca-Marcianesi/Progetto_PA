@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS requests (
     end_time TIMESTAMP NOT NULL,
     title VARCHAR(255) NOT NULL,
     reason TEXT,
-    handledBy INT REFERENCES users(id) ON DELETE CASCADE,
+    handled_by INT REFERENCES users(id) ON DELETE SET NULL,
     status VARCHAR(20) NOT NULL CHECK (status IN ('pending','approved','rejected','invalid','cancelled')),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),

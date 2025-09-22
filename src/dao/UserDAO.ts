@@ -18,8 +18,8 @@ export class UserDAO implements IUserDAO {
 
     }
 
-    async addTokenToUser(email: string, token: number): Promise<void> {
-        await User.increment({ token }, { where: { email } });
+    async addTokenToUser(id: number, token: number): Promise<void> {
+        await User.increment({ token }, { where: { id: id } });
     }
 
     async getUserByEmail(email: string): Promise<User | null> {

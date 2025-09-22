@@ -24,8 +24,16 @@ export class CalendarRepository implements ICalendarRepository {
         return calendarData
     }
     async getCalendarById(id: number): Promise<DomainCalendar | null> {
-        // Implementa la logica per ottenere un calendario per ID
-        throw new Error("Method not implemented.");
+        let model = await this.calendarDAO.getCalendarById(id)
+        return model === null ? null : new DomainCalendar(
+            model.resource_id,
+            model.start_time,
+            model.end_time,
+            model.cost_per_hour,
+            model.title,
+            model.archived,
+            model.id
+        ) 
     }
     async updateCostCalendar(id: number, cost: number): Promise<void> {
         // Implementa la logica per aggiornare un calendario
@@ -43,30 +51,17 @@ export class CalendarRepository implements ICalendarRepository {
         throw new Error("Method not implemented.");
     }
     async archiveCalendar(id: number): Promise<void> {
-        // Implementa la logica per archiviare un calendario
-        throw new Error("Method not implemented.");
+        await this.calendarDAO.updateArchiveCalendarStatus(id,true)
     }
     async unarchiveCalendar(id: number): Promise<void> {
-        // Implementa la logica per ripristinare un calendario archiviato
-        throw new Error("Method not implemented.");
-    }
-    async checkAvailability(id: number, startTime: Date, endTime: Date): Promise<boolean | never> {
-        // Implementa la logica per verificare la disponibilità di un calendario
-        throw new Error("Method not implemented.");
-    }
-
-    async getCalendarStart(calendar_id: number): Promise<Date> {
-        throw new Error("Method not implemented.");
-        
-    }
-
-    async getCalendarEnd(calendar_id: number): Promise<Date> {
-        throw new Error("Method not implemented.");
+        await this.calendarDAO.updateArchiveCalendarStatus(id,false)
         
     }
 
     async getCostPerHourCalendar(calendar_id: number): Promise<number | null> {
-        throw new Error("Method not implemented.");
+        return this.calendarDAO.getCalendarById(calendar_id).then(r => {
+            return r === null ? null : r.cost_per_hour;
+        });
         
     }
 

@@ -13,9 +13,11 @@ export interface IReservationRepository{
 
     reject(reason : string): Promise<void>;
 
-    findReservationByCalendarId(calendar_id: number): Promise<DomainReservation[]>
+    findReservationApprovedByCalendarId(calendar_id: number): Promise<DomainReservation[]>
 
     findReservationById(reservation_id : number): Promise<DomainReservation | null>
+
+    findReservationsByCalendar(calendar_id: number): Promise<DomainReservation[]>
 
     saveReservation(reservation: DomainReservation): Promise<void>
 

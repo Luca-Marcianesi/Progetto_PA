@@ -28,7 +28,9 @@ export class UserService implements IUserService {
     return await this.userRepo.createUser(user_validated);
   }
   async   addTokenToUser(email: string, token: number): Promise<void> {
-    return await this.userRepo.addTokenToUser(email, token);
+    let user = await this.getUserByEmail(email)
+    if(user === null) throw ErrorFactory.getError(ErrorType.UserNotFound)
+    return await this.userRepo.addTokenToUser(user.id, token);
   }
   async  getUserByEmail(email: string): Promise<User | never> {
     let user =  await this.userRepo.getUserByEmail(email)

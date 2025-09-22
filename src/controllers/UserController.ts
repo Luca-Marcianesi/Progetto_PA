@@ -12,8 +12,8 @@ export class UserController {
   login = async (req: Request, res: Response, next: any) => {
 
     try{
-      const {username, password} = req.body
-      const user : User = await this.UserService.login(username,password)
+      const {email, password} = req.body
+      const user : User = await this.UserService.login(email,password)
       let payload : UserPayload = {
         id: user.id,
         email: user.email,

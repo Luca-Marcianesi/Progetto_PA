@@ -18,8 +18,8 @@ export class UserRepository implements IUserRepository {
     throw ErrorFactory.getError(ErrorType.UserNotFound)
   }
 
-  async addTokenToUser(email: string, token: number): Promise<void> {
-    return this.userDAO.addTokenToUser(email, token);
+  async addTokenToUser(id: number, token: number): Promise<void> {
+    return this.userDAO.addTokenToUser(id, token);
   }
 
   async getUserByEmail(email: string): Promise<User | null> {

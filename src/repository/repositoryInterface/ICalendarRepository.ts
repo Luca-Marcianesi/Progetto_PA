@@ -20,10 +20,6 @@ export interface ICalendarRepository {
 
     getCostPerHourCalendar(calendar_id: number): Promise<number | null>;
 
-    getCalendarStart(calendar_id: number): Promise<Date>;
-
-    getCalendarEnd(calendar_id: number): Promise<Date>;
-
     unarchiveCalendar(id: number): Promise<void>; 
 
     findConflicting(resourceId: number, start: Date, end: Date): Promise<DomainCalendar[]>

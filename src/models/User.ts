@@ -85,8 +85,8 @@ User.init(
 User.hasMany(Reservation, { foreignKey: 'user_id', as: 'requests' });
 Reservation.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
-User.hasMany(Reservation, { foreignKey: 'handledBy', as: 'handledRequests' }); 
-Reservation.belongsTo(User, { foreignKey: 'handledBy', as: 'handler' });
+User.hasMany(Reservation, { foreignKey: 'handled_by', as: 'handledRequests' }); 
+Reservation.belongsTo(User, { foreignKey: 'handled_by', as: 'handler' });
 
 export { User };
 

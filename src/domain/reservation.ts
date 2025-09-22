@@ -44,9 +44,25 @@ export class DomainReservation {
         this.rejectReason = reason;
     }
 
-    setCancelled() {
-        // logica di cancellazione
+    getHours() : number{
+        return (this.end.getTime() - this.start.getTime())/(3600*1000)
     }
+
+    getHoursNotUsed(): number{
+        if(this.start.getTime() > Date.now()) return this.getHours()
+
+        if(this.end.getTime()< Date.now()) return 0
+        
+        //Ore restanti approssimate per eccesso
+        return Math.ceil(
+            (this.end.getTime() - Date.now())/(3600*1000)
+        )
+
+        
+        
+    }
+
+
 
     overlaps(other: DomainReservation): boolean {
 
@@ -75,6 +91,13 @@ export class DomainReservation {
 
     cancel(){
         this.state.cancel(this)
+    }
+
+    calculateFineTokens(): number{
+        let tokensFine = 1
+        if(this.start.getTime() < Date.now() && Date.now() < this.end.getTime())  tokensFine = 2
+        return tokensFine
+
     }
 
 }

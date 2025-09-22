@@ -4,14 +4,39 @@ import { StatusCodes } from "http-status-codes";
 import { CalendarIdInput, CreateCalendarInput, UpdateCalendarCostInput, UpdateCalendarEndInput } from "../middleware/zodValidator/calendar.schema";
 import { CalendarNotExistError } from "../middleware/errors/ExtendedError";
 import { CheckSlotInput } from "../middleware/zodValidator/reservation.schema";
+import { object } from "zod";
+import { ResourceDAO } from "../dao/ResourceDAO";
+import { CalendarDAO } from "../dao/CalendarDAO";
 export class CalendarController {
     constructor (private calendarService: ICalendarService) { }
+
+
+    test = async (req: Request, res: Response, next: NextFunction) => {
+        try {   
+            
+            let dao = new ResourceDAO()
+            let cal_dao = new CalendarDAO()
+            let calendar = await cal_dao.getAllCalendars()
+
+            res.status(StatusCodes.CREATED).json({
+                object: calendar
+            })
+
+        } catch (error) {
+            throw error
+        }
+    }
 
     createCalendar = async(req: Request, res: Response, next: NextFunction) => {
         try {     
             const inputValidate = req.body as  unknown as CreateCalendarInput
     
             let calendar = await this.calendarService.createCalendar(inputValidate)
+
+            res.status(StatusCodes.CREATED).json({
+                message:"Creato con successo",
+                object: calendar
+            })
 
         } catch (error) {
             throw error
@@ -41,10 +66,19 @@ export class CalendarController {
     }
 
     getCalendar = async(req: Request, res: Response, next: NextFunction) => {
-        try {     
-            const inputValidate = req.body as  unknown as CalendarIdInput
-    
-            let calendar = await this.calendarService.getCalendarById(req.body)
+        try {
+            console.log(req.query) 
+
+            const inputValidate = req.query as  unknown as CalendarIdInput
+
+            console.log(inputValidate.calendar_id)
+            
+            let calendar = await this.calendarService.getCalendarById(inputValidate.calendar_id)
+
+            res.status(StatusCodes.OK).json({
+                calendar : calendar
+            })
+     
 
         } catch (error) {
             throw error

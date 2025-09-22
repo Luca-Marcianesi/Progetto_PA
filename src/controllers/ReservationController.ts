@@ -4,6 +4,7 @@ import { IReservationRepository } from "../repository/repositoryInterface/IResev
 import { IReservationService } from "../services/serviceInterface/IReservationService";
 import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
 import { NewReservationInput, ReservationStatusFilterInput, UpdateStatusReseservationInput, ReservationIdInput } from "../middleware/zodValidator/reservation.schema";
+import { StatusCodes } from "http-status-codes";
 
 
 export class ReservationController{
@@ -14,6 +15,11 @@ export class ReservationController{
             const inputValidate = req.body as  unknown as NewReservationInput
     
             let reservation = await this.ReservationService.newReservation(inputValidate, this.getUtenteId(req))
+
+            res.status(StatusCodes.CREATED).json({
+                            message:"Creato con successo",
+                            object: reservation.getUserOutput()
+                        })
 
         } catch (error) {
             throw error
@@ -39,7 +45,9 @@ export class ReservationController{
             const inputValidate = req.body as  unknown as UpdateStatusReseservationInput
 
 
-            let reservation = await this.ReservationService.updatteReservation(inputValidate.id,this.getUtenteId(req),inputValidate.reason)
+            let reservation = await this.ReservationService.updatteReservation(inputValidate.id,inputValidate.newStatus,this.getUtenteId(req),inputValidate.reason)
+
+            res.status(StatusCodes.ACCEPTED).json({message:"Prenotazione aggiornata"})
 
         } catch (error) {
             throw error
@@ -76,10 +84,10 @@ export class ReservationController{
 
     getReservationsByCal = async(req: Request, res: Response, next: NextFunction) => {
         try {     
-            const inputValidate = req.body as  unknown as ReservationIdInput
+            const inputValidate = req.query as  unknown as ReservationIdInput
 
 
-            let reservation = await this.ReservationService.getReservationsByCal()
+            let reservation = await this.ReservationService.getReservationsByCal(inputValidate.id)
 
         } catch (error) {
             throw error

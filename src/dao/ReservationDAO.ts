@@ -22,7 +22,7 @@ export class ReservationDAO implements IReservationDAO{
     async saveUpdatedReservation(reservation: DomainReservation): Promise<void> {
         await Reservation.update(
             {
-                handledBy: reservation.handledBy,
+                handled_by: reservation.handledBy,
                 status: reservation.getStatus(),
                 reason: reservation.rejectReason
 
