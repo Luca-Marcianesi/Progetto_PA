@@ -14,3 +14,7 @@ VALUES
   ('GPU_RTX', 'NVIDIA GeForce RTX 4090, top-tier gaming and AI acceleration'),
   ('GPU_V100', 'NVIDIA Tesla V100, designed for data centers and deep learning'),
   ('CPU-EPYC', 'AMD EPYC 7742, 64-core server processor optimized for parallel workloads');
+
+INSERT INTO calendars (resource_id, start_time, end_time, cost_per_hour,title)
+VALUES
+  ('3','2025-09-22T10:00:00Z','2026-09-22T10:00:00Z',10,'calendario infinito')

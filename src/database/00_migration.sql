@@ -23,12 +23,14 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS calendars (
     id SERIAL PRIMARY KEY,
     resource_id INT NOT NULL REFERENCES resources(id) ON DELETE CASCADE,
-    name VARCHAR(150) NOT NULL,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
+    title VARCHAR(30) NOT NULL,
     cost_per_hour NUMERIC(10,4) NOT NULL CHECK (cost_per_hour >= 0),
     archived BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP,
     CHECK (end_time > start_time)
 );
 
@@ -36,10 +38,13 @@ CREATE TABLE IF NOT EXISTS requests (
     id SERIAL PRIMARY KEY,
     calendar_id INT NOT NULL REFERENCES calendars(id) ON DELETE CASCADE,
     user_id INT NOT NULL REFERENCES users(id),
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
     title VARCHAR(255) NOT NULL,
     reason TEXT,
+    handledBy INT REFERENCES users(id) ON DELETE CASCADE,
     status VARCHAR(20) NOT NULL CHECK (status IN ('pending','approved','rejected','invalid','cancelled')),
-    held_tokens NUMERIC(20,4) NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
+    updated_at TIMESTAMP DEFAULT NOW(),
+    CHECK (end_time > start_time)
 );
