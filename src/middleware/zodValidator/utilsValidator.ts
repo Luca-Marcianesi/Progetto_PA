@@ -40,5 +40,5 @@ export const GenericStringSchema = z.string()
 export const PasswordSchema = z.string()
     .min(8,{message: ValidationMessages.psw.toShort(8)})
 
-export const StandarIdSchema = z.number().int().positive()
+export const StandarIdSchema = z.coerce.number().int().positive()
     

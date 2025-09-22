@@ -99,6 +99,27 @@ export class EmailUsedError extends ConflictError {
     }
 }
 
+export class AlredyApprovedReservationError extends ConflictError {
+    constructor(message?: string) {
+        super(message || "Prenotazione già approvata");
+    }
+}
+export class AlredyRejectedReservationError extends ConflictError {
+    constructor(message?: string) {
+        super(message || "Prenotazione già rifiutata");
+    }
+}
+export class ReservationCancelledError extends ConflictError {
+    constructor(message?: string) {
+        super(message || "Prenotazione cancellata");
+    }
+}
+export class ReservationInvalidError extends ConflictError {
+    constructor(message?: string) {
+        super(message || "Prenotazione invalida");
+    }
+}
+
 export class TooLessTokenError extends BadRequestError{
     constructor(){
         super( "Non hai abbastanza token")
@@ -111,9 +132,21 @@ export class SlotNotInCalError extends NotFoundError{
     }
 }
 
+export class ResourceNotFoundError extends NotFoundError{
+    constructor(){
+        super("Risorsa non trovata")
+    }
+}
+
 export class SlotUsedError extends ConflictError{
     constructor(){
         super("1 o più slot richiesti non sono disponibili")
+    }
+}
+
+export class ResourceUsedError extends ConflictError{
+    constructor(){
+        super("La risorsa è in uso in un altro calendario nel periodo inserito")
     }
 }
 

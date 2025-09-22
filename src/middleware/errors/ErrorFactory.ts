@@ -16,10 +16,13 @@ export enum ErrorType {
     SlotUsed,
     TooLessToken,
     LoginFail,
-    ReservationNotFound
-
-
-
+    ReservationNotFound,
+    ResourceNotFound,
+    ResourceUsed,
+    ReservationCancelled,
+    ReservationInvalid,
+    AlredyRejectedReservation,
+    AlredyApprovedReservation
 }
 
 export class ErrorFactory {
@@ -54,6 +57,18 @@ export class ErrorFactory {
                 return new Errors.LoginFailError()
             case ErrorType.ReservationNotFound:
                 return new Errors.ReservationNotFoundError()
+            case ErrorType.ResourceNotFound:
+                return new Errors.ResourceNotFoundError()
+            case ErrorType.ResourceUsed:
+                return new Errors.ResourceUsedError()
+            case ErrorType.AlredyApprovedReservation:
+                return new Errors.AlredyApprovedReservationError()
+            case ErrorType.AlredyRejectedReservation:
+                return new Errors.AlredyRejectedReservationError()
+            case ErrorType.ReservationInvalid:
+                return new Errors.ReservationInvalidError()
+            case ErrorType.ReservationCancelled:
+                return new Errors.ReservationCancelledError()
             default:
                 return new Errors.InternalServerError();
         }
