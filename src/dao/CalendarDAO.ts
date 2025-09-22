@@ -8,6 +8,10 @@ export class CalendarDAO implements ICalendarDAO{
         return await Calendar.findByPk(calendar_id) 
     }
 
+    async getAllCalendars(){
+      return await Calendar.findAll()
+    }
+
     async findConflicting(id_res: number, start: Date, end: Date): Promise<Calendar[]> {
     return Calendar.findAll({
       where: {
@@ -28,5 +32,18 @@ export class CalendarDAO implements ICalendarDAO{
 
         } )
     }
+
+    async updateArchiveCalendarStatus(id: number, status: boolean): Promise<void> {
+        await Calendar.update(
+          {
+            archived : status
+          },
+          {
+            where: {id: id}
+          }
+        )
+    }
+
+    
 
   }

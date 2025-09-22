@@ -8,4 +8,6 @@ export interface IReservationDAO{
     cancel(id: number ): Promise<void>;
     findByPk(id_: number): Promise<Reservation | null>;
     getReservatisByCalendarId(calendar_id: number): Promise<Reservation[]>
+    getReservationApproved(calendar_id: number): Promise<Reservation[]>
+    saveUpdatedReservation(reservation : DomainReservation): Promise<void>
 }

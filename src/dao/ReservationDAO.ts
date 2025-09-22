@@ -19,6 +19,19 @@ export class ReservationDAO implements IReservationDAO{
         
     }
 
+    async saveUpdatedReservation(reservation: DomainReservation): Promise<void> {
+        await Reservation.update(
+            {
+                handledBy: reservation.handledBy,
+                status: reservation.getStatus(),
+                reason: reservation.rejectReason
+
+            },{
+                where: {id: reservation.id}
+            }
+        )
+    }
+
     async findByPk(id_: number): Promise<Reservation | null> {
         return await Reservation.findByPk(id_)
         
@@ -38,6 +51,19 @@ export class ReservationDAO implements IReservationDAO{
             }
         )
         
+    }
+
+    async getReservationApproved(calendar_id: number): Promise<Reservation[]> {
+        return await Reservation.findAll(
+            {
+                where:{
+                    calendar_id : calendar_id,
+                    status: enumReservationStatus.Approved
+
+                }
+            }
+
+        )
     }
 
     async updateStatus(id: number, status: enumReservationStatus): Promise<void> {
