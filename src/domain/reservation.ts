@@ -20,6 +20,16 @@ export class DomainReservation {
         this.state = state ??  new PendingState()
     }
 
+    getUserOutput(){
+        return {
+            calendar : this.calendar_id,
+            title: this.title,
+            start: this.start,
+            end: this.end,
+            state: this.state.getStatus()
+        }
+    }
+
 
     setState(state: IReservationState){
         this.state = state
@@ -39,6 +49,11 @@ export class DomainReservation {
     }
 
     overlaps(other: DomainReservation): boolean {
+
+        console.log("confronto:" + this.start + this.end)
+        console.log("con:" + other.start + other.end)
+        let res = this.start < other.end && this.end > other.start;
+        console.log("sovrapposizione" + res)
         return this.start < other.end && this.end > other.start;
     }
 
