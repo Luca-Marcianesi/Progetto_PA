@@ -11,6 +11,7 @@ import { PendingState } from "../domain/stateReservation/states/pendingState";
 import { RejectedState } from "../domain/stateReservation/states/rejectedState";
 import { CancelState } from "../domain/stateReservation/states/cancelState";
 import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
+import { ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../middleware/zodValidator/reservation.schema";
 
 export class ReservationRepository implements IReservationRepository{
     private reservationDAO : IReservationDAO;
@@ -71,8 +72,6 @@ export class ReservationRepository implements IReservationRepository{
         const model = await this.reservationDAO.findByPk(reservation_id);
         if (!model) return null;
 
-       
-
         return new DomainReservation(
             model.calendar_id,
             model.start_time,
@@ -85,7 +84,40 @@ export class ReservationRepository implements IReservationRepository{
             this.getStateByStatus(model.status)
         );
         
+    }
 
+    async findReservationOptionalFilter(filter: ReservationOptionalFilterInput): Promise<DomainReservation[]> {
+        let reservation = await this.reservationDAO.getReservationOptinalFilter(filter)
+        return reservation
+        .map(model => new DomainReservation(
+                model.calendar_id,
+                model.start_time,
+                model.end_time,
+                model.title,
+                model.user_id,
+                model.user_id,
+                model.id,
+                model.reason,
+                this.getStateByStatus(model.status)
+        ));
+
+        
+    }
+
+    async findReservationStatusFiltered(filter: ReservationStatusFilterInput): Promise<DomainReservation[]> {
+        let reservation = await this.reservationDAO.getReservationOptinalFilter(filter)
+        return reservation
+        .map(model => new DomainReservation(
+                model.calendar_id,
+                model.start_time,
+                model.end_time,
+                model.title,
+                model.user_id,
+                model.user_id,
+                model.id,
+                model.reason,
+                this.getStateByStatus(model.status)
+        ));
         
     }
 

@@ -15,6 +15,8 @@ interface ReservationAttributes {
     status: enumReservationStatus;
     reason?: string;
     handled_by?: number;
+    createdAt?: Date;
+    updatedAt?: Date; 
 }
 interface ReservationCreationAttributes extends Omit<ReservationAttributes, 'id'  | 'reason' | 'handled_by'> {}
 
@@ -30,8 +32,8 @@ class Reservation extends Model<ReservationAttributes, ReservationCreationAttrib
     public reason!: string;
 
 
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 
     }
 

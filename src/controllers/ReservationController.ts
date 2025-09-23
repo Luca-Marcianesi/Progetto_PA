@@ -3,7 +3,7 @@ import { Request, Response ,NextFunction } from "express";
 import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
 import { IReservationService } from "../services/serviceInterface/IReservationService";
 import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
-import { NewReservationInput, ReservationStatusFilterInput, UpdateStatusReseservationInput, ReservationIdInput } from "../middleware/zodValidator/reservation.schema";
+import { NewReservationInput, ReservationStatusFilterInput, ReservationOptionalFilterInput ,UpdateStatusReseservationInput, ReservationIdInput } from "../middleware/zodValidator/reservation.schema";
 import { StatusCodes } from "http-status-codes";
 
 
@@ -26,19 +26,7 @@ export class ReservationController{
         }
     }
 
-    getReservationsFilterStatus = async(req: Request, res: Response, next: NextFunction) => {
-        try {     
-            const inputValidate = req.body as  unknown as ReservationStatusFilterInput
-
-            let {id, created_at, status} = inputValidate
-
-            let reservation = await this.ReservationService.getReservationsFilterStatus(id,status,created_at)
-
-        } catch (error) {
-            throw error
-        }
-
-    }
+    
 
     updateReservations = async(req: Request, res: Response, next: NextFunction) => {
         try {     
@@ -68,13 +56,32 @@ export class ReservationController{
         }
         
     }
-
-    getReservationsFiltered = async(req: Request, res: Response, next: NextFunction) => {
+    getReservationsFilterStatus = async(req: Request, res: Response, next: NextFunction) => {
         try {     
-            const inputValidate = req.body as  unknown //as ReservationOptionalFilterInput
+            const filter = req.body as  unknown as ReservationStatusFilterInput
+
+            let reservation = await this.ReservationService.getReservationsFilterStatus(filter)
+
+            res.status(StatusCodes.ACCEPTED).json({
+                reservation : reservation
+            })
+
+        } catch (error) {
+            throw error
+        }
+
+    }
+
+    getReservationsOptionalFiter = async(req: Request, res: Response, next: NextFunction) => {
+        try {     
+            const filter = req.body as  unknown as ReservationOptionalFilterInput
 
 
-            let reservation = await this.ReservationService.getReservationFiltered()
+            let reservation = await this.ReservationService.getReservationOptionalFilter(filter)
+
+            res.status(StatusCodes.ACCEPTED).json({
+                reservation: reservation
+            })
 
         } catch (error) {
             throw error

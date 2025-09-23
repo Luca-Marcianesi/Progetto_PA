@@ -1,20 +1,20 @@
 import { DomainReservation } from "../../domain/reservation"
-import { NewReservationInput } from "../../middleware/zodValidator/reservation.schema"
+import { NewReservationInput, ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../../middleware/zodValidator/reservation.schema"
 import { Reservation } from "../../models/Reservation"
 import { enumReservationStatus } from "../../utils/db_const"
 
 export interface IReservationService {
     newReservation(reservationData : NewReservationInput,user_id: number):Promise<DomainReservation | never>
 
-    updatteReservation(id: number, approvedBy: number, reason?: string):Promise<void>
-
-    getReservationsFilterStatus(calendar_id: number,state: enumReservationStatus,created_at: Date ): Promise<DomainReservation[]>
+    updatteReservation(id: number, newStatus: string, approvedBy: number, reason?: string):Promise<void>
 
     deleteReservation(reservation_id: number):Promise<void>
 
-    getReservationFiltered():Promise<DomainReservation[]>
+    getReservationOptionalFilter(filter : ReservationOptionalFilterInput):Promise<DomainReservation[]>
 
-    getReservationsByCal():Promise<DomainReservation[]>
+    getReservationsFilterStatus(filter : ReservationStatusFilterInput): Promise<DomainReservation[]>
+
+    getReservationsByCal(id: number):Promise<DomainReservation[]>
 
 
 }

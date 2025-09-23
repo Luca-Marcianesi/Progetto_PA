@@ -11,7 +11,13 @@ export type ReservationIdInput = z.infer<typeof ReservationIdSchema>
 export const ReservationStatusFilterSchema = z.object({
     id: StandarIdSchema,
     status: z.enum(enumReservationStatus),
-    created_at: z
+    from: z
+    .string()
+    .refine(val => !isNaN(Date.parse(val)), {
+      message: ValidationMessages.date.invalid,
+    })
+    .transform(val => new Date(val)),
+    to: z
     .string()
     .refine(val => !isNaN(Date.parse(val)), {
       message: ValidationMessages.date.invalid,

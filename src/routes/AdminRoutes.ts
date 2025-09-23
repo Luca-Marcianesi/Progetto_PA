@@ -8,6 +8,7 @@ import { UpdateTokenSchema } from "../middleware/zodValidator/user.schema";
 import { CreateResourceSchema } from "../middleware/zodValidator/resource.schema";
 import { CalendaIdSchema, CreateCalendarSchema, UpdateCalendaCostSchema, UpdateCalendarEndSchema } from "../middleware/zodValidator/calendar.schema";
 import { UpdateStatusReseservationSchema } from "../middleware/zodValidator/reservation.schema";
+import { ResourceDAO } from "../dao/ResourceDAO";
 
 
 
@@ -49,6 +50,11 @@ router.delete("/calendar", validateParamsSchema(CalendaIdSchema), calendar_contr
 router.patch("/reservation",validateBodySchema(UpdateStatusReseservationSchema),reservation_controller.updateReservations)
 
 router.get("/reservationsByCal",validateQuerySchema(CalendaIdSchema),reservation_controller.getReservationsByCal)
+
+
+
+
+router.get("/test",calendar_controller.test)
 
 
 

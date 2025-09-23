@@ -15,8 +15,13 @@ export class ResourceRepository implements IResourceRepository{
         throw Error("non implementata")
     }
 
-    getResourceById(id: number): Promise<DomainResource | null> {
-        throw Error("non implementata")
+    async getResourceById(id: number): Promise<DomainResource | null> {
+        let model = await this.resource_dao.getResourceById(id)
+        if(model === null) return null
+        return new DomainResource(
+            model.name,
+            model.id
+        )
     }
 
     getAllResources(): Promise<DomainResource[]> {

@@ -1,4 +1,6 @@
+import { Op } from "sequelize";
 import { DomainReservation } from "../domain/reservation";
+import { ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../middleware/zodValidator/reservation.schema";
 import { Reservation } from "../models/Reservation";
 import { enumReservationStatus } from "../utils/db_const";
 import { IReservationDAO } from "./daoInterface/IReservationDAO";
@@ -34,6 +36,30 @@ export class ReservationDAO implements IReservationDAO{
 
     async findByPk(id_: number): Promise<Reservation | null> {
         return await Reservation.findByPk(id_)
+        
+    }
+
+    async getReservationOptinalFilter(filters: ReservationOptionalFilterInput): Promise<Reservation[]> {
+        const where: any = {};
+        if (filters.calendar_id) where.calendar_id = filters.calendar_id;
+        if (filters.status) where.status = filters.status;
+        if (filters.from && filters.to) {
+        where.start = { [Op.gte]: filters.from };
+        where.end = { [Op.lte]: filters.to };
+        }
+        return Reservation.findAll({ where });
+
+    }
+
+    async getReservationStatusFilter(filters: ReservationStatusFilterInput): Promise<Reservation[]> {
+        return await Reservation.findAll({
+            where:{
+                status: filters.status,
+                createdAt: {
+                [Op.between]: [filters.from, filters.to]
+  }
+            }
+        })
         
     }
 

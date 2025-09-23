@@ -3,6 +3,7 @@ import { Reservation } from "../../models/Reservation";
 import { Calendar } from "../../models/Calendar";
 import { enumReservationStatus } from "../../utils/db_const";
 import { DomainReservation } from "../../domain/reservation";
+import { ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../../middleware/zodValidator/reservation.schema";
 
 export interface IReservationRepository{
     insertResevation(reservation: DomainReservation , status: enumReservationStatus): Promise<DomainReservation | never>;
@@ -20,5 +21,9 @@ export interface IReservationRepository{
     findReservationsByCalendar(calendar_id: number): Promise<DomainReservation[]>
 
     saveReservation(reservation: DomainReservation): Promise<void>
+
+    findReservationStatusFiltered(filter: ReservationStatusFilterInput): Promise<DomainReservation[]>
+
+    findReservationOptionalFilter(filter: ReservationOptionalFilterInput): Promise<DomainReservation[]>
 
 }

@@ -17,9 +17,11 @@ export class CalendarService implements ICalendarService {
     }
     async createCalendar(calendarData: CreateCalendarInput): Promise<DomainCalendar> {
         
-        if(!await this.doesResourceExist(calendarData.resource_id)) throw Error("errore non implemenato reso not found")
+        if(!await this.doesResourceExist(calendarData.resource_id)) 
+            throw ErrorFactory.getError(ErrorType.ResourceNotFound)
 
-        if(!await this.isResourceBusy(calendarData.resource_id,calendarData.start,calendarData.end)) throw Error("errore non implemenato reso occupata")
+        if(await this.isResourceBusy(calendarData.resource_id,calendarData.start,calendarData.end)) 
+            throw ErrorFactory.getError(ErrorType.ResourceUsed)
 
         let calendar = new DomainCalendar(
             calendarData.resource_id,
@@ -33,9 +35,14 @@ export class CalendarService implements ICalendarService {
 
     }
     async getCalendarById(id: number): Promise<DomainCalendar | null> {
-        return await this.calendar_repository.getCalendarById(id);
+        let calendar = await this.calendar_repository.getCalendarById(id)
+
+        if (calendar === null) throw ErrorFactory.getError(ErrorType.CalNotExist) 
+        
+        return calendar
+        
     }
-    async updateCostCalendar(id: number, new_cost : Date): Promise<void> {
+    async updateCostCalendar(id: number, new_cost : number): Promise<void> {
         throw Error("Not implemented")
     }
 
@@ -53,8 +60,13 @@ export class CalendarService implements ICalendarService {
         await this.calendar_repository.unarchiveCalendar(id);
     }
 
+    async checkSlotAvaiability(calendar_id: number, start: Date, end: Date): Promise<void> {
+        throw Error("Not implemented")
+        
+    }
+
     private async doesResourceExist(id: number):Promise<boolean>{
-        return await this.resource_repository.getResourceById(id) === null ?  true :  false
+        return await this.resource_repository.getResourceById(id) === null ?  false :  true
     }
 
     private async isResourceBusy(id : number, start: Date, end: Date): Promise<boolean>{
