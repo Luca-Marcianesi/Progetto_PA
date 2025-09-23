@@ -25,13 +25,15 @@ export class ReservationService implements IReservationService {
 
             let {calendar_id, start_time, end_time} = reservationData
 
-            let reservation = new DomainReservation(
-                reservationData.calendar_id,
-                reservationData.start_time,
-                reservationData.end_time,
-                reservationData.title,
-                user_id
-
+            let reservation = new DomainReservation({
+                id: 1,
+                calendar_id: reservationData.calendar_id,
+                start: reservationData.start_time,
+                end: reservationData.end_time,
+                title: reservationData.title,
+                reservationBy: user_id,
+                status: enumReservationStatus.Pending
+            }
             )
 
             let cost_per_hour = await this.getCalendarCost(reservation.calendar_id)
@@ -44,6 +46,8 @@ export class ReservationService implements IReservationService {
 
             const reservation_status : enumReservationStatus = await this.checkHaveEnoughTokens(user_id,start_time,end_time,cost_per_hour)
              ? enumReservationStatus.Pending : enumReservationStatus.Invalid
+
+             reservation.setState(DomainReservation.mapStatus(reservation_status))
 
             //Devo salvare la prenotazione anche se non ha abbastanza token
 

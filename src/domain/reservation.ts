@@ -1,23 +1,58 @@
-import { Reservation as ReservationModel } from "../models/Reservation";
+import { start } from "repl";
+import { Calendar } from "../models/Calendar";
+import { Reservation, Reservation as ReservationModel } from "../models/Reservation";
 import { enumReservationStatus } from "../utils/db_const";
 import { IReservationState} from "./stateReservation/IReservationState"
+import { ApprovedState } from "./stateReservation/states/approvedState";
+import { CancelState } from "./stateReservation/states/cancelState";
+import { InvalidState } from "./stateReservation/states/invalidState";
 import { PendingState } from "./stateReservation/states/pendingState";
+import { RejectedState } from "./stateReservation/states/rejectedState";
+
+interface reservationInput{
+    id: number
+    calendar_id: number
+    start: Date
+    end: Date
+    title: string
+    reservationBy : number
+    status: enumReservationStatus
+    handledBy?: number
+    rejectReason?: string
+
+}
 export class DomainReservation {
+    public id: number
+    public calendar_id: number
+    public start: Date
+    public end: Date
+    public title: string
+    public reservationBy : number
+    state: IReservationState
+    public handledBy?: number
+    public rejectReason?: string
 
-    private state : IReservationState
+    constructor(reservation: reservationInput){
+        this.id = reservation.id,
+        this.calendar_id = reservation.calendar_id,
+        this.start = reservation.start
+        this.end = reservation.end
+        this.title = reservation.title
+        this.reservationBy = reservation.reservationBy
+        this.state = DomainReservation.mapStatus(reservation.status)
+    }
+    
 
-    constructor(
-       public calendar_id: number,
-       public start: Date,
-       public end: Date,
-       public title: string,
-       public reservationBy : number,
-       public id?: number,
-       public handledBy?: number,
-       public rejectReason?: string,
-       state?: IReservationState
-    ){
-        this.state = state ??  new PendingState()
+    static fromPersistence(reservation : Reservation){
+        return new DomainReservation({
+            id: reservation.id,
+            calendar_id : reservation.calendar_id,
+            start: reservation.start_time,
+            end: reservation.end_time,
+            title: reservation.title,
+            status : reservation.status,
+            reservationBy: reservation.user_id
+    })
     }
 
     getUserOutput(){
@@ -29,6 +64,16 @@ export class DomainReservation {
             state: this.state.getStatus()
         }
     }
+
+    static mapStatus(status: string) {
+    switch (status) {
+      case enumReservationStatus.Pending: return new PendingState();
+      case enumReservationStatus.Approved: return new ApprovedState();
+      case enumReservationStatus.Reject: return new RejectedState();
+      case enumReservationStatus.Calcel: return new CancelState();
+      default: return new InvalidState();
+    }
+  }
 
 
     setState(state: IReservationState){
@@ -71,8 +116,6 @@ export class DomainReservation {
         
         
     }
-
-
 
     overlaps(other: DomainReservation): boolean {
 

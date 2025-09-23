@@ -6,6 +6,8 @@ import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory.js";
 import { get } from "http";
 import { DomainUser } from "../domain/user.js";
 import { RegisterInput } from "../middleware/zodValidator/user.schema.js";
+import { email } from "zod";
+import { enumRole } from "../utils/db_const.js";
 
 const HASH_ALGORITM = "sha256";
 const DIGEST = "hex" // You can change this to your preferred hashing algorithm
@@ -17,13 +19,16 @@ export class UserService implements IUserService {
     if(await this.userRepo.getUserByEmail(userInput.email) !== null){
       throw ErrorFactory.getError(ErrorType.EmailUsed);
     }
-    userInput.password = createHash(HASH_ALGORITM).update(userInput.password).digest(DIGEST);// hash della password
+    let hash_password = createHash(HASH_ALGORITM).update(userInput.password).digest(DIGEST);// hash della password
 
-    let user_validated = new DomainUser(
-      userInput.name,
-      userInput.surname,
-      userInput.email,
-      userInput.password
+    let user_validated = new DomainUser({
+      id: 1,
+      name: userInput.name,
+      surname: userInput.surname,
+      email: userInput.email,
+      psw: hash_password,
+      role: enumRole.USER
+    }
     )
     return await this.userRepo.createUser(user_validated);
   }

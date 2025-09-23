@@ -8,6 +8,8 @@ import { CreateCalendarInput } from "../middleware/zodValidator/calendar.schema"
 import { DomainCalendar } from "../domain/calendar";
 import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
 import { IUserRepository } from "../repository/repositoryInterface/IUserRepository";
+import { DomainReservation } from "../domain/reservation";
+import { enumReservationStatus } from "../utils/db_const";
 
 export class CalendarService implements ICalendarService {
     private calendar_repository: ICalendarRepository;
@@ -29,13 +31,14 @@ export class CalendarService implements ICalendarService {
         if(await this.isResourceBusy(calendarData.resource_id,calendarData.start,calendarData.end)) 
             throw ErrorFactory.getError(ErrorType.ResourceUsed)
 
-        let calendar = new DomainCalendar(
-            calendarData.resource_id,
-            calendarData.start,
-            calendarData.end,
-            calendarData.cost_per_hour,
-            calendarData.title
-        )
+        let calendar = new DomainCalendar({
+            id: 1,
+            resource_id: calendarData.resource_id,
+            start_time: calendarData.start,
+            end_time: calendarData.end,
+            cost:calendarData.cost_per_hour,
+            title: calendarData.title
+        })
         return await this.calendar_repository.createCalendar(calendar);
 
 
@@ -85,8 +88,22 @@ export class CalendarService implements ICalendarService {
         await this.calendar_repository.unarchiveCalendar(id);
     }
 
-    async checkSlotAvaiability(calendar_id: number, start: Date, end: Date): Promise<void> {
-        throw Error("Not implemented")
+    async checkSlotAvaiability(calendar_id: number, start: Date, end: Date): Promise<boolean> {
+        let reservation = await this.reservation_repository.findReservationsByCalendar(calendar_id)
+
+        //Oggetto fittizio per fare il confronto con quelli salvati nel db
+        let new_reservation = new DomainReservation({
+            id: 1,
+            reservationBy: 1,
+            title: "",
+            status:enumReservationStatus.Pending,
+            calendar_id: calendar_id,
+            start,
+            end
+            }
+        )
+        return reservation.some(r => r.overlaps(new_reservation))
+
         
     }
 

@@ -115,7 +115,14 @@ export class CalendarController {
         try {     
             const inputValidate = req.body as  unknown as CheckSlotInput
     
-            let calendar = await this.calendarService.checkSlotAvaiability(inputValidate.calendar_id,inputValidate.start,inputValidate.end)
+            let isFree =
+             await this.calendarService.checkSlotAvaiability(inputValidate.calendar_id,inputValidate.start,inputValidate.end)
+
+            let message = isFree ? "free" : "occupated"
+
+            res.status(StatusCodes.ACCEPTED).json({
+                message: message
+            })
 
         } catch (error) {
             throw error

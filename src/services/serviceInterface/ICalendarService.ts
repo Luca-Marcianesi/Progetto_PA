@@ -17,6 +17,6 @@ export interface ICalendarService {
 
     unarchiveCalendar(id: number): Promise<void>;
 
-    checkSlotAvaiability(calendar_id: number, start: Date, end: Date):Promise<void>
+    checkSlotAvaiability(calendar_id: number, start: Date, end: Date):Promise<boolean>
 
 }

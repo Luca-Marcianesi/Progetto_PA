@@ -4,13 +4,15 @@ import { ICalendarRepository } from "./repositoryInterface/ICalendarRepository";
 import { Calendar } from "../models/Calendar";
 import { ICalendarDAO } from "../dao/daoInterface/ICalendarDAO";
 import { DomainCalendar } from "../domain/calendar";
+import { IReservationDAO } from "../dao/daoInterface/IReservationDAO";
+import { DomainReservation } from "../domain/reservation";
 
 export class CalendarRepository implements ICalendarRepository {
-    private resourceDAO: IResourceDAO;
+    private reservationDAO: IReservationDAO;
     private calendarDAO: ICalendarDAO;
 
-    constructor(resourceDAO: IResourceDAO , calendarDAO: ICalendarDAO) {
-        this.resourceDAO = resourceDAO;
+    constructor(reservationDAO: IReservationDAO , calendarDAO: ICalendarDAO) {
+        this.reservationDAO = reservationDAO;
         this.calendarDAO = calendarDAO;
     }
     async createCalendar(calendarData:DomainCalendar): Promise<DomainCalendar> {
@@ -24,16 +26,20 @@ export class CalendarRepository implements ICalendarRepository {
         return calendarData
     }
     async getCalendarById(id: number): Promise<DomainCalendar | null> {
-        let model = await this.calendarDAO.getCalendarById(id)
-        return model === null ? null : new DomainCalendar(
-            model.resource_id,
-            model.start_time,
-            model.end_time,
-            model.cost_per_hour,
-            model.title,
-            model.archived,
-            model.id
-        ) 
+
+        let calendar_model = await this.calendarDAO.getCalendarById(id)
+
+        let reservations_model = await this.reservationDAO.getReservatisByCalendarId(id)
+
+        let reservations = reservations_model.map(r => DomainReservation.fromPersistence(r))
+
+        if (calendar_model === null) return null
+
+        let calendar = DomainCalendar.fromPersistence(calendar_model)
+
+        calendar.addReservations(reservations)
+
+        return calendar
     }
     async updateCostCalendar(id: number, cost: number): Promise<void> {
         // Implementa la logica per aggiornare un calendario
@@ -53,7 +59,7 @@ export class CalendarRepository implements ICalendarRepository {
     async archiveCalendar(id: number): Promise<void> {
         await this.calendarDAO.updateArchiveCalendarStatus(id,true)
     }
-    
+
     async unarchiveCalendar(id: number): Promise<void> {
         await this.calendarDAO.updateArchiveCalendarStatus(id,false)
         
@@ -72,6 +78,6 @@ export class CalendarRepository implements ICalendarRepository {
 
     async findConflicting(resourceId: number, start: Date, end: Date): Promise<DomainCalendar[]>{
         const records = await this.calendarDAO.findConflicting(resourceId, start, end);
-        return records.map(r => new DomainCalendar(r.resource_id, r.start_time, r.end_time,r.cost_per_hour, r.title,r.archived, r.id));
+        return records.map(r =>  DomainCalendar.fromPersistence(r));
     }
 }
