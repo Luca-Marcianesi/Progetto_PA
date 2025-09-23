@@ -120,6 +120,12 @@ export class ReservationInvalidError extends ConflictError {
     }
 }
 
+export class ReservationActiveInCalendarError extends ConflictError {
+    constructor(message?: string) {
+        super(message || "Prenotazione attiva nel calendario. Cancellazione annullata");
+    }
+}
+
 export class TooLessTokenError extends BadRequestError{
     constructor(){
         super( "Non hai abbastanza token")

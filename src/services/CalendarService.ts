@@ -6,14 +6,20 @@ import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
 import { IResourceRepository } from "../repository/repositoryInterface/IResourceRepository";
 import { CreateCalendarInput } from "../middleware/zodValidator/calendar.schema";
 import { DomainCalendar } from "../domain/calendar";
+import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
+import { IUserRepository } from "../repository/repositoryInterface/IUserRepository";
 
 export class CalendarService implements ICalendarService {
     private calendar_repository: ICalendarRepository;
     private resource_repository: IResourceRepository;
+    private reservation_repository: IReservationRepository
+    private user_repository: IUserRepository
 
-    constructor(calendar_repository: ICalendarRepository, resource_repository: IResourceRepository) {
+    constructor(calendar_repository: ICalendarRepository, resource_repository: IResourceRepository,reservation_repository: IReservationRepository, user_repository: IUserRepository) {
         this.calendar_repository = calendar_repository;
-        this.resource_repository = resource_repository; 
+        this.resource_repository = resource_repository;
+        this.reservation_repository = reservation_repository
+        this.user_repository = user_repository
     }
     async createCalendar(calendarData: CreateCalendarInput): Promise<DomainCalendar> {
         
@@ -51,8 +57,27 @@ export class CalendarService implements ICalendarService {
     }
 
     async deleteCalendar(id: number): Promise<void> {
+
+        let calendar = await this.calendar_repository.getCalendarById(id)
+
+        if(calendar === null) throw ErrorFactory.getError(ErrorType.CalNotExist)
+
+        let calendar_cost = calendar.cost
+
+        let reservations = await this.reservation_repository.findReservationsByCalendar(id)
+
+        if( reservations.some(r => r.isActive())) throw ErrorFactory.getError(ErrorType.ReservationActiveInCalendar)
+
+        for (const reservation of reservations.filter(res => res.isWaitingToStart())) {
+            let refundToken = reservation.getHours() * calendar_cost
+            await this.user_repository.addTokenToUser(reservation.id!, refundToken);
+            }
+
         await this.calendar_repository.deleteCalendar(id);
     }
+
+
+
     async archiveCalendar(id: number): Promise<void> {
         await this.calendar_repository.archiveCalendar(id);
     }

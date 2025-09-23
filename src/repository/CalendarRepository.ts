@@ -47,12 +47,13 @@ export class CalendarRepository implements ICalendarRepository {
 
 
     async deleteCalendar(id: number): Promise<void> {
-        // Implementa la logica per eliminare un calendario
-        throw new Error("Method not implemented.");
+        await this.calendarDAO.deleteCalendar(id)
     }
+
     async archiveCalendar(id: number): Promise<void> {
         await this.calendarDAO.updateArchiveCalendarStatus(id,true)
     }
+    
     async unarchiveCalendar(id: number): Promise<void> {
         await this.calendarDAO.updateArchiveCalendarStatus(id,false)
         

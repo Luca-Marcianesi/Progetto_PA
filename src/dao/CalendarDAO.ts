@@ -44,6 +44,12 @@ export class CalendarDAO implements ICalendarDAO{
         )
     }
 
+    async deleteCalendar(id: number): Promise<void> {
+        await Calendar.destroy({
+          where: {id:id}
+        })
+    }
+
     
 
   }

@@ -9,4 +9,6 @@ export interface ICalendarDAO {
 
     updateArchiveCalendarStatus(id: number, status: boolean): Promise<void>
 
+    deleteCalendar(id: number): Promise<void>
+
 }

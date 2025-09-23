@@ -44,6 +44,16 @@ export class DomainReservation {
         this.rejectReason = reason;
     }
 
+    isActive(): boolean{
+        return (this.start.getTime()< Date.now() &&
+         Date.now() <  this.end.getTime() &&
+          this.state.getStatus() === enumReservationStatus.Approved)
+    }
+
+    isWaitingToStart(): boolean{
+        return (Date.now() < this.start.getTime() && this.state.getStatus() === enumReservationStatus.Approved )
+    }
+
     getHours() : number{
         return (this.end.getTime() - this.start.getTime())/(3600*1000)
     }

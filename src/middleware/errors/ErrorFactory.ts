@@ -22,7 +22,8 @@ export enum ErrorType {
     ReservationCancelled,
     ReservationInvalid,
     AlredyRejectedReservation,
-    AlredyApprovedReservation
+    AlredyApprovedReservation,
+    ReservationActiveInCalendar
 }
 
 export class ErrorFactory {
@@ -69,6 +70,8 @@ export class ErrorFactory {
                 return new Errors.ReservationInvalidError()
             case ErrorType.ReservationCancelled:
                 return new Errors.ReservationCancelledError()
+            case ErrorType.ReservationActiveInCalendar:
+                return new Errors.ReservationActiveInCalendarError()
             default:
                 return new Errors.InternalServerError();
         }

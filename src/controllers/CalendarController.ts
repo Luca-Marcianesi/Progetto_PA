@@ -47,7 +47,11 @@ export class CalendarController {
         try {     
             const inputValidate = req.body as  unknown as CalendarIdInput
     
-            let calendar = await this.calendarService.deleteCalendar(req.body)
+            await this.calendarService.deleteCalendar(inputValidate.calendar_id)
+
+            res.status(StatusCodes.ACCEPTED).json({
+                message: "Calendario eliminato"
+            })
 
         } catch (error) {
             throw error
