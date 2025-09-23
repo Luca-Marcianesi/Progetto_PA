@@ -18,10 +18,7 @@ export class ResourceRepository implements IResourceRepository{
     async getResourceById(id: number): Promise<DomainResource | null> {
         let model = await this.resource_dao.getResourceById(id)
         if(model === null) return null
-        return new DomainResource(
-            model.name,
-            model.id
-        )
+        return  DomainResource.fromPersistence(model)
     }
 
     getAllResources(): Promise<DomainResource[]> {

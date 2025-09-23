@@ -28,78 +28,36 @@ export class ReservationRepository implements IReservationRepository{
         let modelReservation = await this.reservationDAO.insert(reservation,status)
         if(!modelReservation) throw ErrorFactory.getError(ErrorType.InternalServer)
         
-        return new DomainReservation(
-            modelReservation.calendar_id,
-            modelReservation.start_time,
-            modelReservation.end_time,
-            modelReservation.title,
-            modelReservation.user_id,
-            modelReservation.handled_by,
-            modelReservation.id,
-            undefined,
-            reservation.getState(),
-
-
-        )
+        return DomainReservation.fromPersistence(modelReservation)
+            
     }
 
     async findReservationApprovedByCalendarId(calendar_id: number): Promise<DomainReservation[]> {
         let models = await this.reservationDAO.getReservationApproved(calendar_id)
         return models
-        .map(r => new DomainReservation(
-                r.calendar_id,
-                r.start_time,
-                r.end_time,
-                r.title,
-                r.user_id,
-            ));
+        .map(r =>  DomainReservation.fromPersistence(r));
         
     }
 
     async findReservationsByCalendar(calendar_id: number): Promise<DomainReservation[]> {
         const models = await this.reservationDAO.getReservatisByCalendarId(calendar_id)
         return models
-        .map(r => new DomainReservation(
-                r.calendar_id,
-                r.start_time,
-                r.end_time,
-                r.title,
-                r.user_id,
-            ));
+        .map(r =>  DomainReservation.fromPersistence(r))
     }
 
     async findReservationById(reservation_id: number): Promise<DomainReservation | null> {
         const model = await this.reservationDAO.findByPk(reservation_id);
         if (!model) return null;
 
-        return new DomainReservation(
-            model.calendar_id,
-            model.start_time,
-            model.end_time,
-            model.title,
-            model.user_id,
-            model.user_id,
-            model.id,
-            model.reason,
-            this.getStateByStatus(model.status)
-        );
+        return  DomainReservation.fromPersistence(model)
+            
         
     }
 
     async findReservationOptionalFilter(filter: ReservationOptionalFilterInput): Promise<DomainReservation[]> {
         let reservation = await this.reservationDAO.getReservationOptinalFilter(filter)
         return reservation
-        .map(model => new DomainReservation(
-                model.calendar_id,
-                model.start_time,
-                model.end_time,
-                model.title,
-                model.user_id,
-                model.user_id,
-                model.id,
-                model.reason,
-                this.getStateByStatus(model.status)
-        ));
+        .map(model =>  DomainReservation.fromPersistence(model))
 
         
     }
@@ -107,17 +65,7 @@ export class ReservationRepository implements IReservationRepository{
     async findReservationStatusFiltered(filter: ReservationStatusFilterInput): Promise<DomainReservation[]> {
         let reservation = await this.reservationDAO.getReservationOptinalFilter(filter)
         return reservation
-        .map(model => new DomainReservation(
-                model.calendar_id,
-                model.start_time,
-                model.end_time,
-                model.title,
-                model.user_id,
-                model.user_id,
-                model.id,
-                model.reason,
-                this.getStateByStatus(model.status)
-        ));
+        .map(model =>  DomainReservation.fromPersistence(model))
         
     }
 

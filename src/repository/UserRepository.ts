@@ -39,12 +39,7 @@ export class UserRepository implements IUserRepository {
 
 
   private buidUser(model: User): DomainUser{
-    return new DomainUser(
-      model.name,
-      model.surname,
-      model.email,
-      model.password
-    )
+    return  DomainUser.fromPersisence(model)
   }
 
 }
