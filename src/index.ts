@@ -5,7 +5,6 @@ import autheticateRoutes from "./routes/AuthenticatedRoutes.js"
 import adminRoutes from "./routes/AdminRoutes.js"
 
 import { errorHandler } from "./middleware/errorHandler.js";
-import { authenticate } from "./middleware/middlewareToken.js";
 
 const app = express();
 const PORT = 3000;

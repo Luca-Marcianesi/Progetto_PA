@@ -22,7 +22,7 @@ router.get("/reservation/filter", validateQuerySchema(ReservationOptionalFilterS
 
 router.get("/calendar",validateQuerySchema(CalendaIdSchema),calendar_conytroller.getCalendar)
 
-router.delete("/reservation", validateParamsSchema(ReservationIdSchema),reservation_controller.deleteReservations)
+router.delete("/reservation/:id", validateParamsSchema(ReservationIdSchema),reservation_controller.deleteReservations)
 
 router.get("/slot",validateQuerySchema(CheckSlotSchema),calendar_conytroller.checkSclot)
 

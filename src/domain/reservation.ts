@@ -55,7 +55,7 @@ export class DomainReservation {
     })
     }
 
-    getUserOutput(){
+    toJSON(){
         return {
             calendar : this.calendar_id,
             title: this.title,

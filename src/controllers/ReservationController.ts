@@ -18,7 +18,7 @@ export class ReservationController{
 
             res.status(StatusCodes.CREATED).json({
                             message:"Creato con successo",
-                            object: reservation.getUserOutput()
+                            object: reservation
                         })
 
         } catch (error) {
@@ -33,7 +33,7 @@ export class ReservationController{
             const inputValidate = req.body as  unknown as UpdateStatusReseservationInput
 
 
-            let reservation = await this.ReservationService.updatteReservation(inputValidate.id,inputValidate.newStatus,this.getUtenteId(req),inputValidate.reason)
+            await this.ReservationService.updatteReservation(inputValidate.id,inputValidate.newStatus,this.getUtenteId(req),inputValidate.reason)
 
             res.status(StatusCodes.ACCEPTED).json({message:"Prenotazione aggiornata"})
 
@@ -46,10 +46,14 @@ export class ReservationController{
     deleteReservations = async(req: Request, res: Response, next: NextFunction) => {
 
         try {     
-            const inputValidate = req.body as  unknown //as ReservationIdInput
+            const inputValidate = req.params as  unknown as ReservationIdInput
 
 
-            let reservation = await this.ReservationService.deleteReservation(req.body)
+            await this.ReservationService.deleteReservation(inputValidate.id)
+
+            res.status(StatusCodes.ACCEPTED).json({
+                message: "Prenotazione eliminata"
+            })
 
         } catch (error) {
             throw error

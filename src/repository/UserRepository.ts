@@ -22,9 +22,9 @@ export class UserRepository implements IUserRepository {
     return this.userDAO.addTokenToUser(id, token);
   }
 
-  async getUserByEmail(email: string): Promise<User | null> {
+  async getUserByEmail(email: string): Promise<DomainUser | null> {
     let model = await this.userDAO.getUserByEmail(email);
-    return model
+    return model === null ? null : DomainUser.fromPersisence(model)
   }
   async getUserToken(user_id: number): Promise<number | null> {
     return this.userDAO.getUserToken(user_id)
