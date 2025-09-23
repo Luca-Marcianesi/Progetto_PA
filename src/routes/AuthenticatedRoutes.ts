@@ -18,7 +18,7 @@ router.post("/reservation", validateBodySchema(NewReservationSchema),reservation
 
 router.get("/reservation/state",validateBodySchema(ReservationStatusFilterSchema),reservation_controller.getReservationsFilterStatus)
 
-router.get("/reservation/filter", validateQuerySchema(ReservationOptionalFilterSchema),reservation_controller.getReservationsFiltered)
+router.get("/reservation/filter", validateQuerySchema(ReservationOptionalFilterSchema),reservation_controller.getReservationsOptionalFiter)
 
 router.get("/calendar",validateQuerySchema(CalendaIdSchema),calendar_conytroller.getCalendar)
 
