@@ -4,7 +4,7 @@ import { buildCalendarController,buildReservationController} from "../utils/cont
 import { validateBodySchema,validateQuerySchema,validateParamsSchema } from "../middleware/middlewareValidator";
 import { CheckSlotSchema, ReservationIdSchema, NewReservationSchema, ReservationOptionalFilterSchema, ReservationStatusFilterSchema } from "../middleware/zodValidator/reservation.schema";
 import { CalendaIdSchema } from "../middleware/zodValidator/calendar.schema";
-import { verifyUserTkens } from "../middleware/middlewareTokenFinish";
+import { verifyUserTokens } from "../middleware/middlewareTokenFinish";
 
 const calendar_conytroller = buildCalendarController()
 
@@ -12,20 +12,41 @@ const reservation_controller =buildReservationController()
 
 const router = Router()
 
-// Verifica del token prima di ogni rotta del file
-router.use(verifyToken,verifyUserTkens)
+router.post("/reservation",
+    verifyToken,
+    verifyUserTokens,
+    validateBodySchema(NewReservationSchema),
+    reservation_controller.newReservation)
 
-router.post("/reservation", validateBodySchema(NewReservationSchema),reservation_controller.newReservation)
+router.get("/reservation/state",
+    verifyToken,
+    verifyUserTokens,
+    validateQuerySchema(ReservationStatusFilterSchema),
+    reservation_controller.getReservationsFilterStatus)
 
-router.get("/reservation/state",validateQuerySchema(ReservationStatusFilterSchema),reservation_controller.getReservationsFilterStatus)
+router.get("/reservation/filter",
+    verifyToken,
+    verifyUserTokens,
+    validateQuerySchema(ReservationOptionalFilterSchema),
+    reservation_controller.getReservationsOptionalFiter)
 
-router.get("/reservation/filter", validateQuerySchema(ReservationOptionalFilterSchema),reservation_controller.getReservationsOptionalFiter)
+router.get("/calendar",
+    verifyToken,
+    verifyUserTokens,
+    validateQuerySchema(CalendaIdSchema),
+    calendar_conytroller.getCalendar)
 
-router.get("/calendar",validateQuerySchema(CalendaIdSchema),calendar_conytroller.getCalendar)
+router.delete("/reservation/:id",
+    verifyToken,
+    verifyUserTokens,
+    validateParamsSchema(ReservationIdSchema),
+    reservation_controller.deleteReservations)
 
-router.delete("/reservation/:id", validateParamsSchema(ReservationIdSchema),reservation_controller.deleteReservations)
-
-router.get("/slot",validateQuerySchema(CheckSlotSchema),calendar_conytroller.checkSclot)
+router.get("/slot",
+    verifyToken,
+    verifyUserTokens,
+    validateQuerySchema(CheckSlotSchema),
+    calendar_conytroller.checkSclot)
 
 
 

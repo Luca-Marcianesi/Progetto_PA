@@ -22,33 +22,66 @@ const reservation_controller =buildReservationController()
 
 const router = Router()
 
-// Verifica del token e controllo del ruolo nel  payload del token prima di ogni rotta
-router.use(verifyToken,authenticate([ADMIN_ROLE]))
+
 
 //Utente
-router.patch("/user/:email/token",validateBodySchema(UpdateTokenSchema), user_controller.updateToken);
+router.patch("/user/:email/token",
+    verifyToken,
+    authenticate([ADMIN_ROLE]),
+    validateBodySchema(UpdateTokenSchema),
+    user_controller.updateToken);
 
 //Risorse
-router.post("/resource",validateBodySchema(CreateResourceSchema),resource_controller.createResource);
+router.post("/resource",
+    verifyToken,
+    authenticate([ADMIN_ROLE]),
+    validateBodySchema(CreateResourceSchema),
+    resource_controller.createResource);
 
 //Calendario
-router.post("/calendar",validateBodySchema(CreateCalendarSchema),calendar_controller.createCalendar);
+router.post("/calendar",
+    verifyToken,authenticate([ADMIN_ROLE]),
+    validateBodySchema(CreateCalendarSchema),
+    calendar_controller.createCalendar);
 
-router.patch("/calendar/unarchive",validateBodySchema(CalendaIdSchema),calendar_controller.archiveCalendar)
+router.patch("/calendar/unarchive",
+    verifyToken,authenticate([ADMIN_ROLE]),
+    validateBodySchema(CalendaIdSchema),
+    calendar_controller.archiveCalendar)
 
-router.get("/calendar",validateQuerySchema(CalendaIdSchema),calendar_controller.getCalendar);
+router.get("/calendar",
+    verifyToken,authenticate([ADMIN_ROLE]),
+    validateQuerySchema(CalendaIdSchema),
+    calendar_controller.getCalendar);
 
-router.patch("/calendar/cost", validateBodySchema(UpdateCalendaCostSchema),calendar_controller.updateCalendarCost);
+router.patch("/calendar/cost",
+    verifyToken,authenticate([ADMIN_ROLE]),
+    validateBodySchema(UpdateCalendaCostSchema),
+    calendar_controller.updateCalendarCost);
 
-router.patch("/calendar/end",validateBodySchema(UpdateCalendarEndSchema),calendar_controller.updateCalendaEnd);
+router.patch("/calendar/end",
+    verifyToken,authenticate([ADMIN_ROLE]),
+    validateBodySchema(UpdateCalendarEndSchema),
+    calendar_controller.updateCalendaEnd);
 
-router.delete("/calendar/:calendar_id", validateParamsSchema(CalendaIdSchema), calendar_controller.cancelCalendar)
+router.delete("/calendar/:calendar_id",
+    verifyToken,authenticate([ADMIN_ROLE]),
+    validateParamsSchema(CalendaIdSchema),
+    calendar_controller.cancelCalendar)
 
 //Prenotazioni
 
-router.patch("/reservation",validateBodySchema(UpdateStatusReseservationSchema),reservation_controller.updateReservations)
+router.patch("/reservation",
+    verifyToken,
+    authenticate([ADMIN_ROLE]),
+    validateBodySchema(UpdateStatusReseservationSchema),
+    reservation_controller.updateReservations)
 
-router.get("/reservationsByCal",validateQuerySchema(CalendaIdSchema),reservation_controller.getReservationsByCal)
+router.get("/reservationsByCal",
+    verifyToken,
+    authenticate([ADMIN_ROLE]),
+    validateQuerySchema(CalendaIdSchema),
+    reservation_controller.getReservationsByCal)
 
 
 
