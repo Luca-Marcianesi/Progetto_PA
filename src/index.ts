@@ -5,6 +5,7 @@ import autheticateRoutes from "./routes/authenticatedRoutes.js"
 import adminRoutes from "./routes/adminRoutes.js"
 
 import { errorHandler } from "./middleware/errorHandler.js";
+import { StatusCodes } from "http-status-codes";
 
 const app = express();
 const PORT = 3000;
@@ -16,6 +17,10 @@ app.use(express.json());
 app.use("/api", publicRoutes);
 app.use("/api", autheticateRoutes);
 app.use("/api", adminRoutes);
+
+app.use((req, res) => {
+  res.status(StatusCodes.BAD_REQUEST).json({ message: "Bad request" });
+});
 
 
 app.use(errorHandler)

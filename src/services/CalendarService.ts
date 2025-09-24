@@ -8,6 +8,7 @@ import { IReservationRepository } from "../repository/repositoryInterface/IResev
 import { IUserRepository } from "../repository/repositoryInterface/IUserRepository";
 import { DomainReservation } from "../domain/reservation";
 import { enumReservationStatus } from "../utils/db_const";
+import { buildRefundPolicyChain } from "../utils/reservationCoR/refaundTokenHandlers";
 
 export class CalendarService implements ICalendarService {
     private calendar_repository: ICalendarRepository;
@@ -71,10 +72,15 @@ export class CalendarService implements ICalendarService {
 
         if( isActive) throw ErrorFactory.getError(ErrorType.ReservationActiveInCalendar)
 
-        for (const reservation of reservations.filter(res => res.isWaitingToStart())) {
-            let refundToken = reservation.getHours() * calendar_cost
-            await this.user_repository.addTokenToUser(reservation.id!, refundToken);
+        const refundChain = buildRefundPolicyChain()
+
+        for (const reservation of reservations) {
+            const refundTokens = refundChain.calculate(reservation, calendar.cost) ?? 0;
+            if (refundTokens > 0) {
+                await this.user_repository.addTokenToUser(reservation.reservationBy, refundTokens);
             }
+        }
+
 
         await this.calendar_repository.deleteCalendar(id);
     }

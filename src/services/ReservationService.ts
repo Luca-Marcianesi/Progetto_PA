@@ -6,6 +6,7 @@ import { enumReservationStatus } from "../utils/db_const";
 import { DomainReservation } from "../domain/reservation";
 import { NewReservationInput, ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../middleware/zodValidator/reservation.schema";
 import { IReservationService } from "./serviceInterface/IReservationService";
+import { buildRefundPolicyChain} from "../utils/reservationCoR/refaundTokenHandlers";
 
 export class ReservationService implements IReservationService {
     private userRepository : IUserRepository;
@@ -112,10 +113,9 @@ export class ReservationService implements IReservationService {
 
         if(reservation.reservationBy !== requestSender) throw ErrorFactory.getError(ErrorType.ResourceNotYours)
 
-         await this.getCalendarCost(reservation.calendar_id)
+        let calendar_cost = await this.getCalendarCost(reservation.calendar_id)
 
-        let refaudTokens =
-         (await this.getCalendarCost(reservation.calendar_id) * reservation.getHoursNotUsed()) - reservation.calculateFineTokens()
+        let refaudTokens = buildRefundPolicyChain().calculate(reservation,calendar_cost)
 
         await this.userRepository.addTokenToUser(reservation.reservationBy,refaudTokens)
 
@@ -127,7 +127,8 @@ export class ReservationService implements IReservationService {
 
     async approveReservation(id: number, approvedBy: number): Promise<void>{
         const reservation = await this.reservationRepository.findReservationById(id)
-        if(!reservation) throw ErrorFactory.getError(ErrorType.ReservationNotFound)
+        
+        if(reservation === null) throw ErrorFactory.getError(ErrorType.ReservationNotFound)
 
         reservation.approve(approvedBy)
         this.reservationRepository.saveReservation(reservation)
@@ -189,5 +190,6 @@ export class ReservationService implements IReservationService {
                 ? false : true
 
     }
+
 }
         
