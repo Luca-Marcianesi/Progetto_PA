@@ -56,12 +56,9 @@ export class CalendarRepository implements ICalendarRepository {
         await this.calendarDAO.deleteCalendar(id)
     }
 
-    async archiveCalendar(id: number): Promise<void> {
-        await this.calendarDAO.updateArchiveCalendarStatus(id,true)
-    }
 
     async unarchiveCalendar(id: number): Promise<void> {
-        await this.calendarDAO.updateArchiveCalendarStatus(id,false)
+        await this.calendarDAO.updateArchiveCalendarStatus(id)
         
     }
 

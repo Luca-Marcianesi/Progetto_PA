@@ -4,6 +4,7 @@ import { buildCalendarController,buildReservationController} from "../utils/cont
 import { validateBodySchema,validateQuerySchema,validateParamsSchema } from "../middleware/middlewareValidator";
 import { CheckSlotSchema, ReservationIdSchema, NewReservationSchema, ReservationOptionalFilterSchema, ReservationStatusFilterSchema } from "../middleware/zodValidator/reservation.schema";
 import { CalendaIdSchema } from "../middleware/zodValidator/calendar.schema";
+import { verifyUserTkens } from "../middleware/middlewareTokenFinish";
 
 const calendar_conytroller = buildCalendarController()
 
@@ -12,11 +13,11 @@ const reservation_controller =buildReservationController()
 const router = Router()
 
 // Verifica del token prima di ogni rotta del file
-router.use(verifyToken)
+router.use(verifyToken,verifyUserTkens)
 
 router.post("/reservation", validateBodySchema(NewReservationSchema),reservation_controller.newReservation)
 
-router.get("/reservation/state",validateBodySchema(ReservationStatusFilterSchema),reservation_controller.getReservationsFilterStatus)
+router.get("/reservation/state",validateQuerySchema(ReservationStatusFilterSchema),reservation_controller.getReservationsFilterStatus)
 
 router.get("/reservation/filter", validateQuerySchema(ReservationOptionalFilterSchema),reservation_controller.getReservationsOptionalFiter)
 

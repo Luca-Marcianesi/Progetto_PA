@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS resources (
     id SERIAL PRIMARY KEY,
     name VARCHAR(150) NOT NULL UNIQUE,
     description TEXT,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
+    "createdAt" TIMESTAMP DEFAULT NOW(),
+    "updatedAt" TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -16,8 +16,8 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR(255) NOT NULL,
   role role_enum NOT NULL DEFAULT 'user',
   token INT DEFAULT 1000 CHECK (token >= 0),
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+  "createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+  "updatedAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS calendars (
@@ -28,9 +28,9 @@ CREATE TABLE IF NOT EXISTS calendars (
     title VARCHAR(30) NOT NULL,
     cost_per_hour NUMERIC(10,4) NOT NULL CHECK (cost_per_hour >= 0),
     archived BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP,
-    deleted_at TIMESTAMP,
+    "createdAt" TIMESTAMP DEFAULT NOW(),
+    "updatedAt" TIMESTAMP,
+    "deletedAt" TIMESTAMP,
     CHECK (end_time > start_time)
 );
 
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS requests (
     reason TEXT,
     handled_by INT REFERENCES users(id) ON DELETE SET NULL,
     status VARCHAR(20) NOT NULL CHECK (status IN ('pending','approved','rejected','invalid','cancelled')),
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW(),
+    "createdAt" TIMESTAMP DEFAULT NOW(),
+    "updatedAt" TIMESTAMP DEFAULT NOW(),
     CHECK (end_time > start_time)
 );

@@ -1,6 +1,8 @@
 import { Resource } from "../../models/Resource";
+import { CreateResourceInput } from "../../middleware/zodValidator/resource.schema";
+import { DomainResource } from "../../domain/resource";
 export interface IResourceService {
-    createResource(resourceData: { name: string; description?: string | null; }): Promise<number>;
+    createResource(input : CreateResourceInput): Promise<DomainResource>;
 
     getResourceById(id: number): Promise<Resource | null>;
 

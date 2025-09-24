@@ -13,8 +13,6 @@ export interface ICalendarService {
 
     deleteCalendar(id: number): Promise<void>;
 
-    archiveCalendar(id: number): Promise<void>;
-
     unarchiveCalendar(id: number): Promise<void>;
 
     checkSlotAvaiability(calendar_id: number, start: Date, end: Date):Promise<boolean>

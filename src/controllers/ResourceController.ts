@@ -2,15 +2,16 @@ import { IResourceService } from "../services/serviceInterface/IResourceService"
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { INTEGER } from "sequelize";
+import { CreateResourceInput } from "../middleware/zodValidator/resource.schema";
 
 export class ResourceController {
     constructor (private resourceService: IResourceService) { }
 
     createResource = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { name, description } = req.body;
-            const resourceId = await this.resourceService.createResource({ name, description});
-            return res.status(StatusCodes.CREATED).json({ message: "Resource created with Id " + resourceId });
+            let input = req.body as unknown as CreateResourceInput
+            const resource = await this.resourceService.createResource(input);
+            return res.status(StatusCodes.CREATED).json({ message: "Resource created :" + resource.name });
         }catch (error) {
             next(error);
         }

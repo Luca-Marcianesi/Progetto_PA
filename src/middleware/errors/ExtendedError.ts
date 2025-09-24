@@ -87,6 +87,13 @@ export class InvaidTokenError extends UnauthorizedError  {
     }   
 }
 
+export class ResourceNotYoursError extends UnauthorizedError  {
+    constructor(message?: string) {
+        super(message || "Non puoi fare azioni su risorse che non ti appartengono!");
+    }   
+}
+
+
 export class UserNotFoundError extends NotFoundError {
     constructor(message?: string) {
         super(message || "Utente non trovato");

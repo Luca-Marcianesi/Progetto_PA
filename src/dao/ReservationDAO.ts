@@ -44,8 +44,8 @@ export class ReservationDAO implements IReservationDAO{
         if (filters.calendar_id) where.calendar_id = filters.calendar_id;
         if (filters.status) where.status = filters.status;
         if (filters.from && filters.to) {
-        where.start = { [Op.gte]: filters.from };
-        where.end = { [Op.lte]: filters.to };
+        where.start_time = { [Op.gte]: filters.from };
+        where.end_time = { [Op.lte]: filters.to };
         }
         return Reservation.findAll({ where });
 
@@ -102,6 +102,10 @@ export class ReservationDAO implements IReservationDAO{
             }
         )
         
+    }
+
+    async getAll(){
+        return await Reservation.findAll()
     }
 
 }

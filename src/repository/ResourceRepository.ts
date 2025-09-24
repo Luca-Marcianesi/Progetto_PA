@@ -1,6 +1,7 @@
 
 import { IResourceDAO } from "../dao/daoInterface/IResourceDAO";
 import { DomainResource } from "../domain/resource";
+import { CreateResourceInput } from "../middleware/zodValidator/resource.schema";
 import { Resource } from "../models/Resource";
 import { IResourceRepository } from "./repositoryInterface/IResourceRepository";
 
@@ -11,8 +12,9 @@ export class ResourceRepository implements IResourceRepository{
         this.resource_dao = resource_dao
 
     }
-    createResource(resourceData: { name: string; description?: string | null; }): Promise<DomainResource> {
-        throw Error("non implementata")
+    async createResource(input: CreateResourceInput): Promise<DomainResource> {
+        let model = await this.resource_dao.createResource(input.name, input.description)
+        return DomainResource.fromPersistence(model)
     }
 
     async getResourceById(id: number): Promise<DomainResource | null> {

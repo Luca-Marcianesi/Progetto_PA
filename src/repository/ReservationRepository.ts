@@ -63,7 +63,7 @@ export class ReservationRepository implements IReservationRepository{
     }
 
     async findReservationStatusFiltered(filter: ReservationStatusFilterInput): Promise<DomainReservation[]> {
-        let reservation = await this.reservationDAO.getReservationOptinalFilter(filter)
+        let reservation = await this.reservationDAO.getReservationStatusFilter(filter)
         return reservation
         .map(model =>  DomainReservation.fromPersistence(model))
         

@@ -43,10 +43,11 @@ export class ReservationService implements IReservationService {
 
             if(await this.searchConflicts(reservation) ) throw  ErrorFactory.getError(ErrorType.SlotUsed)
             
+            let haveEnoughToken = await this.checkHaveEnoughTokens(user_id,start_time,end_time,cost_per_hour)
+            const reservation_status = haveEnoughToken ? enumReservationStatus.Pending : enumReservationStatus.Invalid
 
-            const reservation_status : enumReservationStatus = await this.checkHaveEnoughTokens(user_id,start_time,end_time,cost_per_hour)
-             ? enumReservationStatus.Pending : enumReservationStatus.Invalid
-
+            await this.userRepository.addTokenToUser(user_id,(-
+                cost_per_hour* reservation.getHours()))
              reservation.setState(DomainReservation.mapStatus(reservation_status))
 
             //Devo salvare la prenotazione anche se non ha abbastanza token
@@ -81,9 +82,9 @@ export class ReservationService implements IReservationService {
 
         await this.userRepository.addTokenToUser(reservation.reservationBy,(cost_per_hour*reservation.getHours()))
         reservation.reject(handledBy,reason)
+        }else{
+            reservation.approve(handledBy)
         }
-
-        reservation.approve(handledBy)
 
         await this.reservationRepository.saveReservation(reservation)
 
@@ -105,11 +106,13 @@ export class ReservationService implements IReservationService {
          
     }
 
-    async deleteReservation(reservation_id: number): Promise<void> {
+    async deleteReservation(reservation_id: number, requestSender: number): Promise<void> {
 
         let reservation = await this.reservationRepository.findReservationById(reservation_id)
 
         if(reservation === null) throw ErrorFactory.getError(ErrorType.ReservationNotFound)
+
+        if(reservation.reservationBy !== requestSender) throw ErrorFactory.getError(ErrorType.ResourceNotYours)
 
          await this.getCalendarCost(reservation.calendar_id)
 

@@ -1,6 +1,7 @@
 import {z} from "zod"
 import {enumReservationStatus} from "../../utils/db_const"
 import { DateOnHourSchema, GenericStringSchema, refineFromBeforeToSchema, StandarIdSchema, ValidationMessages } from "./utilsValidator"
+import { en } from "zod/v4/locales"
 
 export const ReservationIdSchema = z.object({
     id: StandarIdSchema,
@@ -9,7 +10,6 @@ export const ReservationIdSchema = z.object({
 export type ReservationIdInput = z.infer<typeof ReservationIdSchema>
 
 export const ReservationStatusFilterSchema = z.object({
-    id: StandarIdSchema,
     status: z.enum(enumReservationStatus),
     from: z
     .string()
@@ -50,13 +50,21 @@ export const NewReservationSchema = z.object({
 }).refine(
     refineFromBeforeToSchema("start","end"),
     { message : ValidationMessages.date.fromBeforeTo}
+).refine(
+  (data) =>{ 
+    const currentHour = new Date(Date.now());
+    currentHour.setMinutes(0, 0, 0); 
+
+    return data.start_time.getTime() >= currentHour.getTime();
+},
+  { message: "La data di inizio deve essere futura", path: ["start"] }
 )
 export type NewReservationInput = z.infer<typeof NewReservationSchema>
 
 
 export const UpdateStatusReseservationSchema = z.object({
     id: StandarIdSchema,
-    newStatus: z.enum(["approved","reject"]),
+    newStatus: z.enum([enumReservationStatus.Approved,enumReservationStatus.Reject]),
     reason : GenericStringSchema.optional()
 
 })

@@ -34,4 +34,8 @@ export class UserDAO implements IUserDAO {
         const user =  await User.findByPk(id)
         return user ? user.token:  null
     }
+
+    async getUsers(): Promise<User[]>{
+        return await User.findAll()
+    }
 }

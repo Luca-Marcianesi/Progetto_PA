@@ -18,6 +18,9 @@ export const CreateCalendarSchema = z.object({
 }).refine(
     refineFromBeforeToSchema("start","end"),
     { message : ValidationMessages.date.fromBeforeTo}
+).refine(
+  (data) => data.start.getTime() > Date.now(),
+  { message: "La data di inizio deve essere futura", path: ["start"] }
 )
 export type CreateCalendarInput = z.infer<typeof CreateCalendarSchema>
 

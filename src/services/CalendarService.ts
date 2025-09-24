@@ -69,7 +69,9 @@ export class CalendarService implements ICalendarService {
 
         let reservations = await this.reservation_repository.findReservationsByCalendar(id)
 
-        if( reservations.some(r => r.isActive())) throw ErrorFactory.getError(ErrorType.ReservationActiveInCalendar)
+        let isActive = reservations.some(r => r.isActive())
+
+        if( isActive) throw ErrorFactory.getError(ErrorType.ReservationActiveInCalendar)
 
         for (const reservation of reservations.filter(res => res.isWaitingToStart())) {
             let refundToken = reservation.getHours() * calendar_cost
@@ -79,11 +81,6 @@ export class CalendarService implements ICalendarService {
         await this.calendar_repository.deleteCalendar(id);
     }
 
-
-
-    async archiveCalendar(id: number): Promise<void> {
-        await this.calendar_repository.archiveCalendar(id);
-    }
     async unarchiveCalendar(id: number): Promise<void> {
         await this.calendar_repository.unarchiveCalendar(id);
     }

@@ -17,8 +17,8 @@ class Resource extends Model<ResourceAttributes, ResourceCreationAttributes> imp
     public name!: string;
     public description!: string | null;
 
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 Resource.init(
@@ -41,8 +41,7 @@ Resource.init(
         sequelize,
         modelName: "Resource",
         tableName: "resources",
-        createdAt: "created_at",
-        updatedAt: "updated_at",
+        
     }
 );
 

@@ -17,4 +17,5 @@ VALUES
 
 INSERT INTO calendars (resource_id, start_time, end_time, cost_per_hour,title)
 VALUES
-  ('3','2025-09-22T10:00:00Z','2026-09-22T10:00:00Z',10,'calendario infinito')
+  ('3','2025-09-22T10:00:00Z','2026-09-22T10:00:00Z',10,'calendario infinito'),
+  ('2','2025-09-22T10:00:00Z','2026-09-22T10:00:00Z',10,'calendario infinito2')

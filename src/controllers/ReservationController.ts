@@ -5,6 +5,7 @@ import { IReservationService } from "../services/serviceInterface/IReservationSe
 import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
 import { NewReservationInput, ReservationStatusFilterInput, ReservationOptionalFilterInput ,UpdateStatusReseservationInput, ReservationIdInput } from "../middleware/zodValidator/reservation.schema";
 import { StatusCodes } from "http-status-codes";
+import { getUtenteId } from "../utils/functions";
 
 
 export class ReservationController{
@@ -14,7 +15,7 @@ export class ReservationController{
         try {     
             const inputValidate = req.body as  unknown as NewReservationInput
     
-            let reservation = await this.ReservationService.newReservation(inputValidate, this.getUtenteId(req))
+            let reservation = await this.ReservationService.newReservation(inputValidate, getUtenteId(req))
 
             res.status(StatusCodes.CREATED).json({
                             message:"Creato con successo",
@@ -33,7 +34,7 @@ export class ReservationController{
             const inputValidate = req.body as  unknown as UpdateStatusReseservationInput
 
 
-            await this.ReservationService.updatteReservation(inputValidate.id,inputValidate.newStatus,this.getUtenteId(req),inputValidate.reason)
+            await this.ReservationService.updatteReservation(inputValidate.id,inputValidate.newStatus,getUtenteId(req),inputValidate.reason)
 
             res.status(StatusCodes.ACCEPTED).json({message:"Prenotazione aggiornata"})
 
@@ -49,7 +50,7 @@ export class ReservationController{
             const inputValidate = req.params as  unknown as ReservationIdInput
 
 
-            await this.ReservationService.deleteReservation(inputValidate.id)
+            await this.ReservationService.deleteReservation(inputValidate.id,getUtenteId(req) )
 
             res.status(StatusCodes.ACCEPTED).json({
                 message: "Prenotazione eliminata"
@@ -62,7 +63,7 @@ export class ReservationController{
     }
     getReservationsFilterStatus = async(req: Request, res: Response, next: NextFunction) => {
         try {     
-            const filter = req.body as  unknown as ReservationStatusFilterInput
+            const filter = req.query as  unknown as ReservationStatusFilterInput
 
             let reservation = await this.ReservationService.getReservationsFilterStatus(filter)
 
@@ -106,11 +107,6 @@ export class ReservationController{
 
     }
 
-    private getUtenteId(req: Request): number{
-        if(!req.user) throw ErrorFactory.getError(ErrorType.Unauthorized)
-        
-        return req.user.id
-    }
 
 
 }

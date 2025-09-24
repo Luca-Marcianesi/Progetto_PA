@@ -1,4 +1,4 @@
-import e, { NextFunction, Request,Response } from "express";
+import { NextFunction, Request,Response } from "express";
 import jwt from "jsonwebtoken";
 import { isNewExpression } from "typescript";
 import {StatusCodes} from "http-status-codes";

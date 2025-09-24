@@ -91,8 +91,6 @@ Reservation.init(
         sequelize,
         modelName: "Reservation",
         tableName: "requests",
-        createdAt: "created_at",
-        updatedAt: "updated_at",
     }
 );
 

@@ -16,8 +16,6 @@ export interface ICalendarRepository {
 
     deleteCalendar(id: number): Promise<void>;
 
-    archiveCalendar(id: number): Promise<void>;
-
     getCostPerHourCalendar(calendar_id: number): Promise<number | null>;
 
     unarchiveCalendar(id: number): Promise<void>; 

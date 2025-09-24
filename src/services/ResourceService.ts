@@ -1,3 +1,5 @@
+import { DomainResource } from "../domain/resource";
+import { CreateResourceInput } from "../middleware/zodValidator/resource.schema";
 import { Resource } from "../models/Resource";
 import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
 import { IResourceRepository } from "../repository/repositoryInterface/IResourceRepository";
@@ -10,8 +12,8 @@ export class ResourceService implements IResourceService{
     constructor(resource_repository : IResourceRepository){
         this.resource_repository = resource_repository
     }
-    createResource(resourceData: { name: string; description?: string | null; }): Promise<number> {
-        throw Error("non Implementata")
+    async createResource(input: CreateResourceInput): Promise<DomainResource> {
+        return await this.resource_repository.createResource(input)
         
     }
 

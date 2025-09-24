@@ -5,8 +5,11 @@ import { CalendarIdInput, CreateCalendarInput, UpdateCalendarCostInput, UpdateCa
 import { CalendarNotExistError } from "../middleware/errors/ExtendedError";
 import { CheckSlotInput } from "../middleware/zodValidator/reservation.schema";
 import { object } from "zod";
-import { ResourceDAO } from "../dao/ResourceDAO";
-import { CalendarDAO } from "../dao/CalendarDAO";
+import { ResourceDAO } from "../dao/resourceDAO";
+import { CalendarDAO } from "../dao/calendarDAO";
+import { UserDAO } from "../dao/userDAO";
+import { ReservationDAO } from "../dao/reservationDAO";
+import { ca } from "zod/locales";
 export class CalendarController {
     constructor (private calendarService: ICalendarService) { }
 
@@ -16,10 +19,16 @@ export class CalendarController {
             
             let dao = new ResourceDAO()
             let cal_dao = new CalendarDAO()
-            let calendar = await cal_dao.getAllCalendars()
+            let user_dao = new UserDAO()
+            let res_dao = new ReservationDAO()
+            let users = await user_dao.getUsers()
+            let reser = await res_dao.getAll()
+            let cal = await cal_dao.getAll()
 
             res.status(StatusCodes.CREATED).json({
-                object: calendar
+                users: users,
+                reser : reser,
+                cal : cal
             })
 
         } catch (error) {
@@ -45,7 +54,7 @@ export class CalendarController {
 
     cancelCalendar = async(req: Request, res: Response, next: NextFunction) => {
         try {     
-            const inputValidate = req.body as  unknown as CalendarIdInput
+            const inputValidate = req.params as  unknown as CalendarIdInput
     
             await this.calendarService.deleteCalendar(inputValidate.calendar_id)
 
@@ -62,7 +71,11 @@ export class CalendarController {
         try {     
             const inputValidate = req.body as  unknown as CalendarIdInput
     
-            let calendar = await this.calendarService.archiveCalendar(req.body)
+            await this.calendarService.unarchiveCalendar(inputValidate.calendar_id)
+
+            res.status(StatusCodes.ACCEPTED).json({
+                message : "Calendario ripristinato"
+            })
 
         } catch (error) {
             throw error
@@ -71,11 +84,8 @@ export class CalendarController {
 
     getCalendar = async(req: Request, res: Response, next: NextFunction) => {
         try {
-            console.log(req.query) 
 
             const inputValidate = req.query as  unknown as CalendarIdInput
-
-            console.log(inputValidate.calendar_id)
             
             let calendar = await this.calendarService.getCalendarById(inputValidate.calendar_id)
 
@@ -113,7 +123,7 @@ export class CalendarController {
 
     checkSclot = async(req: Request, res: Response, next: NextFunction) => {
         try {     
-            const inputValidate = req.body as  unknown as CheckSlotInput
+            const inputValidate = req.query as  unknown as CheckSlotInput
     
             let isFree =
              await this.calendarService.checkSlotAvaiability(inputValidate.calendar_id,inputValidate.start,inputValidate.end)

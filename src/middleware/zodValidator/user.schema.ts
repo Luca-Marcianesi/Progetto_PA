@@ -2,8 +2,8 @@ import {z} from "zod"
 import { GenericStringSchema, PasswordSchema, StandarIdSchema } from "./utilsValidator"
 
 export const RegisterSchema = z.object({
-    name: GenericStringSchema,
-    surname: GenericStringSchema,
+    name: z.string().max(15),
+    surname:  z.string().max(15),
     email: z.email(),
     password: PasswordSchema
 

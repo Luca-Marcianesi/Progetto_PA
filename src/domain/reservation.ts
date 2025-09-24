@@ -40,6 +40,7 @@ export class DomainReservation {
         this.title = reservation.title
         this.reservationBy = reservation.reservationBy
         this.state = DomainReservation.mapStatus(reservation.status)
+        console.log("costruttore" + this.getStatus())
     }
     
 
@@ -119,10 +120,6 @@ export class DomainReservation {
 
     overlaps(other: DomainReservation): boolean {
 
-        console.log("confronto:" + this.start + this.end)
-        console.log("con:" + other.start + other.end)
-        let res = this.start < other.end && this.end > other.start;
-        console.log("sovrapposizione" + res)
         return this.start < other.end && this.end > other.start;
     }
 

@@ -33,21 +33,22 @@ export class CalendarDAO implements ICalendarDAO{
         } )
     }
 
-    async updateArchiveCalendarStatus(id: number, status: boolean): Promise<void> {
-        await Calendar.update(
-          {
-            archived : status
+    async updateArchiveCalendarStatus(id: number): Promise<void> {
+        await Calendar.restore({
+            where : {
+              id: id
           },
-          {
-            where: {id: id}
-          }
-        )
+    })
     }
 
     async deleteCalendar(id: number): Promise<void> {
         await Calendar.destroy({
           where: {id:id}
         })
+    }
+
+    async getAll(){
+      return await Calendar.findAll()
     }
 
     

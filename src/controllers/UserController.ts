@@ -31,8 +31,8 @@ export class UserController {
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { name, surname, email, password } = req.body;
-      const userId = await this.UserService.createUser({ name, surname, email, password });
-      return res.status(StatusCodes.CREATED).json({message: "utente creato con Id" + userId });
+      const user = await this.UserService.createUser({ name, surname, email, password });
+      return res.status(StatusCodes.CREATED).json({message: "utente creato con Id con email" + user.email });
     } catch (error) {
       
       next(error);

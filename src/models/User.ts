@@ -24,8 +24,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public role!: "admin" | "user";
     public token!: number;
 
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 
     }
 
@@ -77,8 +77,6 @@ User.init(
         sequelize,
         modelName: "User",
         tableName: "users",
-        createdAt: "created_at",
-        updatedAt: "updated_at",
     }
 );
 

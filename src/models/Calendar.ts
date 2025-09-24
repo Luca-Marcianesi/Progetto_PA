@@ -26,8 +26,8 @@ class Calendar extends Model<CalendarAttributes,CalendarCreationAttributes> impl
     public title!: string;
     public archived!: boolean;
     
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 Calendar.init(
@@ -70,9 +70,6 @@ Calendar.init(
         sequelize,
         tableName: "calendars",
         paranoid: true,
-        createdAt: "created_at",
-        updatedAt: "updated_at",
-        deletedAt: "deleted_at"
     }
 );
 

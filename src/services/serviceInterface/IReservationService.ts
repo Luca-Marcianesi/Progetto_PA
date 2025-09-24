@@ -8,7 +8,7 @@ export interface IReservationService {
 
     updatteReservation(id: number, newStatus: string, approvedBy: number, reason?: string):Promise<void>
 
-    deleteReservation(reservation_id: number):Promise<void>
+    deleteReservation(reservation_id: number, requestSender : number):Promise<void>
 
     getReservationOptionalFilter(filter : ReservationOptionalFilterInput):Promise<DomainReservation[]>
 

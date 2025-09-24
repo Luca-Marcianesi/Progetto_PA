@@ -8,7 +8,7 @@ import { UpdateTokenSchema } from "../middleware/zodValidator/user.schema";
 import { CreateResourceSchema } from "../middleware/zodValidator/resource.schema";
 import { CalendaIdSchema, CreateCalendarSchema, UpdateCalendaCostSchema, UpdateCalendarEndSchema } from "../middleware/zodValidator/calendar.schema";
 import { UpdateStatusReseservationSchema } from "../middleware/zodValidator/reservation.schema";
-import { ResourceDAO } from "../dao/ResourceDAO";
+import { ResourceDAO } from "../dao/resourceDAO";
 
 
 
@@ -35,7 +35,7 @@ router.post("/resource",validateBodySchema(CreateResourceSchema),resource_contro
 //Calendario
 router.post("/calendar",validateBodySchema(CreateCalendarSchema),calendar_controller.createCalendar);
 
-router.patch("/calendar/archive",validateBodySchema(CalendaIdSchema),calendar_controller.archiveCalendar)
+router.patch("/calendar/unarchive",validateBodySchema(CalendaIdSchema),calendar_controller.archiveCalendar)
 
 router.get("/calendar",validateQuerySchema(CalendaIdSchema),calendar_controller.getCalendar);
 
@@ -43,7 +43,7 @@ router.patch("/calendar/cost", validateBodySchema(UpdateCalendaCostSchema),calen
 
 router.patch("/calendar/end",validateBodySchema(UpdateCalendarEndSchema),calendar_controller.updateCalendaEnd);
 
-router.delete("/calendar", validateParamsSchema(CalendaIdSchema), calendar_controller.cancelCalendar)
+router.delete("/calendar/:calendar_id", validateParamsSchema(CalendaIdSchema), calendar_controller.cancelCalendar)
 
 //Prenotazioni
 
