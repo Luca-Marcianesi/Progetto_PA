@@ -1,4 +1,4 @@
-import { Resource } from "../../models/Resource";
+import { Resource } from "../../models/resourceModel";
 
 export interface IResourceDAO {
     createResource( name: string, description?: string): Promise<Resource>;

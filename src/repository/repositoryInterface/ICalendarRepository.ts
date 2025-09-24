@@ -1,6 +1,5 @@
 import { DomainCalendar } from "../../domain/calendar";
-import { Calendar } from "../../models/Calendar";
-import { Resource } from "../../models/Resource";
+
 
 export interface ICalendarRepository {
 

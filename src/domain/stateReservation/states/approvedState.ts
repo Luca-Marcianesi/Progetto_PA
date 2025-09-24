@@ -1,4 +1,4 @@
-import { ErrorFactory, ErrorType } from "../../../middleware/errors/ErrorFactory";
+import { ErrorFactory, ErrorType } from "../../../middleware/errors/errorFactory";
 import { enumReservationStatus } from "../../../utils/db_const";
 import { DomainReservation } from "../../reservation";
 import { IReservationState } from "../IReservationState";

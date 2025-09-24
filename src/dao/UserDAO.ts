@@ -1,4 +1,4 @@
-import { User } from "../models/User.js";
+import { User } from "../models/userModel.js";
 import { IUserDAO } from "./daoInterface/IUserDAO.js";
 export class UserDAO implements IUserDAO {
 

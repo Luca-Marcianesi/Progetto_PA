@@ -1,8 +1,8 @@
-import { Reservation } from "../models/Reservation";
+import { Reservation } from "../models/reservationModel";
 import { IReservationRepository } from "./repositoryInterface/IResevationRepository";
 import {IReservationDAO} from "../dao/daoInterface/IReservationDAO"
 import {ICalendarDAO} from "../dao/daoInterface/ICalendarDAO"
-import { Calendar } from "../models/Calendar";
+import { Calendar } from "../models/calendarModel";
 import { DomainReservation } from "../domain/reservation";
 import { enumReservationStatus } from "../utils/db_const";
 import { IReservationState } from "../domain/stateReservation/IReservationState";
@@ -10,7 +10,7 @@ import { ApprovedState } from "../domain/stateReservation/states/approvedState";
 import { PendingState } from "../domain/stateReservation/states/pendingState";
 import { RejectedState } from "../domain/stateReservation/states/rejectedState";
 import { CancelState } from "../domain/stateReservation/states/cancelState";
-import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
+import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory";
 import { ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../middleware/zodValidator/reservation.schema";
 
 export class ReservationRepository implements IReservationRepository{

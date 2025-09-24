@@ -1,7 +1,5 @@
 import { NextFunction, Request,Response } from "express";
-
-import { UserRepository } from "../repository/UserRepository";
-import { ErrorFactory, ErrorType } from "./errors/ErrorFactory";
+import { ErrorFactory, ErrorType } from "./errors/errorFactory";
 import { UserDAO } from "../dao/userDAO";
 
 export var verifyUserTkens = async function(req: Request,res : Response, next: NextFunction){

@@ -1,5 +1,5 @@
 import { Request, Response,NextFunction } from "express";
-import { BaseError } from "./errors/ExtendedError";
+import { BaseError } from "./errors/extendedError";
 import { StatusCodes } from "http-status-codes";
 
 export function errorHandler(err: Error, req : Request, res : Response , next: any) { 

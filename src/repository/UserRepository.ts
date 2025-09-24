@@ -1,7 +1,7 @@
 import { IUserDAO } from "../dao/daoInterface/IUserDAO.js";
 import { DomainUser } from "../domain/user.js";
-import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory.js";
-import { User } from "../models/User.js";
+import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory.js";
+import { User } from "../models/userModel.js";
 import { IUserRepository } from "./repositoryInterface/IUserRepository.js";
 
 export class UserRepository implements IUserRepository {

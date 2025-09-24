@@ -2,14 +2,12 @@ import { ICalendarService } from "../services/serviceInterface/ICalendarService"
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { CalendarIdInput, CreateCalendarInput, UpdateCalendarCostInput, UpdateCalendarEndInput } from "../middleware/zodValidator/calendar.schema";
-import { CalendarNotExistError } from "../middleware/errors/ExtendedError";
 import { CheckSlotInput } from "../middleware/zodValidator/reservation.schema";
 import { object } from "zod";
-import { ResourceDAO } from "../dao/resourceDAO";
+import { ResourceDAO } from "../dao/resourceDAO"
 import { CalendarDAO } from "../dao/calendarDAO";
 import { UserDAO } from "../dao/userDAO";
 import { ReservationDAO } from "../dao/reservationDAO";
-import { ca } from "zod/locales";
 export class CalendarController {
     constructor (private calendarService: ICalendarService) { }
 

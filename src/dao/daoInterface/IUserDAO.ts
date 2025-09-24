@@ -1,4 +1,4 @@
-import { User } from "../../models/User.js";
+import { User } from "../../models/userModel.js";
 export interface IUserDAO {
     createUser(name: string, surname: string, email: string, password: string): Promise<User>;
     addTokenToUser(id: number, token: number): Promise<void>;

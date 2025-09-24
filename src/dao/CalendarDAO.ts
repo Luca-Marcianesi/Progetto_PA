@@ -1,4 +1,4 @@
-import { Calendar } from "../models/Calendar";
+import { Calendar } from "../models/calendarModel";
 import { ICalendarDAO } from "./daoInterface/ICalendarDAO";
 import { Op } from "sequelize";
 

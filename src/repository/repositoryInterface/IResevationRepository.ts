@@ -1,6 +1,6 @@
 
-import { Reservation } from "../../models/Reservation";
-import { Calendar } from "../../models/Calendar";
+import { Reservation } from "../../models/reservationModel";
+import { Calendar } from "../../models/calendarModel";
 import { enumReservationStatus } from "../../utils/db_const";
 import { DomainReservation } from "../../domain/reservation";
 import { ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../../middleware/zodValidator/reservation.schema";

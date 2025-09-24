@@ -2,7 +2,7 @@ import { Request, Response ,NextFunction } from "express";
 
 import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
 import { IReservationService } from "../services/serviceInterface/IReservationService";
-import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory";
+import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory";
 import { NewReservationInput, ReservationStatusFilterInput, ReservationOptionalFilterInput ,UpdateStatusReseservationInput, ReservationIdInput } from "../middleware/zodValidator/reservation.schema";
 import { StatusCodes } from "http-status-codes";
 import { getUtenteId } from "../utils/functions";

@@ -1,7 +1,6 @@
 import { DomainCalendar } from "../../domain/calendar";
 import { CreateCalendarInput } from "../../middleware/zodValidator/calendar.schema";
-import { Calendar } from "../../models/Calendar";
-import { Resource } from "../../models/Resource";
+
 export interface ICalendarService {
     createCalendar(calendarData: CreateCalendarInput): Promise<DomainCalendar>;
 

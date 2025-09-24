@@ -1,4 +1,4 @@
-import { Resource } from "../models/Resource";
+import { Resource } from "../models/resourceModel";
 import { IResourceDAO } from "./daoInterface/IResourceDAO";
 export class ResourceDAO implements IResourceDAO {
 

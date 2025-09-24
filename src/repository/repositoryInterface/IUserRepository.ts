@@ -1,5 +1,5 @@
 import { DomainUser } from "../../domain/user.js";
-import { User } from "../../models/User.js";
+import { User } from "../../models/userModel.js";
 export interface IUserRepository {
     createUser(user: DomainUser): Promise<DomainUser>;
     addTokenToUser(id: number, token: number): Promise<void>;

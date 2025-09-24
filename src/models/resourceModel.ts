@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import { getDatabase } from "../database/database.js";
-import { Calendar } from "./Calendar.js";
+import { Calendar } from "./calendarModel.js";
 
 const sequelize = getDatabase();
 

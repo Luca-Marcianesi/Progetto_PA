@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import { getDatabase } from "../database/database.js";
-import { Reservation } from "./Reservation.js";
+import { Reservation } from "./reservationModel.js";
 
 const sequelize = getDatabase();
 

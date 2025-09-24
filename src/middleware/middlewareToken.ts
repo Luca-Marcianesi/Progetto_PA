@@ -6,9 +6,9 @@ import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
 import { stringify } from "querystring";
-import { BaseError } from "./errors/ExtendedError";
+import { BaseError } from "./errors/extendedError";
 import { UserPayload } from "../@types/userPayload";
-import { ErrorFactory, ErrorType } from "./errors/ErrorFactory";
+import { ErrorFactory, ErrorType } from "./errors/errorFactory";
 
 dotenv.config();
 

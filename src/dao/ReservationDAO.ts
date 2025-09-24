@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import { DomainReservation } from "../domain/reservation";
 import { ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../middleware/zodValidator/reservation.schema";
-import { Reservation } from "../models/Reservation";
+import { Reservation } from "../models/reservationModel";
 import { enumReservationStatus } from "../utils/db_const";
 import { IReservationDAO } from "./daoInterface/IReservationDAO";
 

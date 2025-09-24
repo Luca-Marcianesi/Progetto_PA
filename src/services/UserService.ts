@@ -1,8 +1,8 @@
 import { IUserRepository } from "../repository/repositoryInterface/IUserRepository.js";
 import { IUserService } from "./serviceInterface/IUserService.js";
-import { User } from "../models/User.js";
+import { User } from "../models/userModel.js";
 import { createHash } from "crypto";
-import { ErrorFactory, ErrorType } from "../middleware/errors/ErrorFactory.js";
+import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory.js";
 import { get } from "http";
 import { DomainUser } from "../domain/user.js";
 import { RegisterInput } from "../middleware/zodValidator/user.schema.js";

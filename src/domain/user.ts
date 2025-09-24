@@ -1,4 +1,4 @@
-import { User } from "../models/User";
+import { User } from "../models/userModel";
 import { enumRole } from "../utils/db_const";
 
 interface userInput{

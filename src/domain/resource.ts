@@ -1,5 +1,5 @@
 import { rmSync } from "fs"
-import { Resource } from "../models/Resource"
+import { Resource } from "../models/resourceModel"
 
 interface ResourceInput{
     id: number,

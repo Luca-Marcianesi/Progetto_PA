@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { isNewExpression } from "typescript";
 import { StatusCodes } from "http-status-codes";
 import { IUserService } from "../services/serviceInterface/IUserService";
-import { User } from "../models/User";
+import { User } from "../models/userModel";
 import { UserPayload } from "../@types/userPayload";
 import { DomainUser } from "../domain/user";
 

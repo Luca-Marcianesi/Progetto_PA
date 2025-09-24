@@ -48,16 +48,18 @@ export const NewReservationSchema = z.object({
     reason : GenericStringSchema
 
 }).refine(
-    refineFromBeforeToSchema("start","end"),
+            refineFromBeforeToSchema("start_time","end_time"),
     { message : ValidationMessages.date.fromBeforeTo}
 ).refine(
   (data) =>{ 
     const currentHour = new Date(Date.now());
     currentHour.setMinutes(0, 0, 0); 
 
-    return data.start_time.getTime() >= currentHour.getTime();
+            // DateOnHourSchema transforms ISO strings to Date, but be defensive: support Date or string
+            const start = data.start_time instanceof Date ? data.start_time : new Date(data.start_time);
+            return start.getTime() >= currentHour.getTime();
 },
-  { message: "La data di inizio deve essere futura", path: ["start"] }
+        { message: "La data di inizio deve essere futura", path: ["start_time"] }
 )
 export type NewReservationInput = z.infer<typeof NewReservationSchema>
 

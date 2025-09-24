@@ -1,6 +1,6 @@
 import { DomainReservation } from "../../domain/reservation"
 import { NewReservationInput, ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../../middleware/zodValidator/reservation.schema"
-import { Reservation } from "../../models/Reservation"
+import { Reservation } from "../../models/reservationModel"
 import { enumReservationStatus } from "../../utils/db_const"
 
 export interface IReservationService {

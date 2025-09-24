@@ -2,7 +2,7 @@
 import { IResourceDAO } from "../dao/daoInterface/IResourceDAO";
 import { DomainResource } from "../domain/resource";
 import { CreateResourceInput } from "../middleware/zodValidator/resource.schema";
-import { Resource } from "../models/Resource";
+import { Resource } from "../models/resourceModel";
 import { IResourceRepository } from "./repositoryInterface/IResourceRepository";
 
 export class ResourceRepository implements IResourceRepository{

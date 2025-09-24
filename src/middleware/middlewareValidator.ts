@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { NewReservationSchema } from "./zodValidator/reservation.schema";
 import { ZodError, ZodSchema } from "zod";
 import StatusCodes from "http-status-codes";
-import { ErrorFactory, ErrorType } from "./errors/ErrorFactory";
 
 export const validateBodySchema = (schema: ZodSchema) => {
   return  (req: Request,res:Response, next: NextFunction) => {

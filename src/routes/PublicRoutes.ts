@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { UserDAO } from "../dao/userDAO.js";
-import { UserRepository } from "../repository/UserRepository.js";
-import { UserService } from "../services/UserService.js";
+import { UserRepository } from "../repository/userRepository.js";
+import { UserService } from "../services/userService.js";
 import { UserController } from "../controllers/userController.js";
 
 import {detachToken} from "../middleware/middlewareToken.js";

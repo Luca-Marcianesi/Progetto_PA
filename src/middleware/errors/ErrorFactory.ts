@@ -1,5 +1,4 @@
-import * as Errors from "./ExtendedError";
-import { StatusCodes } from "http-status-codes";
+import * as Errors from "./extendedError";
 
 export enum ErrorType {
     NotFound,

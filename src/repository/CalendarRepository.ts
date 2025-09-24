@@ -1,7 +1,4 @@
-import { Resource } from "../models/Resource";
-import { IResourceDAO } from "../dao/daoInterface/IResourceDAO";
 import { ICalendarRepository } from "./repositoryInterface/ICalendarRepository";
-import { Calendar } from "../models/Calendar";
 import { ICalendarDAO } from "../dao/daoInterface/ICalendarDAO";
 import { DomainCalendar } from "../domain/calendar";
 import { IReservationDAO } from "../dao/daoInterface/IReservationDAO";

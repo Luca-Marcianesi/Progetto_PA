@@ -1,19 +1,19 @@
 import { ReservationController } from "../controllers/reservationController";
-import { ReservationService } from "../services/ReservationService";
-import { ReservationRepository } from "../repository/ReservationRepository";
+import { ReservationService } from "../services/reservationService";
+import { ReservationRepository } from "../repository/reservationRepository";
 import { ReservationDAO } from "../dao/reservationDAO";
 import { CalendarDAO } from "../dao/calendarDAO";
-import { CalendarRepository } from "../repository/CalendarRepository";
+import { CalendarRepository } from "../repository/calendarRepository";
 import { UserDAO } from "../dao/userDAO";
-import { UserRepository } from "../repository/UserRepository";
-import { CalendarService } from "../services/CalendarService";
+import { UserRepository } from "../repository/userRepository";
+import { CalendarService } from "../services/calendarService";
 import { CalendarController } from "../controllers/calendarController";
 import { ResourceDAO } from "../dao/resourceDAO";
-import { UserService } from "../services/UserService";
+import { UserService } from "../services/userService";
 import { UserController } from "../controllers/userController";
-import { ResourceRepository } from "../repository/ResourceRepository";
+import { ResourceRepository } from "../repository/resourceRepository";
 import { ResourceController } from "../controllers/resourceController";
-import { ResourceService } from "../services/ResourceService";
+import { ResourceService } from "../services/resourceService";
 
 export function buildUserController(){
     const user_dao = new UserDAO()

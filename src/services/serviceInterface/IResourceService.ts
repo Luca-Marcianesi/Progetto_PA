@@ -1,4 +1,4 @@
-import { Resource } from "../../models/Resource";
+import { Resource } from "../../models/resourceModel";
 import { CreateResourceInput } from "../../middleware/zodValidator/resource.schema";
 import { DomainResource } from "../../domain/resource";
 export interface IResourceService {

@@ -1,5 +1,5 @@
 import { CalendaIdSchema } from "../middleware/zodValidator/calendar.schema"
-import { Calendar } from "../models/Calendar"
+import { Calendar } from "../models/calendarModel"
 import { DomainReservation } from "./reservation"
 
 interface DomainCalendarInput {
