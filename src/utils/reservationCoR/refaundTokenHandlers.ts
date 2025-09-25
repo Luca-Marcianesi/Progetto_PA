@@ -1,6 +1,9 @@
 import { DomainReservation } from "../../domain/reservation";
 import { EnumReservationStatus } from "../db_const";
 
+const ONGOING_PENALTY = 2;
+const FUTURE_PENALTY = 1;
+
 
 //interfaccia per gli handler nella catena di restituzione token
 export interface RefundPolicyHandler {
@@ -30,8 +33,7 @@ export class InvalidOrCancelReservatioHandler extends AbstractRefundPolicyHandle
         const now = new Date();
 
         return (reservation.getStatus() == EnumReservationStatus.Invalid ||
-         reservation.getStatus() == EnumReservationStatus.Calcel) ? 0 : null
-            return 0 // Take the max for not returning negative tokens
+         reservation.getStatus() == EnumReservationStatus.Canlcel) ? 0 : null
     }
 }
 
@@ -42,7 +44,7 @@ export class OngoingReservationRefundHandler extends AbstractRefundPolicyHandler
 
         if (now >= reservation.start && now < reservation.end) {
             const unusedHours = reservation.getHoursNotUsed();
-            const refund = (unusedHours * costPerHour) - 2; 
+            const refund = (unusedHours * costPerHour) - ONGOING_PENALTY; 
             return Math.max(refund, 0); // Take the max for not returning negative tokens
         }
 
@@ -57,7 +59,7 @@ export class FutureReservationRefundHandler extends AbstractRefundPolicyHandler 
 
         if (now < reservation.start) {
             const unusedHours = reservation.getHoursNotUsed();
-            const refund = (unusedHours * costPerHour) - 1;
+            const refund = (unusedHours * costPerHour) - FUTURE_PENALTY ;
             return Math.max(refund, 0);
         }
 
@@ -80,5 +82,5 @@ export function buildRefundPolicyChain(): RefundPolicyHandler {
         const noRefund = new NoRefundHandler();
 
         invalidCanceld.setNext(ongoing).setNext(future).setNext(noRefund);
-        return ongoing;
+        return invalidCanceld;
     }

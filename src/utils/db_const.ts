@@ -9,7 +9,7 @@ export enum EnumReservationStatus {
     Pending = RESERVATION_PENDING,
     Invalid = RESERVATION_INVALID,
     Reject = RESERVATION_REJECTED,
-    Calcel = RESERVATION_CANCELLED
+    Canlcel = RESERVATION_CANCELLED
 }
 
 export const USER_ROLE = "user"

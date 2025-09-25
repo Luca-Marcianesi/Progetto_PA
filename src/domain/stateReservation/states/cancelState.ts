@@ -18,6 +18,6 @@ export class CancelState implements IReservationState{
     }
 
     getStatus(): EnumReservationStatus {
-            return EnumReservationStatus.Calcel
+            return EnumReservationStatus.Canlcel
         }
 }

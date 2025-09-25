@@ -70,7 +70,7 @@ export class DomainReservation {
       case EnumReservationStatus.Pending: return new PendingState();
       case EnumReservationStatus.Approved: return new ApprovedState();
       case EnumReservationStatus.Reject: return new RejectedState();
-      case EnumReservationStatus.Calcel: return new CancelState();
+      case EnumReservationStatus.Canlcel: return new CancelState();
       default: return new InvalidState();
     }
   }
