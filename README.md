@@ -237,7 +237,7 @@ Il CoR permette di strutturare una catena di **handlers** , ognuno dei quali ese
         const noRefund = new NoRefundHandler();
 
         invalidCanceld.setNext(ongoing).setNext(future).setNext(noRefund);
-        return ongoing;
+        return invalidCanceld;
     }
    ```
 3. ADAPTER
