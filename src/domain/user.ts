@@ -1,5 +1,5 @@
 import { User } from "../models/userModel";
-import { enumRole } from "../utils/db_const";
+import { EnumRole } from "../utils/db_const";
 
 interface userInput{
     id: number
@@ -7,7 +7,7 @@ interface userInput{
     surname: string
     email: string
     psw: string
-    role: enumRole
+    role: EnumRole
 
 }
 export class DomainUser{
@@ -16,7 +16,7 @@ export class DomainUser{
     public surname: string
     public email: string
     public psw: string
-    public role: enumRole
+    public role: EnumRole
 
     constructor(user : userInput){
         this.id = user.id
@@ -27,6 +27,7 @@ export class DomainUser{
         this.role = user.role
      }
 
+    // Adapter from the Sequelize Model to the Domain Model
     static fromPersisence(user: User){
         return new DomainUser({
             id: user.id,
@@ -39,10 +40,11 @@ export class DomainUser{
 
     
     }
+    
     static mapRole(role: string){
         switch(role){
-            case enumRole.ADMIN: return enumRole.ADMIN
-            default: return enumRole.USER
+            case EnumRole.ADMIN: return EnumRole.ADMIN
+            default: return EnumRole.USER
 
         }
     }

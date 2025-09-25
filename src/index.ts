@@ -33,7 +33,6 @@ async function start() {
       console.log(`Server running on port ${PORT}`);
     });
   } catch (err) {
-    console.error("❌ Unable to connect to DB", err);
   }
 }
 

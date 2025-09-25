@@ -23,7 +23,7 @@ export type LoginInput = z.infer<typeof LoginSchema>
 
 
 export const UpdateTokenSchema = z.object({
-    user_id: StandarIdSchema,
+    userId: StandarIdSchema,
     token: z.number().int().positive()
 
 })

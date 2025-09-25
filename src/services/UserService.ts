@@ -1,13 +1,10 @@
 import { IUserRepository } from "../repository/repositoryInterface/IUserRepository.js";
 import { IUserService } from "./serviceInterface/IUserService.js";
-import { User } from "../models/userModel.js";
 import { createHash } from "crypto";
 import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory.js";
-import { get } from "http";
 import { DomainUser } from "../domain/user.js";
 import { RegisterInput } from "../middleware/zodValidator/user.schema.js";
-import { email } from "zod";
-import { enumRole } from "../utils/db_const.js";
+import { EnumRole } from "../utils/db_const.js";
 
 const HASH_ALGORITM = "sha256";
 const DIGEST = "hex" // You can change this to your preferred hashing algorithm
@@ -21,16 +18,16 @@ export class UserService implements IUserService {
     }
     let hash_password = createHash(HASH_ALGORITM).update(userInput.password).digest(DIGEST);// hash della password
 
-    let user_validated = new DomainUser({
+    let userValidated = new DomainUser({
       id: 1,
       name: userInput.name,
       surname: userInput.surname,
       email: userInput.email,
       psw: hash_password,
-      role: enumRole.USER
+      role: EnumRole.USER
     }
     )
-    return await this.userRepo.createUser(user_validated);
+    return await this.userRepo.createUser(userValidated);
   }
   async   addTokenToUser(email: string, token: number): Promise<void> {
     let user = await this.getUserByEmail(email)

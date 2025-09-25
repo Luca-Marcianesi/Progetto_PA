@@ -7,43 +7,43 @@ import { DomainCalendar } from "../domain/calendar";
 import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
 import { IUserRepository } from "../repository/repositoryInterface/IUserRepository";
 import { DomainReservation } from "../domain/reservation";
-import { enumReservationStatus } from "../utils/db_const";
+import { EnumReservationStatus } from "../utils/db_const";
 import { buildRefundPolicyChain } from "../utils/reservationCoR/refaundTokenHandlers";
 
 export class CalendarService implements ICalendarService {
-    private calendar_repository: ICalendarRepository;
-    private resource_repository: IResourceRepository;
-    private reservation_repository: IReservationRepository
-    private user_repository: IUserRepository
+    private calendarRepository: ICalendarRepository;
+    private resourceRepository: IResourceRepository;
+    private reservationRepository: IReservationRepository
+    private userRepository: IUserRepository
 
-    constructor(calendar_repository: ICalendarRepository, resource_repository: IResourceRepository,reservation_repository: IReservationRepository, user_repository: IUserRepository) {
-        this.calendar_repository = calendar_repository;
-        this.resource_repository = resource_repository;
-        this.reservation_repository = reservation_repository
-        this.user_repository = user_repository
+    constructor(calendarRepository: ICalendarRepository, resourceRepository: IResourceRepository,reservationRepository: IReservationRepository, userRepository: IUserRepository) {
+        this.calendarRepository = calendarRepository;
+        this.resourceRepository = resourceRepository;
+        this.reservationRepository = reservationRepository
+        this.userRepository = userRepository
     }
     async createCalendar(calendarData: CreateCalendarInput): Promise<DomainCalendar> {
         
-        if(!await this.doesResourceExist(calendarData.resource_id)) 
+        if(!await this.doesResourceExist(calendarData.resourceId)) 
             throw ErrorFactory.getError(ErrorType.ResourceNotFound)
 
-        if(await this.isResourceBusy(calendarData.resource_id,calendarData.start,calendarData.end)) 
+        if(await this.isResourceBusy(calendarData.resourceId,calendarData.start,calendarData.end)) 
             throw ErrorFactory.getError(ErrorType.ResourceUsed)
 
         let calendar = new DomainCalendar({
             id: 1,
-            resource_id: calendarData.resource_id,
-            start_time: calendarData.start,
-            end_time: calendarData.end,
+            resourceId: calendarData.resourceId,
+            start: calendarData.start,
+            end: calendarData.end,
             cost:calendarData.cost_per_hour,
             title: calendarData.title
         })
-        return await this.calendar_repository.createCalendar(calendar);
+        return await this.calendarRepository.createCalendar(calendar);
 
 
     }
     async getCalendarById(id: number): Promise<DomainCalendar | null> {
-        let calendar = await this.calendar_repository.getCalendarById(id)
+        let calendar = await this.calendarRepository.getCalendarById(id)
 
         if (calendar === null) throw ErrorFactory.getError(ErrorType.CalNotExist) 
         
@@ -60,13 +60,11 @@ export class CalendarService implements ICalendarService {
 
     async deleteCalendar(id: number): Promise<void> {
 
-        let calendar = await this.calendar_repository.getCalendarById(id)
+        let calendar = await this.calendarRepository.getCalendarById(id)
 
         if(calendar === null) throw ErrorFactory.getError(ErrorType.CalNotExist)
 
-        let calendar_cost = calendar.cost
-
-        let reservations = await this.reservation_repository.findReservationsByCalendar(id)
+        let reservations = await this.reservationRepository.findReservationsByCalendar(id)
 
         let isActive = reservations.some(r => r.isActive())
 
@@ -77,27 +75,27 @@ export class CalendarService implements ICalendarService {
         for (const reservation of reservations) {
             const refundTokens = refundChain.calculate(reservation, calendar.cost) ?? 0;
             if (refundTokens > 0) {
-                await this.user_repository.addTokenToUser(reservation.reservationBy, refundTokens);
+                await this.userRepository.addTokenToUser(reservation.reservationBy, refundTokens);
             }
         }
 
 
-        await this.calendar_repository.deleteCalendar(id);
+        await this.calendarRepository.deleteCalendar(id);
     }
 
     async unarchiveCalendar(id: number): Promise<void> {
-        await this.calendar_repository.unarchiveCalendar(id);
+        await this.calendarRepository.unarchiveCalendar(id);
     }
 
     async checkSlotAvaiability(calendar_id: number, start: Date, end: Date): Promise<boolean> {
-        let reservation = await this.reservation_repository.findReservationsByCalendar(calendar_id)
+        let reservation = await this.reservationRepository.findReservationsByCalendar(calendar_id)
 
         //Oggetto fittizio per fare il confronto con quelli salvati nel db
         let new_reservation = new DomainReservation({
             id: 1,
             reservationBy: 1,
             title: "",
-            status:enumReservationStatus.Pending,
+            status:EnumReservationStatus.Pending,
             calendar_id: calendar_id,
             start,
             end
@@ -109,12 +107,12 @@ export class CalendarService implements ICalendarService {
     }
 
     private async doesResourceExist(id: number):Promise<boolean>{
-        return await this.resource_repository.getResourceById(id) === null ?  false :  true
+        return await this.resourceRepository.getResourceById(id) === null ?  false :  true
     }
 
     private async isResourceBusy(id : number, start: Date, end: Date): Promise<boolean>{
 
-        const calendars = await this.calendar_repository.findConflicting(id,start,end)
+        const calendars = await this.calendarRepository.findConflicting(id,start,end)
         return (calendars.length == 0) ? false : true
     }
  

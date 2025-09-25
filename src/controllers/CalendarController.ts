@@ -3,7 +3,6 @@ import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { CalendarIdInput, CreateCalendarInput, UpdateCalendarCostInput, UpdateCalendarEndInput } from "../middleware/zodValidator/calendar.schema";
 import { CheckSlotInput } from "../middleware/zodValidator/reservation.schema";
-import { object } from "zod";
 import { ResourceDAO } from "../dao/resourceDAO"
 import { CalendarDAO } from "../dao/calendarDAO";
 import { UserDAO } from "../dao/userDAO";
@@ -54,7 +53,7 @@ export class CalendarController {
         try {     
             const inputValidate = req.params as  unknown as CalendarIdInput
     
-            await this.calendarService.deleteCalendar(inputValidate.calendar_id)
+            await this.calendarService.deleteCalendar(inputValidate.calendarId)
 
             res.status(StatusCodes.ACCEPTED).json({
                 message: "Calendario eliminato"
@@ -65,11 +64,11 @@ export class CalendarController {
         }
     }
 
-    archiveCalendar = async(req: Request, res: Response, next: NextFunction) => {
+    unarchiveCalendar = async(req: Request, res: Response, next: NextFunction) => {
         try {     
             const inputValidate = req.body as  unknown as CalendarIdInput
     
-            await this.calendarService.unarchiveCalendar(inputValidate.calendar_id)
+            await this.calendarService.unarchiveCalendar(inputValidate.calendarId)
 
             res.status(StatusCodes.ACCEPTED).json({
                 message : "Calendario ripristinato"
@@ -85,7 +84,7 @@ export class CalendarController {
 
             const inputValidate = req.query as  unknown as CalendarIdInput
             
-            let calendar = await this.calendarService.getCalendarById(inputValidate.calendar_id)
+            let calendar = await this.calendarService.getCalendarById(inputValidate.calendarId)
 
             res.status(StatusCodes.OK).json({
                 calendar : calendar
@@ -101,7 +100,7 @@ export class CalendarController {
         try {     
             const inputValidate = req.body as  unknown as UpdateCalendarCostInput
     
-            let calendar = await this.calendarService.updateCostCalendar(inputValidate.calendar_id,inputValidate.cost)
+            let calendar = await this.calendarService.updateCostCalendar(inputValidate.calendarId,inputValidate.cost)
 
         } catch (error) {
             throw error
@@ -112,7 +111,7 @@ export class CalendarController {
         try {     
             const inputValidate = req.body as  unknown as UpdateCalendarEndInput
     
-            let calendar = await this.calendarService.updateEndCalendar(inputValidate.calendar_id,inputValidate.end)
+            let calendar = await this.calendarService.updateEndCalendar(inputValidate.calendarId,inputValidate.end)
 
         } catch (error) {
             throw error

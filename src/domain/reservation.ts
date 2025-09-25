@@ -1,5 +1,5 @@
 import { Reservation, Reservation as ReservationModel } from "../models/reservationModel";
-import { enumReservationStatus } from "../utils/db_const";
+import { EnumReservationStatus } from "../utils/db_const";
 import { IReservationState} from "./stateReservation/IReservationState"
 import { ApprovedState } from "./stateReservation/states/approvedState";
 import { CancelState } from "./stateReservation/states/cancelState";
@@ -14,14 +14,14 @@ interface reservationInput{
     end: Date
     title: string
     reservationBy : number
-    status: enumReservationStatus
+    status: EnumReservationStatus
     handledBy?: number
     rejectReason?: string
 
 }
 export class DomainReservation {
     public id: number
-    public calendar_id: number
+    public calendarId: number
     public start: Date
     public end: Date
     public title: string
@@ -32,7 +32,7 @@ export class DomainReservation {
 
     constructor(reservation: reservationInput){
         this.id = reservation.id,
-        this.calendar_id = reservation.calendar_id,
+        this.calendarId = reservation.calendar_id,
         this.start = reservation.start
         this.end = reservation.end
         this.title = reservation.title
@@ -41,7 +41,7 @@ export class DomainReservation {
         console.log("costruttore" + this.getStatus())
     }
     
-
+    // Adapter from the Sequelize Model to the Domain Model
     static fromPersistence(reservation : Reservation){
         return new DomainReservation({
             id: reservation.id,
@@ -54,9 +54,10 @@ export class DomainReservation {
     })
     }
 
+    // Override to print the json object differently
     toJSON(){
         return {
-            calendar : this.calendar_id,
+            calendar : this.calendarId,
             title: this.title,
             start: this.start,
             end: this.end,
@@ -64,12 +65,13 @@ export class DomainReservation {
         }
     }
 
+    // Return the StateClass for imlplementing the Pattern State
     static mapStatus(status: string) {
     switch (status) {
-      case enumReservationStatus.Pending: return new PendingState();
-      case enumReservationStatus.Approved: return new ApprovedState();
-      case enumReservationStatus.Reject: return new RejectedState();
-      case enumReservationStatus.Calcel: return new CancelState();
+      case EnumReservationStatus.Pending: return new PendingState();
+      case EnumReservationStatus.Approved: return new ApprovedState();
+      case EnumReservationStatus.Reject: return new RejectedState();
+      case EnumReservationStatus.Calcel: return new CancelState();
       default: return new InvalidState();
     }
   }
@@ -88,14 +90,16 @@ export class DomainReservation {
         this.rejectReason = reason;
     }
 
+    // Check if the reservation is active and approved
     isActive(): boolean{
         return (this.start.getTime()< Date.now() &&
          Date.now() <  this.end.getTime() &&
-          this.state.getStatus() === enumReservationStatus.Approved)
+          this.state.getStatus() === EnumReservationStatus.Approved)
     }
 
+    // Check if the reservation is waiting to start and is approved
     isWaitingToStart(): boolean{
-        return (Date.now() < this.start.getTime() && this.state.getStatus() === enumReservationStatus.Approved )
+        return (Date.now() < this.start.getTime() && this.state.getStatus() === EnumReservationStatus.Approved )
     }
 
     getHours() : number{
@@ -116,6 +120,7 @@ export class DomainReservation {
         
     }
 
+    // Check if this reservation overlaps wih the one in input
     overlaps(other: DomainReservation): boolean {
 
         return this.start < other.end && this.end > other.start;
@@ -140,12 +145,4 @@ export class DomainReservation {
     cancel(){
         this.state.cancel(this)
     }
-
-    calculateFineTokens(): number{
-        let tokensFine = 1
-        if(this.start.getTime() < Date.now() && Date.now() < this.end.getTime())  tokensFine = 2
-        return tokensFine
-
-    }
-
 }

@@ -7,29 +7,15 @@ import { ResourceRepository } from "../repository/resourceRepository";
 import { IResourceService } from "./serviceInterface/IResourceService";
 
 export class ResourceService implements IResourceService{
-    private resource_repository : IResourceRepository
+    private resourceRepository : IResourceRepository
 
-    constructor(resource_repository : IResourceRepository){
-        this.resource_repository = resource_repository
+    constructor(resourceRepository : IResourceRepository){
+        this.resourceRepository = resourceRepository
     }
     async createResource(input: CreateResourceInput): Promise<DomainResource> {
-        return await this.resource_repository.createResource(input)
+        return await this.resourceRepository.createResource(input)
         
     }
 
-    getAllResources(): Promise<Resource[]> {
-        throw Error("non Implementata")
-        
-    }
-
-    getResourceById(id: number): Promise<Resource | null> {
-        throw Error("non Implementata")
-        
-    }
-
-    updateResource(id: number, updateData: { name?: string; description?: string | null; }): Promise<void> {
-        throw Error("non Implementata")
-        
-    }
 
 }

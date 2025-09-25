@@ -4,7 +4,7 @@ export const RESERVATION_INVALID = "invalid"
 export const RESERVATION_REJECTED = "rejected"
 export const RESERVATION_CANCELLED = "cancelled"
 
-export enum enumReservationStatus {
+export enum EnumReservationStatus {
     Approved = RESERVATION_APPROVED,
     Pending = RESERVATION_PENDING,
     Invalid = RESERVATION_INVALID,
@@ -15,7 +15,7 @@ export enum enumReservationStatus {
 export const USER_ROLE = "user"
 export const ADMIN_ROLE = "admin"
 
-export enum enumRole{
+export enum EnumRole{
     USER = USER_ROLE,
     ADMIN = ADMIN_ROLE
 }

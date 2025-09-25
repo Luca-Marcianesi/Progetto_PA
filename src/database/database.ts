@@ -5,6 +5,8 @@ dotenv.config();
 
 let sequelize: Sequelize | null = null;
 
+// Return always the same instace of Sequelize using the Pattern Sigleton
+
 export const getDatabase = (): Sequelize => {
   if(!sequelize) {
     sequelize = new Sequelize(

@@ -1,5 +1,5 @@
 import { ErrorFactory, ErrorType } from "../../../middleware/errors/errorFactory";
-import { enumReservationStatus } from "../../../utils/db_const";
+import { EnumReservationStatus } from "../../../utils/db_const";
 import { DomainReservation } from "../../reservation";
 import { IReservationState } from "../IReservationState";
 import { CancelState } from "./cancelState";
@@ -17,7 +17,7 @@ export class ApprovedState implements IReservationState{
         
     }
 
-    getStatus(): enumReservationStatus {
-        return enumReservationStatus.Approved
+    getStatus(): EnumReservationStatus {
+        return EnumReservationStatus.Approved
     }
 }

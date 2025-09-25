@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { isNewExpression } from "typescript";
 import { StatusCodes } from "http-status-codes";
 import { IUserService } from "../services/serviceInterface/IUserService";
-import { User } from "../models/userModel";
 import { UserPayload } from "../@types/userPayload";
 import { DomainUser } from "../domain/user";
 
@@ -14,6 +12,8 @@ export class UserController {
     try{
       const {email, password} = req.body
       const user : DomainUser = await this.UserService.login(email,password)
+
+      // enhance the payload and add it to the request
       let payload : UserPayload = {
         id: user.id,
         email: user.email,

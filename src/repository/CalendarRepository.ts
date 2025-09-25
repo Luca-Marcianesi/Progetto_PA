@@ -14,9 +14,9 @@ export class CalendarRepository implements ICalendarRepository {
     }
     async createCalendar(calendarData:DomainCalendar): Promise<DomainCalendar> {
         await this.calendarDAO.create(
-            calendarData.resource_id,
-            calendarData.start_time,
-            calendarData.end_time,
+            calendarData.resourceId,
+            calendarData.start,
+            calendarData.end,
             calendarData.cost,
             calendarData.title
         )
@@ -24,15 +24,17 @@ export class CalendarRepository implements ICalendarRepository {
     }
     async getCalendarById(id: number): Promise<DomainCalendar | null> {
 
-        let calendar_model = await this.calendarDAO.getCalendarById(id)
+        let calendarModel = await this.calendarDAO.getCalendarById(id)
 
-        let reservations_model = await this.reservationDAO.getReservatisByCalendarId(id)
+        let reservationsModel = await this.reservationDAO.getReservatisByCalendarId(id)
 
-        let reservations = reservations_model.map(r => DomainReservation.fromPersistence(r))
+        // Mapping of the Sequelize model into the Domain model
+        let reservations = reservationsModel.map(r => DomainReservation.fromPersistence(r))
 
-        if (calendar_model === null) return null
+        if (calendarModel === null) return null
 
-        let calendar = DomainCalendar.fromPersistence(calendar_model)
+        // Mapping of the Sequelize model into the Domain model
+        let calendar = DomainCalendar.fromPersistence(calendarModel)
 
         calendar.addReservations(reservations)
 
@@ -59,8 +61,8 @@ export class CalendarRepository implements ICalendarRepository {
         
     }
 
-    async getCostPerHourCalendar(calendar_id: number): Promise<number | null> {
-        return this.calendarDAO.getCalendarById(calendar_id).then(r => {
+    async getCostPerHourCalendar(calendarId: number): Promise<number | null> {
+        return this.calendarDAO.getCalendarById(calendarId).then(r => {
             return r === null ? null : r.cost_per_hour;
         });
         
@@ -71,7 +73,11 @@ export class CalendarRepository implements ICalendarRepository {
     }
 
     async findConflicting(resourceId: number, start: Date, end: Date): Promise<DomainCalendar[]>{
+
+        // Get the reservations in the calendar in that period(Approved,Pending,ecc)
         const records = await this.calendarDAO.findConflicting(resourceId, start, end);
+
+        // Mapping of the Sequelize model into the Domain model
         return records.map(r =>  DomainCalendar.fromPersistence(r));
     }
 }

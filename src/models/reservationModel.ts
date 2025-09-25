@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import { getDatabase } from "../database/database.js";
 import { title } from "process";
-import { enumReservationStatus } from "../utils/db_const.js";
+import { EnumReservationStatus } from "../utils/db_const.js";
 
 const sequelize = getDatabase();
 
@@ -12,7 +12,7 @@ interface ReservationAttributes {
     start_time: Date;
     end_time: Date;
     title: string;
-    status: enumReservationStatus;
+    status: EnumReservationStatus;
     reason?: string;
     handled_by?: number;
     createdAt?: Date;
@@ -28,7 +28,7 @@ class Reservation extends Model<ReservationAttributes, ReservationCreationAttrib
     end_time!: Date;
     public title!: string;
     public handled_by!: number;
-    public status!: enumReservationStatus;
+    public status!: EnumReservationStatus;
     public reason!: string;
 
 

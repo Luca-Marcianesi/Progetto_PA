@@ -1,15 +1,8 @@
-import { Reservation } from "../models/reservationModel";
 import { IReservationRepository } from "./repositoryInterface/IResevationRepository";
 import {IReservationDAO} from "../dao/daoInterface/IReservationDAO"
 import {ICalendarDAO} from "../dao/daoInterface/ICalendarDAO"
-import { Calendar } from "../models/calendarModel";
 import { DomainReservation } from "../domain/reservation";
-import { enumReservationStatus } from "../utils/db_const";
-import { IReservationState } from "../domain/stateReservation/IReservationState";
-import { ApprovedState } from "../domain/stateReservation/states/approvedState";
-import { PendingState } from "../domain/stateReservation/states/pendingState";
-import { RejectedState } from "../domain/stateReservation/states/rejectedState";
-import { CancelState } from "../domain/stateReservation/states/cancelState";
+import { EnumReservationStatus } from "../utils/db_const";
 import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory";
 import { ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../middleware/zodValidator/reservation.schema";
 
@@ -24,7 +17,7 @@ export class ReservationRepository implements IReservationRepository{
     }
 
 
-    async insertResevation(reservation: DomainReservation, status: enumReservationStatus): Promise<DomainReservation | never> {
+    async insertResevation(reservation: DomainReservation, status: EnumReservationStatus): Promise<DomainReservation | never> {
         let modelReservation = await this.reservationDAO.insert(reservation,status)
         if(!modelReservation) throw ErrorFactory.getError(ErrorType.InternalServer)
         
@@ -32,15 +25,15 @@ export class ReservationRepository implements IReservationRepository{
             
     }
 
-    async findReservationApprovedByCalendarId(calendar_id: number): Promise<DomainReservation[]> {
-        let models = await this.reservationDAO.getReservationApproved(calendar_id)
+    async findReservationApprovedByCalendarId(calendarId: number): Promise<DomainReservation[]> {
+        let models = await this.reservationDAO.getReservationApproved(calendarId)
         return models
         .map(r =>  DomainReservation.fromPersistence(r));
         
     }
 
-    async findReservationsByCalendar(calendar_id: number): Promise<DomainReservation[]> {
-        const models = await this.reservationDAO.getReservatisByCalendarId(calendar_id)
+    async findReservationsByCalendar(calendarId: number): Promise<DomainReservation[]> {
+        const models = await this.reservationDAO.getReservatisByCalendarId(calendarId)
         return models
         .map(r =>  DomainReservation.fromPersistence(r))
     }
@@ -74,36 +67,5 @@ export class ReservationRepository implements IReservationRepository{
         
     }
 
-    async approve(): Promise<void | never> {
-        throw Error("Not implemented")
-    }
-
-    async reject(reason: string): Promise<void> {
-        throw Error("Not implemented")
-    }
-
-    async refoundToken(token: number): Promise<void> {
-        throw Error("Not implemented")
-    }
-
-    async calcel(): Promise<void | never> {
-        throw Error("Not implemented")
-    }
-
-    private getStateByStatus(status : enumReservationStatus): IReservationState{ 
-        switch(status){
-            case enumReservationStatus.Approved:
-                return new ApprovedState ()    
-            case enumReservationStatus.Pending:
-                return new PendingState()
-            case enumReservationStatus.Reject:
-                return  new RejectedState()
-            case enumReservationStatus.Calcel:
-                return new CancelState()
-            default:
-                return new RejectedState()
-        }
-
-    }
 
 }

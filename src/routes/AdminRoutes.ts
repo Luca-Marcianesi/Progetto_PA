@@ -22,23 +22,31 @@ const reservation_controller =buildReservationController()
 
 const router = Router()
 
+/*
+
+Before all routes there is the check ok the Token
+ande the check ok the role of the request sender
+
+Before calling the controller there is the check of the user input
+*/
 
 
-//Utente
+
+//User
 router.patch("/user/:email/token",
     verifyToken,
     authenticate([ADMIN_ROLE]),
     validateBodySchema(UpdateTokenSchema),
     user_controller.updateToken);
 
-//Risorse
+//Resource
 router.post("/resource",
     verifyToken,
     authenticate([ADMIN_ROLE]),
     validateBodySchema(CreateResourceSchema),
     resource_controller.createResource);
 
-//Calendario
+//Calendar
 router.post("/calendar",
     verifyToken,authenticate([ADMIN_ROLE]),
     validateBodySchema(CreateCalendarSchema),
@@ -47,7 +55,7 @@ router.post("/calendar",
 router.patch("/calendar/unarchive",
     verifyToken,authenticate([ADMIN_ROLE]),
     validateBodySchema(CalendaIdSchema),
-    calendar_controller.archiveCalendar)
+    calendar_controller.unarchiveCalendar)
 
 router.get("/calendar",
     verifyToken,authenticate([ADMIN_ROLE]),
@@ -69,7 +77,7 @@ router.delete("/calendar/:calendar_id",
     validateParamsSchema(CalendaIdSchema),
     calendar_controller.cancelCalendar)
 
-//Prenotazioni
+//Reservations
 
 router.patch("/reservation",
     verifyToken,

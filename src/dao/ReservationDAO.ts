@@ -2,15 +2,15 @@ import { Op } from "sequelize";
 import { DomainReservation } from "../domain/reservation";
 import { ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../middleware/zodValidator/reservation.schema";
 import { Reservation } from "../models/reservationModel";
-import { enumReservationStatus } from "../utils/db_const";
+import { EnumReservationStatus } from "../utils/db_const";
 import { IReservationDAO } from "./daoInterface/IReservationDAO";
 
 export class ReservationDAO implements IReservationDAO{
-    async insert(reservation: DomainReservation, status: enumReservationStatus): Promise<Reservation > {
+    async insert(reservation: DomainReservation, status: EnumReservationStatus): Promise<Reservation > {
         return await Reservation.create(
             {
                 user_id: reservation.reservationBy,
-                calendar_id: reservation.calendar_id,
+                calendar_id: reservation.calendarId,
                 start_time:reservation.start,
                 end_time: reservation.end,
                 title: reservation.title,
@@ -41,6 +41,8 @@ export class ReservationDAO implements IReservationDAO{
 
     async getReservationOptinalFilter(filters: ReservationOptionalFilterInput): Promise<Reservation[]> {
         const where: any = {};
+
+        // management of optional filters
         if (filters.calendar_id) where.calendar_id = filters.calendar_id;
         if (filters.status) where.status = filters.status;
         if (filters.from && filters.to) {
@@ -84,7 +86,7 @@ export class ReservationDAO implements IReservationDAO{
             {
                 where:{
                     calendar_id : calendar_id,
-                    status: enumReservationStatus.Approved
+                    status: EnumReservationStatus.Approved
 
                 }
             }
@@ -92,7 +94,7 @@ export class ReservationDAO implements IReservationDAO{
         )
     }
 
-    async updateStatus(id: number, status: enumReservationStatus): Promise<void> {
+    async updateStatus(id: number, status: EnumReservationStatus): Promise<void> {
         await Reservation.update(
             {
                 status: status

@@ -6,16 +6,16 @@ services:
     container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: supersecret
-      POSTGRES_DB: mydb
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./src/database:/docker-entrypoint-initdb.d:ro
     ports:
-      - "5433:5432"
+      - "${POSTGRES_PORT}:5432"  # non in .env perchè posrta standard di postgress
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 5s
       retries: 10
       start_period: 10s
@@ -29,17 +29,18 @@ services:
       db:
         condition: service_healthy
     environment:
-      NODE_ENV: production
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: supersecret
-      DB_NAME: mydb
+      NODE_ENV: ${NODE_ENV}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      PORT: ${APP_PORT_INTERNAL} 
     ports:
-      - "3000:3000"
+      - - "${APP_PORT}:${APP_PORT_INTERNAL}"
     volumes:
-        - ./key:/usr/app/key
-    
+      - ./key:/usr/app/key
 
 volumes:
   postgres_data:
+

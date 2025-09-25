@@ -1,8 +1,5 @@
 import { Request, Response ,NextFunction } from "express";
-
-import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
 import { IReservationService } from "../services/serviceInterface/IReservationService";
-import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory";
 import { NewReservationInput, ReservationStatusFilterInput, ReservationOptionalFilterInput ,UpdateStatusReseservationInput, ReservationIdInput } from "../middleware/zodValidator/reservation.schema";
 import { StatusCodes } from "http-status-codes";
 import { getUtenteId } from "../utils/functions";
@@ -34,7 +31,8 @@ export class ReservationController{
             const inputValidate = req.body as  unknown as UpdateStatusReseservationInput
 
 
-            await this.ReservationService.updatteReservation(inputValidate.id,inputValidate.newStatus,getUtenteId(req),inputValidate.reason)
+            await this.ReservationService.updatteReservation(
+                inputValidate.id,inputValidate.newStatus,getUtenteId(req),inputValidate.reason)
 
             res.status(StatusCodes.ACCEPTED).json({message:"Prenotazione aggiornata"})
 

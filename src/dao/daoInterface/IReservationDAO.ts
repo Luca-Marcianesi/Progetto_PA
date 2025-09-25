@@ -1,10 +1,10 @@
 import { Reservation } from "../../models/reservationModel";
-import { enumReservationStatus } from "../../utils/db_const";
+import { EnumReservationStatus } from "../../utils/db_const";
 import { DomainReservation } from "../../domain/reservation";
 import { ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../../middleware/zodValidator/reservation.schema";
 
 export interface IReservationDAO{
-    insert(reservation: DomainReservation,status: enumReservationStatus):Promise<Reservation>;
+    insert(reservation: DomainReservation,status: EnumReservationStatus):Promise<Reservation>;
     updateStatus(id: number , status: string): Promise<void>;
     cancel(id: number ): Promise<void>;
     findByPk(id_: number): Promise<Reservation | null>;

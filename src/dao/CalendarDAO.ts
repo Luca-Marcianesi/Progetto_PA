@@ -16,8 +16,8 @@ export class CalendarDAO implements ICalendarDAO{
     return Calendar.findAll({
       where: {
         resource_id: id_res,
-        start_time: { [Op.lt]: end }, // inizio esistente < fine nuova
-        end_time: { [Op.gt]: start }, // fine esistente > inizio nuova
+        start_time: { [Op.lt]: end }, // start  < period end
+        end_time: { [Op.gt]: start }, // fine  > period start
       },
     });
   }

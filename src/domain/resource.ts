@@ -15,6 +15,7 @@ export class DomainResource{
         this.name = resource.name
     }
 
+    // Adapter from the Sequelize Model to the Domain Model
     static fromPersistence(resource: Resource){
         return new DomainResource({
             id: resource.id,

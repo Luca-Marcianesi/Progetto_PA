@@ -1,6 +1,6 @@
 import { DomainReservation } from "../../reservation";
 import { IReservationState } from "../IReservationState";
-import { enumReservationStatus } from "../../../utils/db_const";
+import { EnumReservationStatus } from "../../../utils/db_const";
 import { ErrorFactory, ErrorType } from "../../../middleware/errors/errorFactory";
 
 export class CancelState implements IReservationState{
@@ -17,7 +17,7 @@ export class CancelState implements IReservationState{
         
     }
 
-    getStatus(): enumReservationStatus {
-            return enumReservationStatus.Calcel
+    getStatus(): EnumReservationStatus {
+            return EnumReservationStatus.Calcel
         }
 }

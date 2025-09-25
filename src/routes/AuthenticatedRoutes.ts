@@ -12,6 +12,14 @@ const reservation_controller =buildReservationController()
 
 const router = Router()
 
+/*
+
+Before all routes there is the check of the Token JWT
+and the check if the user has enough app token.
+
+Before calling the controller there is the check of the user input
+*/
+
 router.post("/reservation",
     verifyToken,
     verifyUserTokens,

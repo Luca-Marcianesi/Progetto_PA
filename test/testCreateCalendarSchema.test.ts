@@ -28,8 +28,8 @@ describe("Test CreateCalendarSchema", () =>{
     later.setHours(now.getHours() + 1);
 
         req.body = {
-            resource_id: 123,
-            cost_per_hour: 50,
+            resourceId: 123,
+            costPerHour: 50,
             start: now.toISOString(),  // ISO string
             end: later.toISOString(),  // ISO string
             title: "Prova calendario",
@@ -49,8 +49,8 @@ describe("Test CreateCalendarSchema", () =>{
         later.setHours(later.getHours() + 1);
 
     req.body = {
-    resource_id: "123abc",
-    cost_per_hour: 50,
+    resourceId: 123,
+    costPerHour: 50,
     start: past.toISOString(),
     end: later.toISOString(),
     title: "Prova calendario",
@@ -70,8 +70,8 @@ describe("Test CreateCalendarSchema", () =>{
         endBefore.setHours(now.getHours() - 1);
 
     req.body = {
-    resource_id: "123abc",
-    cost_per_hour: 50,
+    resourceId: 123,
+    costPerHour: 50,
     start: now.toISOString(),
     end: endBefore.toISOString(),
     title: "Prova calendario",
@@ -90,8 +90,8 @@ describe("Test CreateCalendarSchema", () =>{
         later.setHours(now.getHours() + 1);
 
     req.body = {
-    resource_id: "123abc",
-    cost_per_hour: -10,
+    resourceId: "123abc",
+    costPerHour: -10,
     start: now.toISOString(),
     end: later.toISOString(),
     title: "Prova calendario",

@@ -1,10 +1,11 @@
 import { DomainReservation } from "../../domain/reservation";
 
+
+//interfaccia per gli handler nella catena di restituzione token
 export interface RefundPolicyHandler {
     setNext(handler: RefundPolicyHandler): RefundPolicyHandler;
     calculate(reservation: DomainReservation, costPerHour: number): number;
 }
-
 export abstract class AbstractRefundPolicyHandler implements RefundPolicyHandler {
     private nextHandler: RefundPolicyHandler | null = null;
 
@@ -23,6 +24,7 @@ export abstract class AbstractRefundPolicyHandler implements RefundPolicyHandler
     protected abstract apply(reservation: DomainReservation, costPerHour: number): number | null;
 }
 
+// Refaund Policy for reservations started
 export class OngoingReservationRefundHandler extends AbstractRefundPolicyHandler {
     protected apply(reservation: DomainReservation, costPerHour: number): number | null {
         const now = new Date();
@@ -30,14 +32,14 @@ export class OngoingReservationRefundHandler extends AbstractRefundPolicyHandler
         if (now >= reservation.start && now < reservation.end) {
             const unusedHours = reservation.getHoursNotUsed();
             const refund = (unusedHours * costPerHour) - 2; 
-            return Math.max(refund, 0); // prendo il valore massimo per non restituire 0 token
+            return Math.max(refund, 0); // Take the max for not returning negative tokens
         }
 
-        return null; // passa al prossimo handler
+        return null; // next handler
     }
 }
 
-
+// Refaund policy for reservations not started
 export class FutureReservationRefundHandler extends AbstractRefundPolicyHandler {
     protected apply(reservation: DomainReservation, costPerHour: number): number | null {
         const now = new Date();
@@ -52,7 +54,7 @@ export class FutureReservationRefundHandler extends AbstractRefundPolicyHandler 
     }
 }
 
-
+// Default Refaund Policy
 export class NoRefundHandler extends AbstractRefundPolicyHandler {
     protected apply(reservation: DomainReservation, costPerHour: number): number | null {
         return 0; //chiude la catena senza rimborso

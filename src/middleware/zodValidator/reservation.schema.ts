@@ -1,5 +1,5 @@
 import {z} from "zod"
-import {enumReservationStatus} from "../../utils/db_const"
+import {EnumReservationStatus} from "../../utils/db_const"
 import { DateOnHourSchema, GenericStringSchema, refineFromBeforeToSchema, StandarIdSchema, ValidationMessages } from "./utilsValidator"
 import { en } from "zod/v4/locales"
 
@@ -10,7 +10,7 @@ export const ReservationIdSchema = z.object({
 export type ReservationIdInput = z.infer<typeof ReservationIdSchema>
 
 export const ReservationStatusFilterSchema = z.object({
-    status: z.enum(enumReservationStatus),
+    status: z.enum(EnumReservationStatus),
     from: z
     .string()
     .refine(val => !isNaN(Date.parse(val)), {
@@ -30,7 +30,7 @@ export type ReservationStatusFilterInput = z.infer<typeof ReservationStatusFilte
 
 export const ReservationOptionalFilterSchema = z.object({
     calendar_id: StandarIdSchema.optional(),
-    status: z.enum(enumReservationStatus).optional(),
+    status: z.enum(EnumReservationStatus).optional(),
     from: DateOnHourSchema.optional(),
     to: DateOnHourSchema.optional(),
 }).refine(
@@ -66,7 +66,7 @@ export type NewReservationInput = z.infer<typeof NewReservationSchema>
 
 export const UpdateStatusReseservationSchema = z.object({
     id: StandarIdSchema,
-    newStatus: z.enum([enumReservationStatus.Approved,enumReservationStatus.Reject]),
+    newStatus: z.enum([EnumReservationStatus.Approved,EnumReservationStatus.Reject]),
     reason : GenericStringSchema.optional()
 
 })

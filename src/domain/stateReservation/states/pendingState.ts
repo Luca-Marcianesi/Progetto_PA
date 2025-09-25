@@ -1,6 +1,6 @@
 import { DomainReservation } from "../../reservation";
 import { IReservationState } from "../IReservationState";
-import { enumReservationStatus } from "../../../utils/db_const";
+import { EnumReservationStatus } from "../../../utils/db_const";
 import { ErrorFactory, ErrorType } from "../../../middleware/errors/errorFactory";
 import { CancelState } from "./cancelState";
 import { ApprovedState } from "./approvedState";
@@ -25,8 +25,8 @@ export class PendingState implements IReservationState{
         
     }
 
-    getStatus(): enumReservationStatus {
-            return enumReservationStatus.Pending
+    getStatus(): EnumReservationStatus {
+            return EnumReservationStatus.Pending
         }
 
 }
