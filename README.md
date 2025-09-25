@@ -19,3 +19,34 @@
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
 ![Zod](https://img.shields.io/badge/Zod-000000?style=for-the-badge&logo=zod&logoColor=white)
 
+## Introduzione
+
+## Funzionalita
+
+## Teconlogie
+
+## Istallazione
+
+### Requisiti
+
+### Comandi
+
+## Documnetazione delle rotte
+
+## Database
+
+## Architettura
+
+# Design Pattern Utilizzati
+
+## Progettazione
+
+### Use Case
+
+### Diagrammi delle sequenze
+
+## Test
+Per lanciare i test da terminale:
+
+<pre> ```bash npm test ``` </pre>
+
