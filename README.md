@@ -133,10 +133,117 @@ Il database viene inizializzato a partire da un file di migrazioni [00_migration
 
 # Design Pattern Utilizzati
 1. SIGLETON
+---
+Il pattern Singleton è stato utilizzao per la gestione del database [database.ts]([https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/src/database/01_seed.sql](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/src/database/database.ts)) perché garantisce che esista una sola istanza della connessione durante l’esecuzione dell’applicazione. In questo modo:
+- si evita di creare connessioni multiple e costose,
+- si centralizza il punto di accesso al database,
+- si semplifica la gestione delle risorse e la sincronizzazione.
+- 
+```ts
+let sequelize: Sequelize | null = null;
+
+// Return always the same instance of Sequelize using the Singleton Pattern
+export const getDatabase = (): Sequelize => {
+  if (!sequelize) {
+    sequelize = new Sequelize(
+      process.env.DB_NAME || "",
+      process.env.DB_USER || "",
+      process.env.DB_PASSWORD || "",
+      {
+        host: process.env.DB_HOST || "localhost",
+        port: Number(process.env.DB_PORT) || 5432,
+        dialect: "postgres",
+        logging: false,
+        pool: {
+          max: 10,
+          min: 0,
+          acquire: 30000,
+          idle: 10000,
+        },
+        retry: {
+          max: 5,
+        },
+      }
+    );
+  }
+  return sequelize;
+};
+```
+
 2. CHAIN OF RESPONSABILITY
-3. FACTORY METHOD
-4. ADAPTER
-5. STATE
+### Struttura del pattern
+Il CoR permette di strutturare una catena di **handlers** , ognuno dei quali esegue un controllo specifico.  
+- Ogni handler decide se gestire la richiesta o passarla al successivo nella catena.    
+- La catena può essere facilmente estesa o modificata senza alterare il codice esistente.  
+- viene usato quando ci sono più controlli da effettuare in sequenza  
+ 
+### Nel nostro caso
+- **Autenticazione e Validazione**: Veine verificato il token, authenticato l'utente in base al ruolo, validati gli input e chiamata la funzione del controller
+ ``` ts
+    router.post("/calendar",
+    verifyToken,
+    authenticate([ADMIN_ROLE]),
+    validateBodySchema(CreateCalendarSchema),
+    calendar_controller.createCalendar);
+```
+- **Refund policies**: ogni politica (es. tempi, condizioni, eccezioni) viene valutata come step della catena.
+  Interfaccia e classe astratta
+  ```ts
+  export interface RefundPolicyHandler {
+    setNext(handler: RefundPolicyHandler): RefundPolicyHandler;
+    calculate(reservation: DomainReservation, costPerHour: number): number;
+  }
+  export abstract class AbstractRefundPolicyHandler implements RefundPolicyHandler {
+      private nextHandler: RefundPolicyHandler | null = null;
+  
+      public setNext(handler: RefundPolicyHandler): RefundPolicyHandler {
+          this.nextHandler = handler;
+          return handler;
+      }
+  
+
+      public calculate(reservation: DomainReservation, costPerHour: number): number {
+          const result = this.apply(reservation, costPerHour);
+          if (result !== null) return result;
+          if (this.nextHandler) return this.nextHandler.calculate(reservation, costPerHour);
+          return 0;
+      }
+  
+      protected abstract apply(reservation: DomainReservation, costPerHour: number): number | null;
+  }
+  ```
+  Esempio di handler
+  ```ts 
+  export class OngoingReservationRefundHandler extends AbstractRefundPolicyHandler {
+    protected apply(reservation: DomainReservation, costPerHour: number): number | null {
+        const now = new Date();
+
+        if (now >= reservation.start && now < reservation.end) {
+            const unusedHours = reservation.getHoursNotUsed();
+            const refund = (unusedHours * costPerHour) - 2; 
+            return Math.max(refund, 0); // Take the max for not returning negative tokens
+        }
+
+        return null; // next handler
+    }
+  }
+  ```
+  Esempio costruzione catena
+  ```ts
+  export function buildRefundPolicyChain(): RefundPolicyHandler {
+        const invalidCanceld = new InvalidOrCancelReservatioHandler();
+        const ongoing = new OngoingReservationRefundHandler();
+        const future = new FutureReservationRefundHandler();
+        const noRefund = new NoRefundHandler();
+
+        invalidCanceld.setNext(ongoing).setNext(future).setNext(noRefund);
+        return ongoing;
+    }
+   ```
+  
+
+In questo modo la logica rimane **scalabile, leggibile e facilmente estendibile**.
+
 
 
 ## Progettazione
