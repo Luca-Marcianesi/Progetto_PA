@@ -6,7 +6,4 @@ export interface IResourceRepository {
 
     getResourceById(id: number): Promise<DomainResource | null> 
 
-    getAllResources(): Promise<DomainResource[]>
-
-
 }

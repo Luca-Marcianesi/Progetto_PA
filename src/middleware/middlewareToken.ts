@@ -1,18 +1,16 @@
 import { NextFunction, Request,Response } from "express";
 import jwt from "jsonwebtoken";
-import { isNewExpression } from "typescript";
 import {StatusCodes} from "http-status-codes";
 import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
-import { stringify } from "querystring";
 import { BaseError } from "./errors/extendedError";
 import { UserPayload } from "../@types/userPayload";
 import { ErrorFactory, ErrorType } from "./errors/errorFactory";
 
 dotenv.config();
 
-const EXPIRES_IN_TOKEN : number =  3600; 
+const EXPIRES_IN_TOKEN : number =  3600;  //1h
 const ALGORITHM : jwt.Algorithm =  "RS256" as jwt.Algorithm;
 
 
@@ -28,9 +26,10 @@ const private_key = fs.readFileSync(private_key_path, "utf8");
 function signJwt(payload: object): string {
   return jwt.sign(payload, private_key, {
     algorithm: ALGORITHM  || "RS256",
-    expiresIn: EXPIRES_IN_TOKEN || 3600,
+    expiresIn: EXPIRES_IN_TOKEN || 3600, // 1h
   });
 }
+
 
 export var detachToken = function(req : Request, res: Response){
   try{
@@ -72,6 +71,8 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
+
+// Check if the role in the UserPayload is in the array given
 export const authenticate = (roles: string[])=>{
   return (req: Request, res: Response, next: NextFunction)=>{
     if(!req.user || !roles.includes(req.user.role)){

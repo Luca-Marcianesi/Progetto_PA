@@ -1,6 +1,6 @@
 import {z} from "zod"
 
-
+// Custom error messagges
 export const ValidationMessages ={
     date: {
         mustBeOnHour : "La date deve essere all'ora esatta",
@@ -16,6 +16,8 @@ export const ValidationMessages ={
     }
 }
 
+
+// Schema e refine for standar date
 export const DateOnHourSchema = z
     .iso.datetime()
     .transform((value) => new Date(value))

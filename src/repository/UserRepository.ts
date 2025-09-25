@@ -14,7 +14,7 @@ export class UserRepository implements IUserRepository {
       user.email,
       user.psw
     );
-    if(model !== null) return this.buidUser(model)
+    if(model !== null) return DomainUser.fromPersisence(model)
     throw ErrorFactory.getError(ErrorType.UserNotFound)
   }
 
@@ -26,20 +26,17 @@ export class UserRepository implements IUserRepository {
     let model = await this.userDAO.getUserByEmail(email);
     return model === null ? null : DomainUser.fromPersisence(model)
   }
+
   async getUserToken(user_id: number): Promise<number | null> {
     return this.userDAO.getUserToken(user_id)
       
   }
+
   async getUserById(id: number): Promise<DomainUser | null> {
     let model = await this.userDAO.getUserById(id)
-    if(model !== null) return this.buidUser(model)
+    if(model !== null) return DomainUser.fromPersisence(model)
     throw ErrorFactory.getError(ErrorType.UserNotFound)
-      
   }
 
-
-  private buidUser(model: User): DomainUser{
-    return  DomainUser.fromPersisence(model)
-  }
 
 }

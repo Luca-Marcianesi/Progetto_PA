@@ -19,6 +19,7 @@ export class ReservationRepository implements IReservationRepository{
 
     async insertResevation(reservation: DomainReservation, status: EnumReservationStatus): Promise<DomainReservation | never> {
         let modelReservation = await this.reservationDAO.insert(reservation,status)
+        
         if(!modelReservation) throw ErrorFactory.getError(ErrorType.InternalServer)
         
         return DomainReservation.fromPersistence(modelReservation)

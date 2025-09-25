@@ -26,6 +26,7 @@ export enum ErrorType {
     ResourceNotYours
 }
 
+// Pattern Factory for the management of the errors
 export class ErrorFactory {
     static getError(type: ErrorType): Errors.BaseError {
 

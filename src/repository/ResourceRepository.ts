@@ -23,8 +23,5 @@ export class ResourceRepository implements IResourceRepository{
         return  DomainResource.fromPersistence(model)
     }
 
-    getAllResources(): Promise<DomainResource[]> {
-        throw Error("non implementata")
-    }
 
 }

@@ -52,7 +52,7 @@ Calendar.init(
         cost_per_hour: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            validate: { min: 0 } // Valore non negativo
+            validate: { min: 0 }
         },
         title:{
             type: DataTypes.STRING,

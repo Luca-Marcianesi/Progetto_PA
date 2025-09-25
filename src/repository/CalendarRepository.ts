@@ -36,6 +36,7 @@ export class CalendarRepository implements ICalendarRepository {
         // Mapping of the Sequelize model into the Domain model
         let calendar = DomainCalendar.fromPersistence(calendarModel)
 
+        // Add the Domain Reservations to the Domain Calendar
         calendar.addReservations(reservations)
 
         return calendar
@@ -66,10 +67,6 @@ export class CalendarRepository implements ICalendarRepository {
             return r === null ? null : r.cost_per_hour;
         });
         
-    }
-
-    getCalendarsByResourceId(id: number): Promise<DomainCalendar[]> {
-        throw new Error("Method not implemented.");
     }
 
     async findConflicting(resourceId: number, start: Date, end: Date): Promise<DomainCalendar[]>{

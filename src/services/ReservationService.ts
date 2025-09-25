@@ -37,9 +37,10 @@ export class ReservationService implements IReservationService {
 
             let costPerHour = await this.getCalendarCost(reservation.calendarId)
 
+            // Check if the slot requested exist
             if(!await this.checkSlotExist(calendar_id, start_time, end_time) ) throw  ErrorFactory.getError(ErrorType.SlotNotInCal)
 
-
+            // Serch if there is at least one reservation in conflict with the new one
             if(await this.searchConflicts(reservation) ) throw  ErrorFactory.getError(ErrorType.SlotUsed)
             
             let haveEnoughToken = await this.checkHaveEnoughTokens(userId,start_time,end_time,costPerHour)
@@ -78,7 +79,7 @@ export class ReservationService implements IReservationService {
 
         if (costPerHour === null) throw ErrorFactory.getError(ErrorType.CalNotExist)
 
-
+        // if the reservetion is rejected the sistem refaud the token
         await this.userRepository.addTokenToUser(reservation.reservationBy,(costPerHour*reservation.getHours()))
         reservation.reject(handledBy,reason)
         }else{
@@ -115,6 +116,7 @@ export class ReservationService implements IReservationService {
 
         let calendar_cost = await this.getCalendarCost(reservation.calendarId)
 
+        // Chain of Responsability to calculate the tokens to refaund
         let refaudTokens = buildRefundPolicyChain().calculate(reservation,calendar_cost)
 
         await this.userRepository.addTokenToUser(reservation.reservationBy,refaudTokens)
@@ -123,24 +125,6 @@ export class ReservationService implements IReservationService {
 
         await this.reservationRepository.saveReservation(reservation)        
         
-    }
-
-    async approveReservation(id: number, approvedBy: number): Promise<void>{
-        const reservation = await this.reservationRepository.findReservationById(id)
-        
-        if(reservation === null) throw ErrorFactory.getError(ErrorType.ReservationNotFound)
-
-        reservation.approve(approvedBy)
-        this.reservationRepository.saveReservation(reservation)
-    }
-
-    async rejectReservation(id: number, rejectedBy: number, reason: string): Promise<void>{
-        const reservation = await this.reservationRepository.findReservationById(id)
-        if(!reservation) throw ErrorFactory.getError(ErrorType.ReservationNotFound)
-
-        reservation.reject(rejectedBy,reason)
-        this.reservationRepository.saveReservation(reservation)
-
     }
 
 
@@ -169,6 +153,7 @@ export class ReservationService implements IReservationService {
 
         const reservations = await this.reservationRepository.findReservationApprovedByCalendarId(reservation.calendarId);
 
+        // Return true if at least one of the reservation stored on the db overlaps the new one
         return reservations.some(r => r.overlaps(reservation));
         
     }

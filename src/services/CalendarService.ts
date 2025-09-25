@@ -35,7 +35,7 @@ export class CalendarService implements ICalendarService {
             resourceId: calendarData.resourceId,
             start: calendarData.start,
             end: calendarData.end,
-            cost:calendarData.cost_per_hour,
+            cost:calendarData.costPerHour,
             title: calendarData.title
         })
         return await this.calendarRepository.createCalendar(calendar);
@@ -55,7 +55,7 @@ export class CalendarService implements ICalendarService {
     }
 
     async updateEndCalendar(id: number, new_end : Date): Promise<void>{
-
+        throw Error("Not implemented")
     }
 
     async deleteCalendar(id: number): Promise<void> {
@@ -66,10 +66,12 @@ export class CalendarService implements ICalendarService {
 
         let reservations = await this.reservationRepository.findReservationsByCalendar(id)
 
+        //Check if there is at least one reservation active in this momemt
         let isActive = reservations.some(r => r.isActive())
 
         if( isActive) throw ErrorFactory.getError(ErrorType.ReservationActiveInCalendar)
 
+        // Chain Of Responsability for the managment of the refaund policy
         const refundChain = buildRefundPolicyChain()
 
         for (const reservation of reservations) {
@@ -78,14 +80,14 @@ export class CalendarService implements ICalendarService {
                 await this.userRepository.addTokenToUser(reservation.reservationBy, refundTokens);
             }
         }
-
-
         await this.calendarRepository.deleteCalendar(id);
     }
+
 
     async unarchiveCalendar(id: number): Promise<void> {
         await this.calendarRepository.unarchiveCalendar(id);
     }
+    
 
     async checkSlotAvaiability(calendar_id: number, start: Date, end: Date): Promise<boolean> {
         let reservation = await this.reservationRepository.findReservationsByCalendar(calendar_id)
