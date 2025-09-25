@@ -33,7 +33,8 @@ export class InvalidOrCancelReservatioHandler extends AbstractRefundPolicyHandle
         const now = new Date();
 
         return (reservation.getStatus() == EnumReservationStatus.Invalid ||
-         reservation.getStatus() == EnumReservationStatus.Canlcel) ? 0 : null
+         reservation.getStatus() == EnumReservationStatus.Canlcel ||
+          reservation.getStatus() == EnumReservationStatus.Reject) ? 0 : null
     }
 }
 
