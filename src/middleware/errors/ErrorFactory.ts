@@ -23,7 +23,8 @@ export enum ErrorType {
     AlredyRejectedReservation,
     AlredyApprovedReservation,
     ReservationActiveInCalendar,
-    ResourceNotYours
+    ResourceNotYours,
+    ReservationAfterNewEnd
 }
 
 // Pattern Factory for the management of the errors
@@ -75,6 +76,8 @@ export class ErrorFactory {
                 return new Errors.ReservationActiveInCalendarError()
             case ErrorType.ResourceNotYours:
                 return new Errors.ResourceNotYoursError()
+            case ErrorType.ReservationAfterNewEnd:
+                return new Errors.ReservationAfterNewEndError()
             default:
                 return new Errors.InternalServerError();
         }

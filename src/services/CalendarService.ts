@@ -60,7 +60,7 @@ export class CalendarService implements ICalendarService {
         let reservationApproved = await this.reservationRepository.findReservationApprovedByCalendarId(id)
 
         // check if there are reservation approved after the new end
-        if(reservationApproved.some(r=> r.isAfter(end))) throw ErrorFactory
+        if(reservationApproved.some(r=> r.isAfter(end))) throw ErrorFactory.getError(ErrorType.ReservationAfterNewEnd)
 
         let allReservation = await this.reservationRepository.findReservationsByCalendar(id)
 

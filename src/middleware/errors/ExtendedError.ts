@@ -64,6 +64,12 @@ export class InvalidReservaionError extends BadRequestError{
     }
 }
 
+export class ReservationAfterNewEndError extends BadRequestError{
+    constructor(){
+        super("Ci sono prenotazioni approvate dopo fine inseria. Update bloccato")
+    }
+}
+
 export class CalendarNotExistError extends NotFoundError{
     constructor(){
         super("Calendario non trovato")
@@ -133,7 +139,7 @@ export class ReservationActiveInCalendarError extends ConflictError {
     }
 }
 
-export class TooLessTokenError extends BadRequestError{
+export class TooLessTokenError extends UnauthorizedError{
     constructor(){
         super( "Non hai abbastanza token")
     }
