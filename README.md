@@ -138,7 +138,7 @@ Il pattern Singleton è stato utilizzao per la gestione del database [database.t
 - si evita di creare connessioni multiple e costose,
 - si centralizza il punto di accesso al database,
 - si semplifica la gestione delle risorse e la sincronizzazione.
-- 
+### Database sigleton
 ```ts
 let sequelize: Sequelize | null = null;
 
@@ -187,7 +187,7 @@ Il CoR permette di strutturare una catena di **handlers** , ognuno dei quali ese
     calendar_controller.createCalendar);
 ```
 - **Refund policies**: ogni politica (es. tempi, condizioni, eccezioni) viene valutata come step della catena.
-  Interfaccia e classe astratta
+  ### Interfaccia e classe astratta
   ```ts
   export interface RefundPolicyHandler {
     setNext(handler: RefundPolicyHandler): RefundPolicyHandler;
@@ -212,7 +212,7 @@ Il CoR permette di strutturare una catena di **handlers** , ognuno dei quali ese
       protected abstract apply(reservation: DomainReservation, costPerHour: number): number | null;
   }
   ```
-  Esempio di handler
+  ### Esempio di handler
   ```ts 
   export class OngoingReservationRefundHandler extends AbstractRefundPolicyHandler {
     protected apply(reservation: DomainReservation, costPerHour: number): number | null {
@@ -228,7 +228,7 @@ Il CoR permette di strutturare una catena di **handlers** , ognuno dei quali ese
     }
   }
   ```
-  Esempio costruzione catena
+  ### Esempio costruzione catena
   ```ts
   export function buildRefundPolicyChain(): RefundPolicyHandler {
         const invalidCanceld = new InvalidOrCancelReservatioHandler();
@@ -240,9 +240,148 @@ Il CoR permette di strutturare una catena di **handlers** , ognuno dei quali ese
         return ongoing;
     }
    ```
-  
+3. ADAPTER
+È stato utilizzato il **pattern Adapter** per trasformare i dati provenienti dai **modelli Sequelize** nel **domain model** dell’applicazione.  
+In questo modo separiamo la struttura del database dalla logica di business, rendendo il codice più modulare e facile da mantenere.
+### Eccone un esempio:
+ ```ts
+static fromPersistence(calendar : Calendar){
+        return new DomainCalendar({
+        id: calendar.id,
+        resourceId : calendar.resource_id,
+        start: calendar.start_time,
+        end: calendar.end_time,
+        cost: calendar.cost_per_hour,
+        title: calendar.title,
+        archived: calendar.archived 
+    })
 
-In questo modo la logica rimane **scalabile, leggibile e facilmente estendibile**.
+    }
+ ```
+4. STATE
+Il **pattern State** viene utilizzato per gestire le **prenotazioni** nei loro diversi stati (ad esempio: pending, confirmed, cancelled).  
+Ogni stato incapsula il proprio comportamento, permettendo di:  
+- modificare il comportamento di una prenotazione in base allo stato attuale,  
+- aggiungere nuovi stati senza alterare il codice esistente,  
+- rendere il flusso di transizione più chiaro e manutenibile.  
+
+In pratica, ogni prenotazione “sa” come comportarsi a seconda dello stato in cui si trova.
+### Esempio di stato
+``` ts
+export class PendingState implements IReservationState{
+    approve(reservation: DomainReservation, approvedBy: number): void {
+        reservation.setApprovedBy(approvedBy),
+        reservation.setState(new ApprovedState())
+        
+        
+    }
+
+    reject(reservation: DomainReservation, rejectedBy: number, reason: string): void {
+        reservation.setRejectedBy(rejectedBy,reason)
+        reservation.setState( new RejectedState())
+        
+    }
+
+    cancel(reservation: DomainReservation): void {
+        reservation.setState(new CancelState())
+        
+    }
+
+    getStatus(): EnumReservationStatus {
+            return EnumReservationStatus.Pending
+        }
+
+}
+
+```
+### Esempio di utilizzo
+```ts
+async updatteReservation(id: number, newStatus: string,handledBy: number, reason?: string): Promise<void> {
+
+        let reservation = await this.reservationRepository.findReservationById(id)
+
+        if(reservation === null ) throw ErrorFactory.getError(ErrorType.ReservationNotFound)
+
+        if(newStatus == EnumReservationStatus.Reject){
+            if (reason == undefined) throw new Error("Devi fornire una motivazione")
+
+        let costPerHour = await this.calendarRepository.getCostPerHourCalendar(reservation.calendarId)
+
+        if (costPerHour === null) throw ErrorFactory.getError(ErrorType.CalNotExist)
+
+        // if the reservetion is rejected the sistem refaud the token
+        await this.userRepository.addTokenToUser(reservation.reservationBy,(costPerHour*reservation.getHours()))
+        reservation.reject(handledBy,reason)
+        }else{
+            reservation.approve(handledBy)
+        }
+
+        await this.reservationRepository.saveReservation(reservation)
+    }
+
+```
+5. FACTORY METHOD
+Il **pattern Factory Method** viene utilizzato per la gestione centralizzata degli **errori** e per la costruzione dei **controller**.  
+Permette di creare oggetti errore specifici a seconda del contesto, garantendo:  
+- coerenza nel formato e nella struttura degli errori,  
+- facilità di estensione per nuovi tipi di errore,  
+- riduzione della duplicazione di codice nella gestione delle eccezioni
+  ## Errori
+  ### Factory:
+  ```ts
+  export class UserNotFoundError extends NotFoundError {
+    constructor(message?: string) {
+        super(message || "Utente non trovato");
+    }
+  }
+  export class ErrorFactory {
+    static getError(type: ErrorType): Errors.BaseError {
+
+        switch (type) {
+            case ErrorType.AlredyApprovedReservation:
+                return new Errors.AlredyApprovedReservationError()
+            case ErrorType.AlredyRejectedReservation:
+                return new Errors.AlredyRejectedReservationError()
+            case ErrorType.ReservationInvalid:
+                return new Errors.ReservationInvalidError()
+            case ErrorType.ReservationCancelled:
+                return new Errors.ReservationCancelledError()
+            case ErrorType.ReservationActiveInCalendar:
+                return new Errors.ReservationActiveInCalendarError()
+            case ErrorType.ResourceNotYours:
+                return new Errors.ResourceNotYoursError()
+            case ErrorType.ReservationAfterNewEnd:
+                return new Errors.ReservationAfterNewEndError()
+            default:
+                return new Errors.InternalServerError();
+        }
+    }
+  }
+  
+  ```
+  ### Esempio d'uso
+  ```ts
+  if(await this.isResourceBusy(calendarData.resourceId,calendarData.start,calendarData.end)) 
+            throw ErrorFactory.getError(ErrorType.ResourceUsed)
+  
+  ```
+  ## Controller
+  ### Esempio costruzione controller
+  ```ts
+  export function buildReservationController(){
+    const reservationDao = new ReservationDAO()
+    const userDao = new UserDAO()
+    const calendarDao = new CalendarDAO()
+    const calendarRepository = new CalendarRepository(reservationDao,calendarDao)
+    const userRepository = new UserRepository(userDao)
+    const reservation_reository = new ReservationRepository(reservationDao,calendarDao)
+    const reservation_service = new ReservationService(reservation_reository,calendarRepository,userRepository)
+    return new ReservationController(reservation_service)
+
+  }
+  ```
+  
+  
 
 
 
