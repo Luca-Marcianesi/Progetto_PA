@@ -1,4 +1,5 @@
 import { DomainReservation } from "../../domain/reservation";
+import { EnumReservationStatus } from "../db_const";
 
 
 //interfaccia per gli handler nella catena di restituzione token
@@ -22,6 +23,16 @@ export abstract class AbstractRefundPolicyHandler implements RefundPolicyHandler
     }
 
     protected abstract apply(reservation: DomainReservation, costPerHour: number): number | null;
+}
+
+export class InvalidOrCancelReservatioHandler extends AbstractRefundPolicyHandler {
+    protected apply(reservation: DomainReservation, costPerHour: number): number | null {
+        const now = new Date();
+
+        return (reservation.getStatus() == EnumReservationStatus.Invalid ||
+         reservation.getStatus() == EnumReservationStatus.Calcel) ? 0 : null
+            return 0 // Take the max for not returning negative tokens
+    }
 }
 
 // Refaund Policy for reservations started
@@ -63,10 +74,11 @@ export class NoRefundHandler extends AbstractRefundPolicyHandler {
 
 
 export function buildRefundPolicyChain(): RefundPolicyHandler {
+        const invalidCanceld = new InvalidOrCancelReservatioHandler();
         const ongoing = new OngoingReservationRefundHandler();
         const future = new FutureReservationRefundHandler();
         const noRefund = new NoRefundHandler();
 
-        ongoing.setNext(future).setNext(noRefund);
+        invalidCanceld.setNext(ongoing).setNext(future).setNext(noRefund);
         return ongoing;
     }

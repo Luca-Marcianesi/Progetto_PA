@@ -66,7 +66,7 @@ export class ReservationController{
             let reservation = await this.ReservationService.getReservationsFilterStatus(filter)
 
             res.status(StatusCodes.ACCEPTED).json({
-                reservation : reservation
+                reservations : reservation
             })
 
         } catch (error) {
@@ -77,13 +77,13 @@ export class ReservationController{
 
     getReservationsOptionalFiter = async(req: Request, res: Response, next: NextFunction) => {
         try {     
-            const filter = req.body as  unknown as ReservationOptionalFilterInput
+            const filter = req.query as  unknown as ReservationOptionalFilterInput
 
 
             let reservation = await this.ReservationService.getReservationOptionalFilter(filter)
 
             res.status(StatusCodes.ACCEPTED).json({
-                reservation: reservation
+                reservations: reservation
             })
 
         } catch (error) {

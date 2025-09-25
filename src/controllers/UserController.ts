@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { IUserService } from "../services/serviceInterface/IUserService";
 import { UserPayload } from "../@types/userPayload";
 import { DomainUser } from "../domain/user";
+import { UpdateTokenInput, UpdateTokenSchema } from "../middleware/zodValidator/user.schema";
 
 export class UserController {
   constructor(private UserService : IUserService) {}
@@ -51,9 +52,8 @@ export class UserController {
 
   updateToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const email = req.params.email;
-      const { token } = req.body;
-      await this.UserService.addTokenToUser(email, token);
+      let inputValidated = req.query as unknown as UpdateTokenInput
+      await this.UserService.addTokenToUser(inputValidated.email, inputValidated.token);
       return res.status(StatusCodes.OK).json({ message: "Token updated successfully" });
     } catch (error) {
       next(error);

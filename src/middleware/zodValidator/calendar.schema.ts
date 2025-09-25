@@ -1,5 +1,5 @@
 import {z} from "zod"
-import { StandarIdSchema, DateOnHourSchema,ValidationMessages,refineFromBeforeToSchema, GenericStringSchema } from "./utilsValidator"
+import { StandarIdSchema, DateOnHourSchema,ValidationMessages, GenericStringSchema } from "./utilsValidator"
 
 export const CalendaIdSchema = z.object({
     calendarId: StandarIdSchema
@@ -14,10 +14,10 @@ export const CreateCalendarSchema = z.object({
     end: DateOnHourSchema,
     title: GenericStringSchema
     
+}).refine((data) => data.start.getTime() < data.end.getTime(), {
+  message: "La data di inizio deve essere precedente alla fine",
+  path: ["start"],
 }).refine(
-    refineFromBeforeToSchema("start","end"),
-    { message : ValidationMessages.date.fromBeforeTo}
-).refine(
   (data) => data.start.getTime() > Date.now(),
   { message: "La data di inizio deve essere futura", path: ["start"] }
 )

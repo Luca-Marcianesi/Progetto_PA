@@ -6,9 +6,8 @@ export interface ICalendarService {
 
     getCalendarById(id: number): Promise<DomainCalendar | null>;
 
-    updateCostCalendar(id: number, new_cost : number): Promise<void>
+    updateEndCalendar(id: number, end : Date): Promise<void>
     
-    updateEndCalendar(id: number, new_end : Date): Promise<void>
 
     deleteCalendar(id: number): Promise<void>;
 

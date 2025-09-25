@@ -17,23 +17,18 @@ export const ValidationMessages ={
 }
 
 
-// Schema e refine for standar date
-export const DateOnHourSchema = z
-    .iso.datetime()
-    .transform((value) => new Date(value))
-    .refine((date) => date.getMinutes() === 0 && date.getSeconds() === 0,
-    {
-        message: ValidationMessages.date.mustBeOnHour
-    }
-)
+// Schema  for standar date
+export const DateOnHourSchema = z.coerce.date()
+  .refine((date) => !isNaN(date.getTime()), {
+    message: "Data invalida",
+  })
+  .refine(
+    (date) => date.getMinutes() === 0 && date.getSeconds() === 0,
+    { message: ValidationMessages.date.mustBeOnHour }
+  );
 
 
-export const refineFromBeforeToSchema = (from : string, to : string) =>{
-    return (data: any) =>{
-        if(!data[from] || !data[to]) return true;
-        return new Date(data[from]) < new Date(data[to])
-    }
-}
+
 
 export const GenericStringSchema = z.string()
     .min(6,{message: ValidationMessages.string.toShort(6)})

@@ -9,6 +9,8 @@ import { IUserRepository } from "../repository/repositoryInterface/IUserReposito
 import { DomainReservation } from "../domain/reservation";
 import { EnumReservationStatus } from "../utils/db_const";
 import { buildRefundPolicyChain } from "../utils/reservationCoR/refaundTokenHandlers";
+import { number } from "zod";
+import { CancelState } from "../domain/stateReservation/states/cancelState";
 
 export class CalendarService implements ICalendarService {
     private calendarRepository: ICalendarRepository;
@@ -50,13 +52,36 @@ export class CalendarService implements ICalendarService {
         return calendar
         
     }
-    async updateCostCalendar(id: number, new_cost : number): Promise<void> {
-        throw Error("Not implemented")
+    async updateEndCalendar(id: number, end : Date): Promise<void> {
+        let calendar = await this.calendarRepository.getCalendarById(id)
+
+        if (calendar === null) throw ErrorFactory.getError(ErrorType.CalNotExist)
+        
+        let reservationApproved = await this.reservationRepository.findReservationApprovedByCalendarId(id)
+
+        // check if there are reservation approved after the new end
+        if(reservationApproved.some(r=> r.isAfter(end))) throw ErrorFactory
+
+        let allReservation = await this.reservationRepository.findReservationsByCalendar(id)
+
+        let reservationToRefaund = allReservation.
+                            filter(r => r.startAfter(end)).
+                            filter(r => r.getStatus() == EnumReservationStatus.Pending)
+
+        const refundChain = buildRefundPolicyChain()
+
+        for (const reservation of reservationToRefaund) {
+            const refundTokens = refundChain.calculate(reservation, calendar.cost) ?? 0;
+            await this.userRepository.addTokenToUser(reservation.reservationBy, refundTokens);
+            reservation.setState(new CancelState())
+            await this.reservationRepository.saveReservation(reservation)
+                
+            }
+
+        await this.calendarRepository.updateEndCalendar(id,end)
     }
 
-    async updateEndCalendar(id: number, new_end : Date): Promise<void>{
-        throw Error("Not implemented")
-    }
+    
 
     async deleteCalendar(id: number): Promise<void> {
 
@@ -76,9 +101,9 @@ export class CalendarService implements ICalendarService {
 
         for (const reservation of reservations) {
             const refundTokens = refundChain.calculate(reservation, calendar.cost) ?? 0;
-            if (refundTokens > 0) {
-                await this.userRepository.addTokenToUser(reservation.reservationBy, refundTokens);
-            }
+            await this.userRepository.addTokenToUser(reservation.reservationBy, refundTokens);
+            reservation.setState(new CancelState())
+            await this.reservationRepository.saveReservation(reservation)
         }
         await this.calendarRepository.deleteCalendar(id);
     }

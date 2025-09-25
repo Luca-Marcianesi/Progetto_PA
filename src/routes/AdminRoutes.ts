@@ -33,10 +33,10 @@ Before calling the controller there is the check of the user input
 
 
 //User
-router.patch("/user/:email/token",
+router.patch("/token",
     verifyToken,
     authenticate([ADMIN_ROLE]),
-    validateBodySchema(UpdateTokenSchema),
+    validateQuerySchema(UpdateTokenSchema),
     user_controller.updateToken);
 
 //Resource
@@ -62,17 +62,13 @@ router.get("/calendar",
     validateQuerySchema(CalendaIdSchema),
     calendar_controller.getCalendar);
 
-router.patch("/calendar/cost",
-    verifyToken,authenticate([ADMIN_ROLE]),
-    validateBodySchema(UpdateCalendaCostSchema),
-    calendar_controller.updateCalendarCost);
 
 router.patch("/calendar/end",
     verifyToken,authenticate([ADMIN_ROLE]),
     validateBodySchema(UpdateCalendarEndSchema),
-    calendar_controller.updateCalendaEnd);
+    calendar_controller.updateEndCalendar);
 
-router.delete("/calendar/:calendar_id",
+router.delete("/calendar/:calendarId",
     verifyToken,authenticate([ADMIN_ROLE]),
     validateParamsSchema(CalendaIdSchema),
     calendar_controller.cancelCalendar)

@@ -41,15 +41,11 @@ export class CalendarRepository implements ICalendarRepository {
 
         return calendar
     }
-    async updateCostCalendar(id: number, cost: number): Promise<void> {
-        // Implementa la logica per aggiornare un calendario
-        throw new Error("Method not implemented.");
+    async updateEndCalendar(id: number, end : Date): Promise<void> {
+        await this.calendarDAO.updateEnd(id,end)
     }
 
-    async updateEndCalendar(id: number, end: Date): Promise<void> {
-        // Implementa la logica per aggiornare un calendario
-        throw new Error("Method not implemented.");
-    }
+    
 
 
     async deleteCalendar(id: number): Promise<void> {

@@ -9,9 +9,7 @@ export interface ICalendarRepository {
 
     getCalendarById(id: number): Promise<DomainCalendar | null>;
 
-    updateCostCalendar(id: number,  cost: number): Promise<void>;
-
-    updateEndCalendar(id: number,  cost: Date): Promise<void>;
+    updateEndCalendar(id: number,  end: Date): Promise<void>;
 
     deleteCalendar(id: number): Promise<void>;
 

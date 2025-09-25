@@ -96,22 +96,13 @@ export class CalendarController {
         }
     }
 
-    updateCalendarCost = async(req: Request, res: Response, next: NextFunction) => {
-        try {     
-            const inputValidate = req.body as  unknown as UpdateCalendarCostInput
-    
-            let calendar = await this.calendarService.updateCostCalendar(inputValidate.calendarId,inputValidate.cost)
-
-        } catch (error) {
-            throw error
-        }
-    }
-
-    updateCalendaEnd = async(req: Request, res: Response, next: NextFunction) => {
+    updateEndCalendar = async(req: Request, res: Response, next: NextFunction) => {
         try {     
             const inputValidate = req.body as  unknown as UpdateCalendarEndInput
     
-            let calendar = await this.calendarService.updateEndCalendar(inputValidate.calendarId,inputValidate.end)
+            await this.calendarService.updateEndCalendar(inputValidate.calendarId,inputValidate.end)
+
+            res.status(StatusCodes.ACCEPTED).json({ message: "Calendario aggiornato"})
 
         } catch (error) {
             throw error

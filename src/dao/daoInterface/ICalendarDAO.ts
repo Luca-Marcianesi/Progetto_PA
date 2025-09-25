@@ -11,4 +11,6 @@ export interface ICalendarDAO {
 
     deleteCalendar(id: number): Promise<void>
 
+    updateEnd(id: number,new_end: Date): Promise<void>
+
 }

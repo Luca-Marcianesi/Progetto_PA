@@ -1,6 +1,6 @@
 import { Calendar } from "../models/calendarModel";
 import { ICalendarDAO } from "./daoInterface/ICalendarDAO";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 
 export class CalendarDAO implements ICalendarDAO{
 
@@ -20,6 +20,17 @@ export class CalendarDAO implements ICalendarDAO{
         end_time: { [Op.gt]: start }, // fine  > period start
       },
     });
+  }
+
+  async updateEnd(id: number, new_end: Date): Promise<void> {
+      Calendar.update(
+        { 
+        end_time: new_end
+       },         // valori da aggiornare
+        { where: { id: 1 }}
+
+      )
+        
   }
 
     async create(resourceId: number, start_time: Date, end_time: Date, cost_per_hour: number,title: string): Promise<Calendar> {

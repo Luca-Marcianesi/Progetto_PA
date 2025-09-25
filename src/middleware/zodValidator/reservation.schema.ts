@@ -1,7 +1,6 @@
 import {z} from "zod"
 import {EnumReservationStatus} from "../../utils/db_const"
-import { DateOnHourSchema, GenericStringSchema, refineFromBeforeToSchema, StandarIdSchema, ValidationMessages } from "./utilsValidator"
-import { en } from "zod/v4/locales"
+import { DateOnHourSchema, GenericStringSchema, StandarIdSchema, ValidationMessages } from "./utilsValidator"
 
 export const ReservationIdSchema = z.object({
     id: StandarIdSchema,
@@ -29,14 +28,22 @@ export type ReservationStatusFilterInput = z.infer<typeof ReservationStatusFilte
 
 
 export const ReservationOptionalFilterSchema = z.object({
-    calendar_id: StandarIdSchema.optional(),
-    status: z.enum(EnumReservationStatus).optional(),
-    from: DateOnHourSchema.optional(),
-    to: DateOnHourSchema.optional(),
-}).refine(
-    refineFromBeforeToSchema("from","to"),
-    { message : ValidationMessages.date.fromBeforeTo}
-)
+  calendar_id: StandarIdSchema.optional(),
+  status: z.enum(EnumReservationStatus).optional(),
+  from: DateOnHourSchema.optional(),
+  to: DateOnHourSchema.optional(),
+}).refine((data) => {
+  // se entrambi i valori esistono, controlla l'ordine
+  if (data.from && data.to) {
+    return data.from.getTime() < data.to.getTime();
+  }
+  // se uno dei due manca, va bene
+  return true;
+}, {
+  message: "La data di inizio deve essere precedente alla fine",
+  path: ["from"],
+});
+
 export type ReservationOptionalFilterInput = z.infer<typeof ReservationOptionalFilterSchema>
 
 
@@ -47,10 +54,10 @@ export const NewReservationSchema = z.object({
     end_time: DateOnHourSchema,
     reason : GenericStringSchema
 
+}).refine((data) => data.start_time.getTime() < data.end_time.getTime(), {
+  message: "La data di inizio deve essere precedente alla fine",
+  path: ["start"],
 }).refine(
-            refineFromBeforeToSchema("start_time","end_time"),
-    { message : ValidationMessages.date.fromBeforeTo}
-).refine(
   (data) =>{ 
     const currentHour = new Date(Date.now());
     currentHour.setMinutes(0, 0, 0); 
@@ -74,14 +81,20 @@ export type UpdateStatusReseservationInput = z.infer<typeof UpdateStatusReseserv
 
 
 export const CheckSlotSchema = z.object({
-    calendar_id: StandarIdSchema,
-    start: DateOnHourSchema,
-    end: DateOnHourSchema,
-
+  calendar_id: StandarIdSchema,
+  start: DateOnHourSchema,
+  end: DateOnHourSchema,
 }).refine(
-    refineFromBeforeToSchema("start","end"),
-    { message : ValidationMessages.date.fromBeforeTo}
-)
+  (data) =>
+    data.start instanceof Date &&
+    data.end instanceof Date &&
+    data.start.getTime() < data.end.getTime(),
+  {
+    message: "La data di inizio deve essere precedente alla fine",
+    path: ["start"],
+  }
+);
+
 export type CheckSlotInput = z.infer<typeof CheckSlotSchema>
 
 

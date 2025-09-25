@@ -38,7 +38,6 @@ export class DomainReservation {
         this.title = reservation.title
         this.reservationBy = reservation.reservationBy
         this.state = DomainReservation.mapStatus(reservation.status)
-        console.log("costruttore" + this.getStatus())
     }
     
     // Adapter from the Sequelize Model to the Domain Model
@@ -100,6 +99,14 @@ export class DomainReservation {
     // Check if the reservation is waiting to start and is approved
     isWaitingToStart(): boolean{
         return (Date.now() < this.start.getTime() && this.state.getStatus() === EnumReservationStatus.Approved )
+    }
+
+    isAfter(date: Date): boolean{
+        return (this.end.getTime()> date.getTime())
+    }
+
+    startAfter(date: Date): boolean{
+        return (this.start.getTime()> date.getTime())
     }
 
     getHours() : number{

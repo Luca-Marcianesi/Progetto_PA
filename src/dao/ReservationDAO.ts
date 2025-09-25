@@ -43,7 +43,6 @@ export class ReservationDAO implements IReservationDAO{
         const where: any = {};
 
         // management of optional filters
-        if (filters.calendar_id) where.calendar_id = filters.calendar_id;
         if (filters.status) where.status = filters.status;
         if (filters.from && filters.to) {
         where.start_time = { [Op.gte]: filters.from };
@@ -57,7 +56,7 @@ export class ReservationDAO implements IReservationDAO{
         return await Reservation.findAll({
             where:{
                 status: filters.status,
-                createdAt: {
+                start_time: {
                 [Op.between]: [filters.from, filters.to]
   }
             }
