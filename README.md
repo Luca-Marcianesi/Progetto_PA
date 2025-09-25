@@ -48,5 +48,5 @@
 ## Test
 Per lanciare i test da terminale:
 
-<pre> ```bash npm test ``` </pre>
+<pre>npm test </pre>
 
