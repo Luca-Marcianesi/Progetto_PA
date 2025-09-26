@@ -130,229 +130,275 @@ Nel repository è presente anche **la collection** e le **Variabili d'ambinte** 
     - Descrizione: Inserimento di una nuova prenotazione
     - Rotta: **POST** -> /api/reservation
     - Body:
-    <pre> {
+      ```
+       {
        "calendar_id": 1,
        "title": "prova prenotazione",
        "start_time":"2025-09-26T15:00:00.000Z",
        "end_time": "2025-09-26T16:00:00.000Z",
        "reason" : "prenotazione da accettare"
-     }
-    </pre>
+         }
+      ```
     - Risultato :
-      <pre> 
+      ``` 
       {
-    "message": "Creato con successo",
-    "reservation": {
-        "calendar": 1,
-        "title": "prova prenotazione",
-        "start": "2025-09-26T15:00:00.000Z",
-        "end": "2025-09-26T16:00:00.000Z",
-        "state": "pending"
-    }
-}
-</pre>
+      "message": "Creato con successo",
+      "reservation": {
+          "calendar": 1,
+          "title": "prova prenotazione",
+          "start": "2025-09-26T15:00:00.000Z",
+          "end": "2025-09-26T16:00:00.000Z",
+          "state": "pending"
+       }
+      }
+      ```
     ## Visualizza Prenotazioni filtrate dallo stato
     - Descrizione: Visualizzare le prenotazioni con filtri obbligatori sullo stato e sul       periodo di ricerca
     - Rotta: **GET** -> /api/reservation/state?status=approved&from=2026-04-01&to=2026-04-30
     - Risultato :
-      <pre>
+      ```
       {
-    "reservations": [
-        {
-            "calendar": 3,
-            "title": "Team Meeting",
-            "start": "2026-04-26T10:00:00.000Z",
-            "end": "2026-04-26T11:00:00.000Z",
-            "state": "approved"
-        }
-    ]
-}
-      </pre>
+          "reservations": [
+              {
+                  "calendar": 3,
+                  "title": "Team Meeting",
+                  "start": "2026-04-26T10:00:00.000Z",
+                  "end": "2026-04-26T11:00:00.000Z",
+                  "state": "approved"
+              }
+          ]
+      }
+      ```
     ## Visualizza Prenotazione con filtri opzionali
     - Descrizione: Visualizzare le prenotazioni con filtri opzionali sul periodo, stato e calendario
     - Rotta: **GET** -> /api/reservation/filter?calendar_id=3&status=pending&from=2026-05-10
     - Risultato :
-      <pre>
+      ```
       {
-    "reservations": [
-        {
-            "calendar": 3,
-            "title": "Prenotazione Sala Riunioni",
-            "start": "2025-10-25T10:00:00.000Z",
-            "end": "2025-10-25T11:00:00.000Z",
-            "state": "pending"
-        }
-    ]
-}
-      </pre>
+      "reservations": [
+          {
+              "calendar": 3,
+              "title": "Prenotazione Sala Riunioni",
+              "start": "2025-10-25T10:00:00.000Z",
+              "end": "2025-10-25T11:00:00.000Z",
+              "state": "pending"
+          }
+      ]
+      }
+      ```
     ## Visualizza Calendario
     - Descrizione: Visualizzazione di un calendario e delle prenotazioni
     - Rotta: **GET** -> /api/calendar/1
     - Risultato :
-      <pre> 
+      ```
       {
-    "calendar": {
-        "archive": false,
-        "reservations": [
-            {
-                "calendar": 1,
-                "title": "prova prenotazione",
-                "start": "2025-09-26T15:00:00.000Z",
-                "end": "2025-09-26T16:00:00.000Z",
-                "state": "approved"
-            }
-        ],
-        "id": 1,
-        "resourceId": 3,
-        "start": "2025-09-22T10:00:00.000Z",
-        "end": "2026-09-22T10:00:00.000Z",
-        "cost": "10.0000",
-        "title": "calendario infinito"
-    }
-}
-      </pre>
+      "calendar": {
+          "archive": false,
+          "reservations": [
+              {
+                  "calendar": 1,
+                  "title": "prova prenotazione",
+                  "start": "2025-09-26T15:00:00.000Z",
+                  "end": "2025-09-26T16:00:00.000Z",
+                  "state": "approved"
+              }
+          ],
+          "id": 1,
+          "resourceId": 3,
+          "start": "2025-09-22T10:00:00.000Z",
+          "end": "2026-09-22T10:00:00.000Z",
+          "cost": "10.0000",
+          "title": "calendario infinito"
+      }
+      }
+      ```
     ## Cancella Prenotazione
     - Descrizione: Cancellare una prenotazione
     - Rotta: **DELETE** -> /api/reservation/1
     - Risultato :
-      <pre> {
-    "message": "Prenotazione eliminata"} </pre>
+      ```
+       {"message": "Prenotazione eliminata"}
+      ```
     ## Controlla disponibilità slot temporale
     - Descrizione: Controllare la disponibilità di uno slot temporale inserendo il calendario e il periodo
     - Rotta: **GET** -> /api/slot?calendar_id=3&start=2026-04-26T10:00:00.000Z&end=2026-04-26T11:00:00.000Z
     - Risultato :
-      <pre> { "message": "occupated"} </pre>
+      ```
+       { "message": "occupated"}
+      ```
   # Admin Routes
   - Tutte le seguenti rotte necessitano di autenticazione tramite JWT Bearer Token e presenza nel payload del attributo **role** valorizato con la stringa **admin** altrimenti restituisco **Unauthorized**
     ## Nuova Risorsa
     - Descrizione : Inserimento di una nuova risorsa
     - Rotta: **POST** -> /api/resource
     - Body:
-     <pre> 
-     {
-    "name": "GPU 4000",
-    "description": "una bella gpu"
-}
-     </pre>
+      ``` 
+        {
+       "name": "GPU 4000",
+       "description": "una bella gpu"
+       }
+      ```
     - Risultato :
-      <pre>{ "message": "Resource created :GPU 4000"} </pre>
+      ```
+      { "message": "Resource created :GPU 4000"}
+      ```
     ## Aggiungi token all'Utente
     - Descrizione : Aggiunta token all'utente
     - Rotta: **PATCH** -> /api/token?email=demo@demo.com&token=20
     - Risultato :
-      <pre> {"message": "Token updated successfully"} </pre>
+      ```
+       {"message": "Token updated successfully"}
+      ```
     ## Crea Calendario
     - Descrizione : Creazione Calendario
     - Rotta: **POST** -> /api/calendar
     - Body:
-     <pre> 
-     {
-    "resourceId": 1,
-    "costPerHour": 10,
-    "start":"2025-09-26T15:00:00.000Z",
-    "end": "2025-10-25T16:00:00.000Z",
-    "title":"prova calendario esame"
-    }  
-     </pre>
+      ```
+       {
+      "resourceId": 1,
+      "costPerHour": 10,
+      "start":"2025-09-26T15:00:00.000Z",
+      "end": "2025-10-25T16:00:00.000Z",
+      "title":"prova calendario esame"
+      }  
+      ```
     - Risultato :
-      <pre> 
+      ```
       {
-    "message": "Creato con successo",
-    "calendar": {
-        "archive": false,
-        "reservations": [],
-        "id": 1,
-        "resourceId": 1,
-        "start": "2025-09-26T16:00:00.000Z",
-        "end": "2025-09-27T15:00:00.000Z",
-        "cost": 10,
-        "title": "prova calendario esame"
-    }
-}
-      </pre>
+      "message": "Creato con successo",
+      "calendar": {
+          "archive": false,
+          "reservations": [],
+          "id": 1,
+          "resourceId": 1,
+          "start": "2025-09-26T16:00:00.000Z",
+          "end": "2025-09-27T15:00:00.000Z",
+          "cost": 10,
+          "title": "prova calendario esame"
+        }
+       }
+        ```
     ## Cancella Calendario
     - Descrizione : Cancellazione Calendario
     - Rotta: **DELETE** -> /api/calendar/1
     - Risultato :
-      <pre>{ "message": "Calendario eliminato"} </pre>
+      ```
+      { "message": "Calendario eliminato"}
+      ```
       Oppure
-      <pre>{"error": "Prenotazione attiva nel calendario. Cancellazione annullata"}</pre>
+      ```
+      {"error": "Prenotazione attiva nel calendario. Cancellazione annullata"}
+      ```
     ## Ripristina Calendario
     - Descrizione : Ripristino di un calendario cancellato
-    - Rotta: **PATCH** -> /api/calendar/unarchive
-    - Body:
-     <pre> 
-      {
-    "calendarId": 1
-    }
-    </pre>
+    - Rotta: **PATCH** -> /api/calendar/unarchive/1
     - Risultato :
-      <pre> {"message": "Calendario ripristinato"}</pre>
+      ```
+      {"message": "Calendario ripristinato"}
+      ```
     ## Modifica Calendario
     - Descrizione : Modifica della data di fine di un calendario
     - Rotta: **PATCH** -> /api/calendar/end
     - Body:
-     <pre> 
-     {
-    "calendarId": 1,
-    "end": "2027-09-26T15:00:00.000Z"
-    }
-     </pre>
+      ```
+       {
+      "calendarId": 1,
+      "end": "2027-09-26T15:00:00.000Z"
+      }
+      ``` 
     - Risultato :
-      <pre> { "message": "Calendario aggiornato"}</pre>
+      ```
+      { "message": "Calendario aggiornato"}
+      ```
     ## Visualizza Calendario
     - Descrizione : Visualizzazione di un calendario
     - Rotta: **GET** -> /api/calendar/1
     - Body:
-     <pre> {
-    "calendar": {
-        "archive": false,
-        "reservations": [
-            {
-                "calendar": 1,
-                "title": "prova prenotazione",
-                "start": "2025-09-26T15:00:00.000Z",
-                "end": "2025-09-26T16:00:00.000Z",
-                "state": "approved"
-            }
-        ],
-        "id": 1,
-        "resourceId": 3,
-        "start": "2025-09-22T10:00:00.000Z",
-        "end": "2026-09-22T10:00:00.000Z",
-        "cost": "10.0000",
-        "title": "calendario infinito"
-    }
-} </pre>
+      ```
+       {
+          "calendar": {
+              "archive": false,
+              "reservations": [
+                  {
+                      "calendar": 1,
+                      "title": "prova prenotazione",
+                      "start": "2025-09-26T15:00:00.000Z",
+                      "end": "2025-09-26T16:00:00.000Z",
+                      "state": "approved"
+                  }
+              ],
+              "id": 1,
+              "resourceId": 3,
+              "start": "2025-09-22T10:00:00.000Z",
+              "end": "2026-09-22T10:00:00.000Z",
+              "cost": "10.0000",
+              "title": "calendario infinito"
+          }
+      }
+      ```
     - Risultato :
-      <pre> </pre>
+      ```
+      {
+          "calendar": {
+              "archive": false,
+              "reservations": [
+                  {
+                      "calendar": 1,
+                      "title": "prova prenotazione",
+                      "start": "2025-09-26T15:00:00.000Z",
+                      "end": "2025-09-26T16:00:00.000Z",
+                      "state": "approved"
+                  }
+              ],
+              "id": 1,
+              "resourceId": 3,
+              "start": "2025-09-22T10:00:00.000Z",
+              "end": "2026-09-22T10:00:00.000Z",
+              "cost": "10.0000",
+              "title": "calendario infinito"
+          }
+      }
+
+      ```
     ## Approva o Rigetta Prenotazione
     - Descrizione : Approvare o Rigettare una prenotazione
     - Rotta: **PATCH** -> /api/reservation
     - Body:
-     <pre> 
-     {
-     "id":7,
-     "newStatus":"approved"
-    }
-     </pre>
+      ```
+       {
+       "id":7,
+       "newStatus":"approved"
+      }
+      ```
      Oppure
-     <pre>
+     ```
      {
      "id":7,
      "newStatus":"rejected",
      "reason": "im sorry :("
      }
-     </pre>
+     ```
     - Risultato :
-      <pre> {"message": "Prenotazione aggiornata"} </pre>
+    ```
+     {"message": "Prenotazione aggiornata"}
+    ```
     ## Visualizza Prenotazioni di un Calendario
     - Descrizione : Visualizza le prenotazioni dato un calendario
-    - Rotta: **GET** -> /api/reservationsByCal
-    - Body:
-     <pre>  </pre>
+    - Rotta: **GET** -> /api/reservationsByCal/1
     - Risultato :
-      <pre> </pre>
+      ```
+      {
+          "reservation": [
+              {
+                  "calendar": 1,
+                  "title": "prova prenotazione",
+                  "start": "2025-09-26T15:00:00.000Z",
+                  "end": "2025-09-26T16:00:00.000Z",
+                  "state": "cancelled"
+              }
+          ]
+      }
+      ```
     
     
     
