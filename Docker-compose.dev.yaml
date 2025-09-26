@@ -23,7 +23,7 @@ services:
   app:
     build: 
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: ts_app
     depends_on:
       db:

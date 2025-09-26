@@ -23,7 +23,7 @@ services:
   app:
     build: 
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     container_name: ts_app
     depends_on:
       db:
@@ -37,9 +37,7 @@ services:
       DB_NAME: ${DB_NAME}
       PORT: ${APP_PORT_INTERNAL} 
     ports:
-      - - "${APP_PORT}:3000"
-    volumes:
-      - ./key:/usr/app/key
+      -  "${APP_PORT}:${APP_PORT_INTERNAL}"
 
 volumes:
   postgres_data:
