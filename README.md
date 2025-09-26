@@ -83,9 +83,328 @@ Questo progetto consiste nello sviluppo di un back-end in TypeScript per la gest
 - Generare la chiave pubblica e quella privata
 - Creare la cartella "key" allo stesso livello di src e inserire le chiavi generate
 
-### Comandi
-
 ## Documnetazione delle rotte
+Per provate le chiamate REST API basta, dopo aver avviato Docker Engine, effettura le chiamate all'indirizzo 
+<pre> http://127.0.0.1:3000/api</pre> attraverso un servizio come ad esempio **Postman**
+Nel repository è presente anche **la collection** e le **Variabili d'ambinte** che testano alcune delle funzionalità disponibili con i dati presenti nei see.
+(I test nella collection sono pensati per essere eseguiti con il database popolato dai soli dati dei seed. Una successiva esecuzione dei test potrebbe ortare al fallimento di alcuni di essi)
+
+## Rotte Pubbliche
+
+## User
+- Descrizione: Creazione di un nuovo utente
+- Rotta: **POST** -> /api/user
+- Body:
+ <pre> 
+   {
+    "name": "luca",
+    "surname": "marcianesi",
+    "email": "demo@demo.com",
+    "password": "prova123"
+  }
+ </pre>
+- Risultato :
+  <pre>{ "message": "Creato utente con email: demo@demo.com"}  </pre>
+
+
+## Login Routes
+- Descrizione: Autenticazione con l'applicazione
+- Rotta: **POST** -> /api/login
+- Body:
+ <pre> 
+   {
+    "email": "demo@demo.com",
+    "password": "prova123"
+  }
+ </pre>
+- Risultato :
+  <pre>
+    {
+    "message": "Login successful",
+    "token": "eyJhbGciO...
+  }
+  </pre>
+## User Routes
+  - Tutte le seguenti rotte necessitano di autenticazione tramite JWT Bearer Token altrimenti restituisco **Unauthorized**
+    ## Nuova Prenotazione
+    - Descrizione: Inserimento di una nuova prenotazione
+    - Rotta: **POST** -> /api/reservation
+    - Body:
+      ```
+       {
+       "calendar_id": 1,
+       "title": "prova prenotazione",
+       "start_time":"2025-09-26T15:00:00.000Z",
+       "end_time": "2025-09-26T16:00:00.000Z",
+       "reason" : "prenotazione da accettare"
+         }
+      ```
+    - Risultato :
+      ``` 
+      {
+      "message": "Creato con successo",
+      "reservation": {
+          "calendar": 1,
+          "title": "prova prenotazione",
+          "start": "2025-09-26T15:00:00.000Z",
+          "end": "2025-09-26T16:00:00.000Z",
+          "state": "pending"
+       }
+      }
+      ```
+    ## Visualizza Prenotazioni filtrate dallo stato
+    - Descrizione: Visualizzare le prenotazioni con filtri obbligatori sullo stato e sul       periodo di ricerca
+    - Rotta: **GET** -> /api/reservation/state?status=approved&from=2026-04-01&to=2026-04-30
+    - Risultato :
+      ```
+      {
+          "reservations": [
+              {
+                  "calendar": 3,
+                  "title": "Team Meeting",
+                  "start": "2026-04-26T10:00:00.000Z",
+                  "end": "2026-04-26T11:00:00.000Z",
+                  "state": "approved"
+              }
+          ]
+      }
+      ```
+    ## Visualizza Prenotazione con filtri opzionali
+    - Descrizione: Visualizzare le prenotazioni con filtri opzionali sul periodo, stato e calendario
+    - Rotta: **GET** -> /api/reservation/filter?calendar_id=3&status=pending&from=2026-05-10
+    - Risultato :
+      ```
+      {
+      "reservations": [
+          {
+              "calendar": 3,
+              "title": "Prenotazione Sala Riunioni",
+              "start": "2025-10-25T10:00:00.000Z",
+              "end": "2025-10-25T11:00:00.000Z",
+              "state": "pending"
+          }
+      ]
+      }
+      ```
+    ## Visualizza Calendario
+    - Descrizione: Visualizzazione di un calendario e delle prenotazioni
+    - Rotta: **GET** -> /api/calendar/1
+    - Risultato :
+      ```
+      {
+      "calendar": {
+          "archive": false,
+          "reservations": [
+              {
+                  "calendar": 1,
+                  "title": "prova prenotazione",
+                  "start": "2025-09-26T15:00:00.000Z",
+                  "end": "2025-09-26T16:00:00.000Z",
+                  "state": "approved"
+              }
+          ],
+          "id": 1,
+          "resourceId": 3,
+          "start": "2025-09-22T10:00:00.000Z",
+          "end": "2026-09-22T10:00:00.000Z",
+          "cost": "10.0000",
+          "title": "calendario infinito"
+      }
+      }
+      ```
+    ## Cancella Prenotazione
+    - Descrizione: Cancellare una prenotazione
+    - Rotta: **DELETE** -> /api/reservation/1
+    - Risultato :
+      ```
+       {"message": "Prenotazione eliminata"}
+      ```
+    ## Controlla disponibilità slot temporale
+    - Descrizione: Controllare la disponibilità di uno slot temporale inserendo il calendario e il periodo
+    - Rotta: **GET** -> /api/slot?calendar_id=3&start=2026-04-26T10:00:00.000Z&end=2026-04-26T11:00:00.000Z
+    - Risultato :
+      ```
+       { "message": "occupated"}
+      ```
+  # Admin Routes
+  - Tutte le seguenti rotte necessitano di autenticazione tramite JWT Bearer Token e presenza nel payload del attributo **role** valorizato con la stringa **admin** altrimenti restituisco **Unauthorized**
+    ## Nuova Risorsa
+    - Descrizione : Inserimento di una nuova risorsa
+    - Rotta: **POST** -> /api/resource
+    - Body:
+      ``` 
+        {
+       "name": "GPU 4000",
+       "description": "una bella gpu"
+       }
+      ```
+    - Risultato :
+      ```
+      { "message": "Resource created :GPU 4000"}
+      ```
+    ## Aggiungi token all'Utente
+    - Descrizione : Aggiunta token all'utente
+    - Rotta: **PATCH** -> /api/token?email=demo@demo.com&token=20
+    - Risultato :
+      ```
+       {"message": "Token updated successfully"}
+      ```
+    ## Crea Calendario
+    - Descrizione : Creazione Calendario
+    - Rotta: **POST** -> /api/calendar
+    - Body:
+      ```
+       {
+      "resourceId": 1,
+      "costPerHour": 10,
+      "start":"2025-09-26T15:00:00.000Z",
+      "end": "2025-10-25T16:00:00.000Z",
+      "title":"prova calendario esame"
+      }  
+      ```
+    - Risultato :
+      ```
+      {
+      "message": "Creato con successo",
+      "calendar": {
+          "archive": false,
+          "reservations": [],
+          "id": 1,
+          "resourceId": 1,
+          "start": "2025-09-26T16:00:00.000Z",
+          "end": "2025-09-27T15:00:00.000Z",
+          "cost": 10,
+          "title": "prova calendario esame"
+        }
+       }
+        ```
+    ## Cancella Calendario
+    - Descrizione : Cancellazione Calendario
+    - Rotta: **DELETE** -> /api/calendar/1
+    - Risultato :
+      ```
+      { "message": "Calendario eliminato"}
+      ```
+      Oppure
+      ```
+      {"error": "Prenotazione attiva nel calendario. Cancellazione annullata"}
+      ```
+    ## Ripristina Calendario
+    - Descrizione : Ripristino di un calendario cancellato
+    - Rotta: **PATCH** -> /api/calendar/unarchive/1
+    - Risultato :
+      ```
+      {"message": "Calendario ripristinato"}
+      ```
+    ## Modifica Calendario
+    - Descrizione : Modifica della data di fine di un calendario
+    - Rotta: **PATCH** -> /api/calendar/end
+    - Body:
+      ```
+       {
+      "calendarId": 1,
+      "end": "2027-09-26T15:00:00.000Z"
+      }
+      ``` 
+    - Risultato :
+      ```
+      { "message": "Calendario aggiornato"}
+      ```
+    ## Visualizza Calendario
+    - Descrizione : Visualizzazione di un calendario
+    - Rotta: **GET** -> /api/calendar/1
+    - Body:
+      ```
+       {
+          "calendar": {
+              "archive": false,
+              "reservations": [
+                  {
+                      "calendar": 1,
+                      "title": "prova prenotazione",
+                      "start": "2025-09-26T15:00:00.000Z",
+                      "end": "2025-09-26T16:00:00.000Z",
+                      "state": "approved"
+                  }
+              ],
+              "id": 1,
+              "resourceId": 3,
+              "start": "2025-09-22T10:00:00.000Z",
+              "end": "2026-09-22T10:00:00.000Z",
+              "cost": "10.0000",
+              "title": "calendario infinito"
+          }
+      }
+      ```
+    - Risultato :
+      ```
+      {
+          "calendar": {
+              "archive": false,
+              "reservations": [
+                  {
+                      "calendar": 1,
+                      "title": "prova prenotazione",
+                      "start": "2025-09-26T15:00:00.000Z",
+                      "end": "2025-09-26T16:00:00.000Z",
+                      "state": "approved"
+                  }
+              ],
+              "id": 1,
+              "resourceId": 3,
+              "start": "2025-09-22T10:00:00.000Z",
+              "end": "2026-09-22T10:00:00.000Z",
+              "cost": "10.0000",
+              "title": "calendario infinito"
+          }
+      }
+
+      ```
+    ## Approva o Rigetta Prenotazione
+    - Descrizione : Approvare o Rigettare una prenotazione
+    - Rotta: **PATCH** -> /api/reservation
+    - Body:
+      ```
+       {
+       "id":7,
+       "newStatus":"approved"
+      }
+      ```
+     Oppure
+     ```
+     {
+     "id":7,
+     "newStatus":"rejected",
+     "reason": "im sorry :("
+     }
+     ```
+    - Risultato :
+    ```
+     {"message": "Prenotazione aggiornata"}
+    ```
+    ## Visualizza Prenotazioni di un Calendario
+    - Descrizione : Visualizza le prenotazioni dato un calendario
+    - Rotta: **GET** -> /api/reservationsByCal/1
+    - Risultato :
+      ```
+      {
+          "reservation": [
+              {
+                  "calendar": 1,
+                  "title": "prova prenotazione",
+                  "start": "2025-09-26T15:00:00.000Z",
+                  "end": "2025-09-26T16:00:00.000Z",
+                  "state": "cancelled"
+              }
+          ]
+      }
+      ```
+    
+    
+    
+
+
+
 
 ## Database
 ### Tables
@@ -391,6 +710,30 @@ Permette di creare oggetti errore specifici a seconda del contesto, garantendo:
 ![Use case diagramm](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/Use%20Case%20Diagramm.drawio.png)
 
 ### Diagrammi delle sequenze
+Di seguito vengono mostrati i diagrammi dellle squenze di alcune funzioni della applicazione che mostrano alcuni aspetti rilevanti della applicazione.
+### Layer Application Diagramm
+Descrizione dei layer con cui è strutturata l'architettura dell'applicazione
+![Layer](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/diagramma%20layer.png)
+
+### User Authentication
+Descrivione dei controlli durante l'autenticazione dell'utente standard
+![User Authentication](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/user%20auth.png)
+
+### Admin Authentication
+Descrivione dei controlli durante l'autenticazione dell'admin
+![Admin Authentication](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/admin%20auth.png)
+
+### Nuova Prenotazione
+Sequenza di creazione di una prenotazione con anche l'utilizzo del **Pattern Factory** per gli errori
+![New Reservation](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/new%20reservation.png)
+
+### Approva Prenotazione
+Sequenza di approvazione di una richiesta con l'utilizzo del **Pattern State**
+![Approve Reservation](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/approve.png)
+
+### Cancella calendario
+Sequenza di cancellazione di un calendario ed utilizzo del **Pattern Chain Of Responsability** per la restituzione dei token
+![Cancel Calendar](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/delete%20calendar.png)
 
 ## Test
 Per lanciare i test da terminale:
