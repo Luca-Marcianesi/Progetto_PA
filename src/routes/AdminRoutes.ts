@@ -52,9 +52,9 @@ router.post("/calendar",
     validateBodySchema(CreateCalendarSchema),
     calendar_controller.createCalendar);
 
-router.patch("/calendar/unarchive",
+router.patch("/calendar/unarchive/:calendarId",
     verifyToken,authenticate([ADMIN_ROLE]),
-    validateBodySchema(CalendaIdSchema),
+    validateParamsSchema(CalendaIdSchema),
     calendar_controller.unarchiveCalendar)
 
 router.get("/calendar",
@@ -81,10 +81,10 @@ router.patch("/reservation",
     validateBodySchema(UpdateStatusReseservationSchema),
     reservation_controller.updateReservations)
 
-router.get("/reservationsByCal",
+router.get("/reservationsByCal/:calendarId",
     verifyToken,
     authenticate([ADMIN_ROLE]),
-    validateQuerySchema(CalendaIdSchema),
+    validateParamsSchema(CalendaIdSchema),
     reservation_controller.getReservationsByCal)
 
 

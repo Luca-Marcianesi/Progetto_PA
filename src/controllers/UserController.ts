@@ -33,7 +33,7 @@ export class UserController {
     try {
       const { name, surname, email, password } = req.body;
       const user = await this.UserService.createUser({ name, surname, email, password });
-      return res.status(StatusCodes.CREATED).json({message: "utente creato con Id con email" + user.email });
+      return res.status(StatusCodes.CREATED).json({message: "Creato utente con email: " + user.email });
     } catch (error) {
       
       next(error);

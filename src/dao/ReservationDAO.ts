@@ -71,20 +71,20 @@ export class ReservationDAO implements IReservationDAO{
     }
 
 
-    async getReservatisByCalendarId(calendar_id: number): Promise<Reservation[]> {
+    async getReservatisByCalendarId(calendarId: number): Promise<Reservation[]> {
         return await Reservation.findAll(
             {
-                where:{calendar_id : calendar_id}
+                where:{calendar_id : calendarId}
             }
         )
         
     }
 
-    async getReservationApproved(calendar_id: number): Promise<Reservation[]> {
+    async getReservationApproved(calendarId: number): Promise<Reservation[]> {
         return await Reservation.findAll(
             {
                 where:{
-                    calendar_id : calendar_id,
+                    calendar_id : calendarId,
                     status: EnumReservationStatus.Approved
 
                 }

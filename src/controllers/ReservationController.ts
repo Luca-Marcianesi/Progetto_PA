@@ -3,6 +3,7 @@ import { IReservationService } from "../services/serviceInterface/IReservationSe
 import { NewReservationInput, ReservationStatusFilterInput, ReservationOptionalFilterInput ,UpdateStatusReseservationInput, ReservationIdInput } from "../middleware/zodValidator/reservation.schema";
 import { StatusCodes } from "http-status-codes";
 import { getUtenteId } from "../utils/functions";
+import { CalendarIdInput } from "../middleware/zodValidator/calendar.schema";
 
 
 export class ReservationController{
@@ -16,7 +17,7 @@ export class ReservationController{
 
             res.status(StatusCodes.CREATED).json({
                             message:"Creato con successo",
-                            object: reservation
+                            reservation: reservation
                         })
 
         } catch (error) {
@@ -94,10 +95,14 @@ export class ReservationController{
 
     getReservationsByCal = async(req: Request, res: Response, next: NextFunction) => {
         try {     
-            const inputValidate = req.query as  unknown as ReservationIdInput
+            const inputValidate = req.params as  unknown as CalendarIdInput
 
 
-            let reservation = await this.ReservationService.getReservationsByCal(inputValidate.id)
+            let reservation = await this.ReservationService.getReservationsByCal(inputValidate.calendarId)
+
+            res.status(StatusCodes.ACCEPTED).json({
+                reservation:reservation 
+            })
 
         } catch (error) {
             throw error

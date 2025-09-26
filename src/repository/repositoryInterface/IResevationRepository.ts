@@ -10,7 +10,7 @@ export interface IReservationRepository{
 
     findReservationApprovedByCalendarId(calendarId: number): Promise<DomainReservation[]>
 
-    findReservationById(reservation_id : number): Promise<DomainReservation | null>
+    findReservationById(ReservationId : number): Promise<DomainReservation | null>
 
     findReservationsByCalendar(calendarId: number): Promise<DomainReservation[]>
 

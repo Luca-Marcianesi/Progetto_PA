@@ -41,7 +41,7 @@ export class CalendarController {
 
             res.status(StatusCodes.CREATED).json({
                 message:"Creato con successo",
-                object: calendar
+                calendar: calendar
             })
 
         } catch (error) {
@@ -66,7 +66,7 @@ export class CalendarController {
 
     unarchiveCalendar = async(req: Request, res: Response, next: NextFunction) => {
         try {     
-            const inputValidate = req.body as  unknown as CalendarIdInput
+            const inputValidate = req.params as  unknown as CalendarIdInput
     
             await this.calendarService.unarchiveCalendar(inputValidate.calendarId)
 
