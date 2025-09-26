@@ -124,8 +124,7 @@ Nel repository è presente anche **la collection** e le **Variabili d'ambinte** 
     "token": "eyJhbGciO...
   }
   </pre>
-
-  # User Routes
+## User Routes
   - Tutte le seguenti rotte necessitano di autenticazione tramite JWT Bearer Token altrimenti restituisco **Unauthorized**
     ## Nuova Prenotazione
     - Descrizione: Inserimento di una nuova prenotazione
