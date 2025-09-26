@@ -391,6 +391,30 @@ Permette di creare oggetti errore specifici a seconda del contesto, garantendo:
 ![Use case diagramm](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/Use%20Case%20Diagramm.drawio.png)
 
 ### Diagrammi delle sequenze
+Di seguito vengono mostrati i diagrammi dellle squenze di alcune funzioni della applicazione che mostrano alcuni aspetti rilevanti della applicazione.
+### Layer Application Diagramm
+Descrizione dei layer con cui è strutturata l'architettura dell'applicazione
+![Layer](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/diagramma%20layer.png)
+
+### User Authentication
+Descrivione dei controlli durante l'autenticazione dell'utente standard
+![User Authentication](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/user%20auth.png)
+
+### Admin Authentication
+Descrivione dei controlli durante l'autenticazione dell'admin
+![Admin Authentication](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/admin%20auth.png)
+
+### Nuova Prenotazione
+Sequenza di creazione di una prenotazione con anche l'utilizzo del **Pattern Factory** per gli errori
+![New Reservation](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/new%20reservation.png)
+
+### Approva Prenotazione
+Sequenza di approvazione di una richiesta con l'utilizzo del **Pattern State**
+![Approve Reservation](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/approve.png)
+
+### Cancella calendario
+Sequenza di cancellazione di un calendario ed utilizzo del **Pattern Chain Of Responsability** per la restituzione dei token
+![Cancel Calendar](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/doc/delete%20calendar.png)
 
 ## Test
 Per lanciare i test da terminale:
