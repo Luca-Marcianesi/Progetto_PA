@@ -130,13 +130,12 @@ Nel repository è presente anche **la collection** e le **Variabili d'ambinte** 
     - Descrizione: Inserimento di una nuova prenotazione
     - Rotta: **POST** -> /api/reservation
     - Body:
-    <pre> 
-      {
-     "calendar_id": 1,
-     "title": "prova prenotazione",
-     "start_time":"2025-09-26T15:00:00.000Z",
-     "end_time": "2025-09-26T16:00:00.000Z",
-     "reason" : "prenotazione da accettare"
+    <pre> {
+       "calendar_id": 1,
+       "title": "prova prenotazione",
+       "start_time":"2025-09-26T15:00:00.000Z",
+       "end_time": "2025-09-26T16:00:00.000Z",
+       "reason" : "prenotazione da accettare"
      }
     </pre>
     - Risultato :
