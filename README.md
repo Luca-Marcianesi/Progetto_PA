@@ -419,6 +419,7 @@ Nel repository è presente anche **la collection** e le **Variabili d'ambinte** 
 ### Migrations e Seeds
 Il database viene inizializzato a partire da un file di migrazioni [00_migration.sql]([percorso/del/file.txt](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/src/database/00_migration.sql)) e valorizzato da uno di seed [01_seed.sql](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/src/database/01_seed.sql)
 ## Architettura
+``` text
 ┌─────────────────────────────────────────────────────┐
 │                     Router                          │ ← Route definitions
 ├─────────────────────────────────────────────────────┤
@@ -439,6 +440,8 @@ Il database viene inizializzato a partire da un file di migrazioni [00_migration
 ├─────────────────────────────────────────────────────┤
 │                    Database                         │ ← Persistent storage
 └─────────────────────────────────────────────────────┘
+
+```
 - Router: Riceve la richiesta HTTP dal client e le instrada verso il controller
 - Middleware : Autenticazione, autorizzazione, validazione prima del controller
 - Controllers : Gestiscono la richiesta specifica
