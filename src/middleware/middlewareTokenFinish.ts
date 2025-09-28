@@ -1,6 +1,6 @@
 import { NextFunction, Request,Response } from "express";
 import { ErrorFactory, ErrorType } from "./errors/errFactory";
-import { UserDAO } from "../dao/usDAO";
+import { UserDAO } from "../dao/userDAO";
 
 export var verifyUserTokens = async function(req: Request,res : Response, next: NextFunction){
     let user_dao = new UserDAO()
