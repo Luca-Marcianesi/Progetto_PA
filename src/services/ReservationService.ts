@@ -80,7 +80,10 @@ export class ReservationService implements IReservationService {
         if (costPerHour === null) throw ErrorFactory.getError(ErrorType.CalNotExist)
 
         // if the reservetion is rejected the sistem refaud the token
-        await this.userRepository.addTokenToUser(reservation.reservationBy,(costPerHour*reservation.getHours()))
+        let tokensToRefaund = buildRefundPolicyChain().calculate(reservation,costPerHour)
+
+        await this.userRepository.addTokenToUser(reservation.reservationBy,tokensToRefaund)
+        
         reservation.reject(handledBy,reason)
         }else{
             reservation.approve(handledBy)
@@ -114,10 +117,10 @@ export class ReservationService implements IReservationService {
 
         if(reservation.reservationBy !== requestSender) throw ErrorFactory.getError(ErrorType.ResourceNotYours)
 
-        let calendar_cost = await this.getCalendarCost(reservation.calendarId)
+        let calendarCost = await this.getCalendarCost(reservation.calendarId)
 
         // Chain of Responsability to calculate the tokens to refaund
-        let refaudTokens = buildRefundPolicyChain().calculate(reservation,calendar_cost)
+        let refaudTokens = buildRefundPolicyChain().calculate(reservation,calendarCost)
 
         await this.userRepository.addTokenToUser(reservation.reservationBy,refaudTokens)
 
@@ -129,21 +132,21 @@ export class ReservationService implements IReservationService {
 
 
 
-    private async checkSlotExist(calendar_id: number, start_time: Date, end_time: Date):Promise<boolean>{
+    private async checkSlotExist(calendar_id: number, start: Date, end: Date):Promise<boolean>{
         let calendar = await this.calendarRepository.getCalendarById(calendar_id)
 
         if(calendar === null) throw ErrorFactory.getError(ErrorType.CalNotExist)
 
-        if(start_time.getTime() < calendar.start.getTime()) return false
+        if(start.getTime() < calendar.start.getTime()) return false
 
-        if(end_time.getTime() > calendar.end.getTime()) return false
+        if(end.getTime() > calendar.end.getTime()) return false
 
         return true
     }
 
-    private async getCalendarCost(calendar_id: number): Promise<number>{
+    private async getCalendarCost(calendarId: number): Promise<number>{
         let costPerHour : number | null = 
-                await this.calendarRepository.getCostPerHourCalendar(calendar_id)
+                await this.calendarRepository.getCostPerHourCalendar(calendarId)
         if( (costPerHour) === null) throw ErrorFactory.getError(ErrorType.CalNotExist)
         return costPerHour
     }
@@ -158,20 +161,20 @@ export class ReservationService implements IReservationService {
         
     }
     
-    private getTotalCost(start_time: Date, end_time: Date, costPerHour: number): number {
-        let hours = (end_time.getTime()- start_time.getTime())/( 3600 * 1000)
+    private getTotalCost(start: Date, end: Date, costPerHour: number): number {
+        let hours = (end.getTime()- start.getTime())/( 3600 * 1000)
         return hours * costPerHour
         
     }
 
     private async  checkHaveEnoughTokens(
         userId: number,
-        start_time: Date,
-        end_time: Date,
+        start: Date,
+        end: Date,
         costPerHour: number): Promise<boolean>{
         const user_token = await this.userRepository.getUserToken(userId)
         if(user_token == null) throw ErrorFactory.getError(ErrorType.UserNotFound)
-        return (user_token < this.getTotalCost(start_time,end_time,costPerHour)) 
+        return (user_token < this.getTotalCost(start,end,costPerHour)) 
                 ? false : true
 
     }

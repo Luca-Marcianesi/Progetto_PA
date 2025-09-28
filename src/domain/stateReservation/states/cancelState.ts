@@ -13,6 +13,7 @@ export class CancelState implements IReservationState{
         
     }
     cancel(reservation: DomainReservation): void {
+        throw ErrorFactory.getError(ErrorType.ReservationCancelled)
         
     }
 

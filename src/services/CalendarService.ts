@@ -102,7 +102,11 @@ export class CalendarService implements ICalendarService {
         for (const reservation of reservations) {
             const refundTokens = refundChain.calculate(reservation, calendar.cost) ?? 0;
             await this.userRepository.addTokenToUser(reservation.reservationBy, refundTokens);
-            reservation.cancel()
+            try {
+                reservation.cancel()
+            } catch (error) {
+                
+            }
             await this.reservationRepository.saveReservation(reservation)
         }
         await this.calendarRepository.deleteCalendar(id);
