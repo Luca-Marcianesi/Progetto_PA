@@ -742,4 +742,7 @@ Sequenza di cancellazione di un calendario ed utilizzo del **Pattern Chain Of Re
 Per lanciare i test da terminale:
 
 <pre>npm test </pre>
+## Postman
+Test Collection : ![Collection](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/postman/ProgettoCollection.postman_collection.json)
+Postman Enviroment :  ![Enviroment](https://github.com/Luca-Marcianesi/Progetto_PA/blob/main/postman/progetto.postman_environment.json)
 
