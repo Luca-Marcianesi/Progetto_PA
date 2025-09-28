@@ -73,7 +73,7 @@ export class CalendarService implements ICalendarService {
         for (const reservation of reservationToRefaund) {
             const refundTokens = refundChain.calculate(reservation, calendar.cost) ?? 0;
             await this.userRepository.addTokenToUser(reservation.reservationBy, refundTokens);
-            reservation.setState(new CancelState())
+            reservation.cancel()
             await this.reservationRepository.saveReservation(reservation)
                 
             }
@@ -102,7 +102,7 @@ export class CalendarService implements ICalendarService {
         for (const reservation of reservations) {
             const refundTokens = refundChain.calculate(reservation, calendar.cost) ?? 0;
             await this.userRepository.addTokenToUser(reservation.reservationBy, refundTokens);
-            reservation.setState(new CancelState())
+            reservation.cancel()
             await this.reservationRepository.saveReservation(reservation)
         }
         await this.calendarRepository.deleteCalendar(id);
