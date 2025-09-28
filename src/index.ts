@@ -1,8 +1,8 @@
 import { getDatabase } from "./database/database.js";
 import express from "express";
-import publicRoutes from "./routes/publicRoutes.js";
-import autheticateRoutes from "./routes/authenticatedRoutes.js"
-import adminRoutes from "./routes/adminRoutes.js"
+import publicRoutes from "./routes/pubRoutes.js";
+import autheticateRoutes from "./routes/authentidRoutes.js"
+import adminRoutes from "./routes/admRoutes.js"
 
 import { errorHandler } from "./middleware/errorHandler.js";
 import { StatusCodes } from "http-status-codes";

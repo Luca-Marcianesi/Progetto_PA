@@ -1,6 +1,6 @@
 import { IUserDAO } from "../dao/daoInterface/IUserDAO.js";
 import { DomainUser } from "../domain/user.js";
-import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory.js";
+import { ErrorFactory, ErrorType } from "../middleware/errors/errFactory.js";
 import { User } from "../models/userModel.js";
 import { IUserRepository } from "./repositoryInterface/IUserRepository.js";
 

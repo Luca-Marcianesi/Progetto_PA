@@ -4,9 +4,9 @@ import {StatusCodes} from "http-status-codes";
 import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
-import { BaseError } from "./errors/extendedError";
+import { BaseError } from "./errors/extendedEor";
 import { UserPayload } from "../@types/userPayload";
-import { ErrorFactory, ErrorType } from "./errors/errorFactory";
+import { ErrorFactory, ErrorType } from "./errors/errFactory";
 
 dotenv.config();
 

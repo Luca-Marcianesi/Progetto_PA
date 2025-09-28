@@ -1,18 +1,18 @@
-import { ReservationController } from "../controllers/reservationController";
+import { ReservationController } from "../controllers/reservcol";
 import { ReservationService } from "../services/reservationService";
-import { ReservationRepository } from "../repository/reservationRepository";
-import { ReservationDAO } from "../dao/reservationDAO";
-import { CalendarDAO } from "../dao/calendarDAO";
-import { CalendarRepository } from "../repository/calendarRepository";
-import { UserDAO } from "../dao/userDAO";
-import { UserRepository } from "../repository/userRepository";
+import { ReservationRepository } from "../repository/reservRepository";
+import { ReservationDAO } from "../dao/restionDAO";
+import { CalendarDAO } from "../dao/calarDAO";
+import { CalendarRepository } from "../repository/calenRepository";
+import { UserDAO } from "../dao/usDAO";
+import { UserRepository } from "../repository/usRepository";
 import { CalendarService } from "../services/calendarService";
-import { CalendarController } from "../controllers/calendarController";
-import { ResourceDAO } from "../dao/resourceDAO";
+import { CalendarController } from "../controllers/calcol";
+import { ResourceDAO } from "../dao/resceDAO";
 import { UserService } from "../services/userService";
-import { UserController } from "../controllers/userController";
-import { ResourceRepository } from "../repository/resourceRepository";
-import { ResourceController } from "../controllers/resourceController";
+import { UserController } from "../controllers/usercol";
+import { ResourceRepository } from "../repository/resoeRepository";
+import { ResourceController } from "../controllers/resoucol";
 import { ResourceService } from "../services/resourceService";
 
 export function buildUserController(){

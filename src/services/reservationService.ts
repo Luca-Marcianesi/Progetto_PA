@@ -1,7 +1,7 @@
 import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
 import { ICalendarRepository } from "../repository/repositoryInterface/ICalendarRepository";
 import { IUserRepository } from "../repository/repositoryInterface/IUserRepository";
-import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory";
+import { ErrorFactory, ErrorType } from "../middleware/errors/errFactory";
 import { EnumReservationStatus } from "../utils/db_const";
 import { DomainReservation } from "../domain/reservation";
 import { NewReservationInput, ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../middleware/zodValidator/reservation.schema";

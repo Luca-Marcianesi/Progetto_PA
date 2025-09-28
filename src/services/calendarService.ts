@@ -1,6 +1,6 @@
 import { ICalendarService } from "./serviceInterface/ICalendarService";
 import { ICalendarRepository } from "../repository/repositoryInterface/ICalendarRepository";
-import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory";
+import { ErrorFactory, ErrorType } from "../middleware/errors/errFactory";
 import { IResourceRepository } from "../repository/repositoryInterface/IResourceRepository";
 import { CreateCalendarInput } from "../middleware/zodValidator/calendar.schema";
 import { DomainCalendar } from "../domain/calendar";

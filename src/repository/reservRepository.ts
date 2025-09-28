@@ -3,7 +3,7 @@ import {IReservationDAO} from "../dao/daoInterface/IReservationDAO"
 import {ICalendarDAO} from "../dao/daoInterface/ICalendarDAO"
 import { DomainReservation } from "../domain/reservation";
 import { EnumReservationStatus } from "../utils/db_const";
-import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory";
+import { ErrorFactory, ErrorType } from "../middleware/errors/errFactory";
 import { ReservationOptionalFilterInput, ReservationStatusFilterInput } from "../middleware/zodValidator/reservation.schema";
 
 export class ReservationRepository implements IReservationRepository{

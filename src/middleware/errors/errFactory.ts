@@ -1,4 +1,4 @@
-import * as Errors from "./extendedError";
+import * as Errors from "./extendedEor";
 
 export enum ErrorType {
     NotFound,

@@ -3,10 +3,10 @@ import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { CalendarIdInput, CreateCalendarInput, UpdateCalendarCostInput, UpdateCalendarEndInput } from "../middleware/zodValidator/calendar.schema";
 import { CheckSlotInput } from "../middleware/zodValidator/reservation.schema";
-import { ResourceDAO } from "../dao/resourceDAO"
-import { CalendarDAO } from "../dao/calendarDAO";
-import { UserDAO } from "../dao/userDAO";
-import { ReservationDAO } from "../dao/reservationDAO";
+import { ResourceDAO } from "../dao/resceDAO"
+import { CalendarDAO } from "../dao/calarDAO";
+import { UserDAO } from "../dao/usDAO";
+import { ReservationDAO } from "../dao/restionDAO";
 export class CalendarController {
     constructor (private calendarService: ICalendarService) { }
 

@@ -1,7 +1,7 @@
 import { DomainReservation } from "../../reservation";
 import { IReservationState } from "../IReservationState";
 import { EnumReservationStatus } from "../../../utils/db_const";
-import { ErrorFactory, ErrorType } from "../../../middleware/errors/errorFactory";
+import { ErrorFactory, ErrorType } from "../../../middleware/errors/errFactory";
 
 export class CancelState implements IReservationState{
     approve(reservation: DomainReservation, approvedBy: number): void {

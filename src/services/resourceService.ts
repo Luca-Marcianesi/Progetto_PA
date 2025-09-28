@@ -3,7 +3,7 @@ import { CreateResourceInput } from "../middleware/zodValidator/resource.schema"
 import { Resource } from "../models/resourceModel";
 import { IReservationRepository } from "../repository/repositoryInterface/IResevationRepository";
 import { IResourceRepository } from "../repository/repositoryInterface/IResourceRepository";
-import { ResourceRepository } from "../repository/resourceRepository";
+import { ResourceRepository } from "../repository/resoeRepository";
 import { IResourceService } from "./serviceInterface/IResourceService";
 
 export class ResourceService implements IResourceService{

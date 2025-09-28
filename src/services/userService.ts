@@ -1,7 +1,7 @@
 import { IUserRepository } from "../repository/repositoryInterface/IUserRepository.js";
 import { IUserService } from "./serviceInterface/IUserService.js";
 import { createHash } from "crypto";
-import { ErrorFactory, ErrorType } from "../middleware/errors/errorFactory.js";
+import { ErrorFactory, ErrorType } from "../middleware/errors/errFactory.js";
 import { DomainUser } from "../domain/user.js";
 import { RegisterInput } from "../middleware/zodValidator/user.schema.js";
 import { EnumRole } from "../utils/db_const.js";
