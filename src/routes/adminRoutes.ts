@@ -6,7 +6,7 @@ import { buildCalendarController,buildReservationController,
 import { validateBodySchema,validateParamsSchema,validateQuerySchema } from "../middleware/middlewareValidator";
 import { UpdateTokenSchema } from "../middleware/zodValidator/user.schema";
 import { CreateResourceSchema } from "../middleware/zodValidator/resource.schema";
-import { CalendaIdSchema, CreateCalendarSchema, UpdateCalendaCostSchema, UpdateCalendarEndSchema } from "../middleware/zodValidator/calendar.schema";
+import { CalendaIdSchema, CreateCalendarSchema, UpdateCalendarEndSchema } from "../middleware/zodValidator/calendar.schema";
 import { UpdateStatusReseservationSchema } from "../middleware/zodValidator/reservation.schema";
 
 
