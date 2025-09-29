@@ -90,8 +90,5 @@ router.get("/reservationsByCal/:calendarId",
 
 
 
-router.get("/test",calendar_controller.test)
-
-
 
 export default router

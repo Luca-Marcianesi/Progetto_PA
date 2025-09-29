@@ -1,37 +1,12 @@
 import { ICalendarService } from "../services/serviceInterface/ICalendarService";
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { CalendarIdInput, CreateCalendarInput, UpdateCalendarCostInput, UpdateCalendarEndInput } from "../middleware/zodValidator/calendar.schema";
+import { CalendarIdInput, CreateCalendarInput, UpdateCalendarEndInput } from "../middleware/zodValidator/calendar.schema";
 import { CheckSlotInput } from "../middleware/zodValidator/reservation.schema";
-import { ResourceDAO } from "../dao/resourceDAO"
-import { CalendarDAO } from "../dao/calendarDAO";
-import { UserDAO } from "../dao/userDAO";
-import { ReservationDAO } from "../dao/reservationDAO";
+
 export class CalendarController {
     constructor (private calendarService: ICalendarService) { }
 
-
-    test = async (req: Request, res: Response, next: NextFunction) => {
-        try {   
-            
-            let dao = new ResourceDAO()
-            let cal_dao = new CalendarDAO()
-            let user_dao = new UserDAO()
-            let res_dao = new ReservationDAO()
-            let users = await user_dao.getUsers()
-            let reser = await res_dao.getAll()
-            let cal = await cal_dao.getAll()
-
-            res.status(StatusCodes.CREATED).json({
-                users: users,
-                reser : reser,
-                cal : cal
-            })
-
-        } catch (error) {
-            throw error
-        }
-    }
 
     createCalendar = async(req: Request, res: Response, next: NextFunction) => {
         try {     

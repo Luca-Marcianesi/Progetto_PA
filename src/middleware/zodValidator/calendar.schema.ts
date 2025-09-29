@@ -24,16 +24,12 @@ export const CreateCalendarSchema = z.object({
 export type CreateCalendarInput = z.infer<typeof CreateCalendarSchema>
 
 
-export const UpdateCalendaCostSchema = z.object({
-    calendarId: StandarIdSchema,
-    cost: z.number().int().positive()
-
-})
-export type UpdateCalendarCostInput = z.infer<typeof UpdateCalendaCostSchema>
-
 
 export const UpdateCalendarEndSchema = z.object({
     calendarId: StandarIdSchema,
     end: DateOnHourSchema
-})
+}).refine(
+  (data) => data.end.getTime() > Date.now(),
+  { message: "La data di fine deve essere futura", path: ["end"] }
+)
 export type UpdateCalendarEndInput = z.infer<typeof UpdateCalendarEndSchema>
