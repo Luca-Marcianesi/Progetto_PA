@@ -598,7 +598,11 @@ Il CoR permette di strutturare una catena di **handlers** , ognuno dei quali ese
    ```
 3. ADAPTER
 È stato utilizzato il **pattern Adapter** per trasformare i dati provenienti dai **modelli Sequelize** nel **domain model** dell’applicazione.  
-In questo modo separiamo la struttura del database dalla logica di business, rendendo il codice più modulare e facile da mantenere.
+In caso i vantaggi sono:
+- Separazione della struttura del database dalla logica di business
+- Codice più modulare e facile da mantenere.
+- Creare variabili e funzioni specifiche del dominio
+
 ### Eccone un esempio:
  ```ts
 static fromPersistence(calendar : Calendar){
